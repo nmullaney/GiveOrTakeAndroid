@@ -1,0 +1,4 @@
+*.iml
+GiveOrTake/build/*
+.gradle/
+.idea/*
