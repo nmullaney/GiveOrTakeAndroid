@@ -2,6 +2,7 @@ package com.bitdance.giveortake;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -27,6 +28,10 @@ public class ItemService extends IntentService {
         // TODO: meaningful intent data
         ItemsFetcher fetcher = new ItemsFetcher(this);
         ArrayList<Item> items = fetcher.fetchMostRecentItems();
+        for (Item item : items) {
+            Drawable thumbnail = fetcher.fetchItemThumbnail(item);
+            item.setThumbnail(thumbnail);
+        }
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         Intent i = new Intent(FREE_ITEMS_UPDATED);
         i.putExtra(FREE_ITEMS_DATA, items);

@@ -6,6 +6,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="app_name">GiveOrTake</string>
+    <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">

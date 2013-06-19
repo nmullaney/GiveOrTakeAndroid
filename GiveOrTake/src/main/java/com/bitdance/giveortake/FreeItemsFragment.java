@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -37,6 +40,8 @@ public class FreeItemsFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(R.string.free_items_title);
+
         items = new ArrayList<Item>();
         items.add(new Item("mouse"));
         items.add(new Item("bird"));
@@ -59,7 +64,33 @@ public class FreeItemsFragment extends ListFragment {
 
     public class FreeItemAdapter extends ArrayAdapter<Item> {
         public FreeItemAdapter(ArrayList<Item> items) {
-            super(getActivity(), android.R.layout.simple_list_item_1, items);
+            super(getActivity(), R.layout.list_item_item, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_item, null);
+            }
+
+            Item i = getItem(position);
+
+            ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
+            if (i.getThumbnail() != null) {
+                Log.i(TAG, "Setting image drawable for item: " + i);
+                thumbnailView.setImageDrawable(i.getThumbnail());
+            } else {
+                Log.i(TAG, "Item image is null for item: " + i);
+            }
+
+            TextView textView = (TextView) convertView.findViewById(R.id.list_item_name);
+            textView.setText(i.getName());
+
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_state);
+            Drawable imageState = i.getDrawableForState(getActivity());
+            imageView.setImageDrawable(imageState);
+
+            return convertView;
         }
     }
 

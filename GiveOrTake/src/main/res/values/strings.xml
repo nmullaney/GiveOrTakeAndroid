@@ -4,5 +4,6 @@
     <string name="app_name">GiveOrTake</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="free_items_title">Free Items</string>
 
 </resources>

@@ -1,6 +1,9 @@
 package com.bitdance.giveortake;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -10,7 +13,9 @@ import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -29,10 +34,20 @@ import javax.net.ssl.X509TrustManager;
 public class ItemsFetcher {
     public static final String TAG = "ItemsFetcher";
 
+    private static final int BUFFER_SIZE = 1024;
+
     private Context context;
+
+    private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+        @Override
+        public boolean verify(String s, SSLSession sslSession) {
+            return s.equals("api.giveortakeapp.com");
+        }
+    };
 
     public ItemsFetcher(Context context) {
         this.context = context;
+        trustAllHosts();
     }
 
     public ArrayList<Item> fetchMostRecentItems() {
@@ -43,7 +58,7 @@ public class ItemsFetcher {
         String urlspec = urlsb.toString();
         String result = null;
         try {
-            result = fetchURLData(urlspec);
+            result = fetchURLStringData(urlspec);
             Log.i(TAG, "JSON = \n" + result);
             items = parseItems(result);
             Log.i(TAG, "Items = " + items);
@@ -54,6 +69,17 @@ public class ItemsFetcher {
         }
 
         return items;
+    }
+
+    public Drawable fetchItemThumbnail(Item item) {
+        if (item.getThumbnailURL() == null) return null;
+
+        try {
+            return fetchURLBitmapDrawable(item.getThumbnailURL());
+        } catch (IOException ioe) {
+            Log.e(TAG, "Unable to download thumbnail: ", ioe);
+            return null;
+        }
     }
 
     private ArrayList<Item> parseItems(String result) throws JSONException {
@@ -68,19 +94,11 @@ public class ItemsFetcher {
         return items;
     }
 
-    ;
-
-    public String fetchURLData(String urlspec) throws IOException {
+    private String fetchURLStringData(String urlspec) throws IOException {
         BufferedReader reader = null;
         URL url = new URL(urlspec);
-        trustAllHosts();
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.setHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String s, SSLSession sslSession) {
-                return s.equals("api.giveortakeapp.com");
-            }
-        });
+        connection.setHostnameVerifier(hostnameVerifier);
 
         try {
             StringBuilder result = new StringBuilder();
@@ -94,6 +112,23 @@ public class ItemsFetcher {
             connection.disconnect();
             if (reader != null) {
                 reader.close();
+            }
+        }
+    }
+
+    private BitmapDrawable fetchURLBitmapDrawable(String urlspec) throws IOException {
+        URL url = new URL(urlspec);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        InputStream in = null;
+        try {
+            in = connection.getInputStream();
+            BitmapDrawable drawable = new BitmapDrawable(context.getResources(),
+                    BitmapFactory.decodeStream(in));
+            return drawable;
+        } finally {
+            connection.disconnect();
+            if (in != null) {
+                in.close();
             }
         }
     }
