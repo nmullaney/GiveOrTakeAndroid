@@ -42,7 +42,6 @@ public class FreeItemsFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.free_items_title);
 
         items = new ArrayList<Item>();
         items.add(new Item("mouse"));

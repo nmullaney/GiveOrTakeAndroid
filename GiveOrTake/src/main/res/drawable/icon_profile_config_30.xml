@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_take_selected"
+    <item android:drawable="@drawable/ic_profile_selected_30"
           android:state_selected="true" />
-    <item android:drawable="@drawable/ic_take" />
+    <item android:drawable="@drawable/ic_profile_30" />
 </selector>

@@ -14,7 +14,6 @@ public class OffersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.offers_title);
     }
 
     @Override
