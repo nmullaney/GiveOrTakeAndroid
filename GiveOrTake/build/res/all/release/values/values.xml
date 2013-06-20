@@ -8,6 +8,9 @@
     <string name="app_name">GiveOrTake</string>
     <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
+    <string name="offers_title">My Offers</string>
+    <string name="profile_title">Profile</string>
+    <string name="title_activity_tab">TabActivity</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

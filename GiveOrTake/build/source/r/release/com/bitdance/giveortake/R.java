@@ -17,30 +17,49 @@ public final class R {
     public static final class drawable {
         public static final int available=0x7f020000;
         public static final int draft=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int promised=0x7f020003;
-        public static final int taken=0x7f020004;
+        public static final int ic_give=0x7f020002;
+        public static final int ic_give_selected=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int ic_profile=0x7f020005;
+        public static final int ic_profile_selected=0x7f020006;
+        public static final int ic_take=0x7f020007;
+        public static final int ic_take_selected=0x7f020008;
+        public static final int icon_give_config=0x7f020009;
+        public static final int icon_profile_config=0x7f02000a;
+        public static final int icon_take_config=0x7f02000b;
+        public static final int promised=0x7f02000c;
+        public static final int taken=0x7f02000d;
     }
     public static final class id {
-        public static final int action_settings=0x7f080004;
+        public static final int action_settings=0x7f080006;
         public static final int fragmentContainer=0x7f080000;
         public static final int list_item_name=0x7f080002;
         public static final int list_item_state=0x7f080003;
         public static final int list_item_thumbnail=0x7f080001;
+        public static final int tab_image=0x7f080004;
+        public static final int tab_text=0x7f080005;
     }
     public static final class layout {
         public static final int activity_single_fragment=0x7f030000;
-        public static final int fragment_free_items=0x7f030001;
-        public static final int list_item_item=0x7f030002;
+        public static final int activity_tab=0x7f030001;
+        public static final int fragment_free_items=0x7f030002;
+        public static final int fragment_offers=0x7f030003;
+        public static final int fragment_profile=0x7f030004;
+        public static final int list_item_item=0x7f030005;
+        public static final int tab=0x7f030006;
     }
     public static final class menu {
         public static final int free_items=0x7f070000;
+        public static final int tab=0x7f070001;
     }
     public static final class string {
         public static final int action_settings=0x7f050000;
         public static final int app_name=0x7f050001;
         public static final int free_items_title=0x7f050002;
         public static final int hello_world=0x7f050003;
+        public static final int offers_title=0x7f050004;
+        public static final int profile_title=0x7f050005;
+        public static final int title_activity_tab=0x7f050006;
     }
     public static final class style {
         /** 
