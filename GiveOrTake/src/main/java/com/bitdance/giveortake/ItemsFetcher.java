@@ -50,11 +50,23 @@ public class ItemsFetcher {
         trustAllHosts();
     }
 
+    public ArrayList<Item> fetchMyItems() {
+        ItemsFilter filter = new ItemsFilter();
+        filter.setOwnedBy(3);
+        return fetchItemsWithFilter(filter);
+    }
+
     public ArrayList<Item> fetchMostRecentItems() {
         Log.i(TAG, "Fetching the most recent items");
+        ItemsFilter filter = new ItemsFilter();
+        filter.setDistance(20).setUserID(3).setShowMyItems(true);
+        return fetchItemsWithFilter(filter);
+    }
+
+    private ArrayList<Item> fetchItemsWithFilter(ItemsFilter filter) {
         ArrayList<Item> items = new ArrayList<Item>();
         StringBuilder urlsb = new StringBuilder();
-        urlsb.append(Constants.BASE_URL).append("/items.php?userID=3&distance=20&showMyItems=1");
+        urlsb.append(Constants.BASE_URL).append("/items.php?").append(filter.buildQueryString());
         String urlspec = urlsb.toString();
         String result = null;
         try {

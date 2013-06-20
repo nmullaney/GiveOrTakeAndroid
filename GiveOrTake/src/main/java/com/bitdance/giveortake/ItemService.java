@@ -14,8 +14,12 @@ import java.util.ArrayList;
 public class ItemService extends IntentService {
     public static final String TAG = "ItemService";
 
+    public static final String UPDATE_FREE_ITEMS = "update_free_items";
+    public static final String UPDATE_MY_ITEMS = "update_my_items";
+
     public static final String FREE_ITEMS_UPDATED = "free_items_updated";
-    public static final String FREE_ITEMS_DATA = "free_items_data";
+    public static final String MY_ITEMS_UPDATED = "my_items_updated";
+    public static final String ITEMS_DATA = "items_data";
 
     public ItemService() {
         super(TAG);
@@ -24,17 +28,27 @@ public class ItemService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i(TAG, "Handling a new intent");
-        // TODO: meaningful intent data
         ItemsFetcher fetcher = new ItemsFetcher(this);
-        ArrayList<Item> items = fetcher.fetchMostRecentItems();
+        ArrayList<Item> items = new ArrayList<Item>();
+        String resultAction = null;
+        if (intent.getAction() == UPDATE_FREE_ITEMS) {
+            items = fetcher.fetchMostRecentItems();
+            resultAction = FREE_ITEMS_UPDATED;
+        } else if (intent.getAction() == UPDATE_MY_ITEMS) {
+            items = fetcher.fetchMyItems();
+            resultAction = MY_ITEMS_UPDATED;
+        }
+
         for (Item item : items) {
             Drawable thumbnail = fetcher.fetchItemThumbnail(item);
             item.setThumbnail(thumbnail);
         }
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
-        Intent i = new Intent(FREE_ITEMS_UPDATED);
-        i.putExtra(FREE_ITEMS_DATA, items);
-        localBroadcastManager.sendBroadcast(i);
+
+        if (resultAction != null) {
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+            Intent i = new Intent(resultAction);
+            i.putExtra(ITEMS_DATA, items);
+            localBroadcastManager.sendBroadcast(i);
+        }
     }
 }

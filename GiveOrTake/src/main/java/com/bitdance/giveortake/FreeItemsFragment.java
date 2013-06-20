@@ -1,6 +1,5 @@
 package com.bitdance.giveortake;
 
-import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +32,8 @@ public class FreeItemsFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
-                items = (ArrayList<Item>) intent.getSerializableExtra(ItemService.FREE_ITEMS_DATA);
-                setListAdapter(new FreeItemAdapter(items));
+                items = (ArrayList<Item>) intent.getSerializableExtra(ItemService.ITEMS_DATA);
+                setListAdapter(new ItemArrayAdapter(getActivity(), items));
             }
         }
     };
@@ -44,16 +43,13 @@ public class FreeItemsFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         items = new ArrayList<Item>();
-        items.add(new Item("mouse"));
-        items.add(new Item("bird"));
-        items.add(new Item("whale"));
-        setListAdapter(new FreeItemAdapter(items));
+        setListAdapter(new ItemArrayAdapter(getActivity(), items));
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.FREE_ITEMS_UPDATED);
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
 
         Intent intent = new Intent(getActivity(), ItemService.class);
-        intent.setAction(ItemService.FREE_ITEMS_UPDATED);
+        intent.setAction(ItemService.UPDATE_FREE_ITEMS);
         getActivity().startService(intent);
     }
 
@@ -62,38 +58,6 @@ public class FreeItemsFragment extends ListFragment {
         View v = inflater.inflate(R.layout.fragment_free_items, container, false);
         TabWidget tabWidget = (TabWidget)v.findViewById(android.R.id.tabs);
         return v;
-    }
-
-    public class FreeItemAdapter extends ArrayAdapter<Item> {
-        public FreeItemAdapter(ArrayList<Item> items) {
-            super(getActivity(), R.layout.list_item_item, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_item, null);
-            }
-
-            Item i = getItem(position);
-
-            ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
-            if (i.getThumbnail() != null) {
-                Log.i(TAG, "Setting image drawable for item: " + i);
-                thumbnailView.setImageDrawable(i.getThumbnail());
-            } else {
-                Log.i(TAG, "Item image is null for item: " + i);
-            }
-
-            TextView textView = (TextView) convertView.findViewById(R.id.list_item_name);
-            textView.setText(i.getName());
-
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_state);
-            Drawable imageState = i.getDrawableForState(getActivity());
-            imageView.setImageDrawable(imageState);
-
-            return convertView;
-        }
     }
 
     @Override
