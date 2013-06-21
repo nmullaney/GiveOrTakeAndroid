@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Facebook/Facebook.iml" filepath="$PROJECT_DIR$/Facebook/Facebook.iml" />
       <module fileurl="file://$PROJECT_DIR$/GiveOrTake/GiveOrTake.iml" filepath="$PROJECT_DIR$/GiveOrTake/GiveOrTake.iml" />
       <module fileurl="file://$PROJECT_DIR$/GiveOrTakeProject.iml" filepath="$PROJECT_DIR$/GiveOrTakeProject.iml" />
     </modules>
