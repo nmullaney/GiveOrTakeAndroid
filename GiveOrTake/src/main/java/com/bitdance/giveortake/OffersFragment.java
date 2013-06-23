@@ -29,7 +29,9 @@ public class OffersFragment extends ListFragment {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
                 items = (ArrayList<Item>) intent.getSerializableExtra(ItemService.ITEMS_DATA);
-                setListAdapter(new ItemArrayAdapter(getActivity(), items));
+                Log.i(TAG, "setting items to " + items);
+                Log.i(TAG, "setting context to " + context);
+                setListAdapter(new ItemArrayAdapter(context, items));
             }
         }
     };

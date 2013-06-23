@@ -20,6 +20,9 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
 
     public ItemArrayAdapter(Context context, ArrayList<Item> items) {
         super(context, R.layout.list_item_item, items);
+        Log.i(TAG, "The context = " + context);
+        Log.i(TAG, "The items = " + items);
+
     }
 
     @Override

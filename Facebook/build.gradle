@@ -6,11 +6,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.4'
     }
 }
-apply plugin: 'android'
+apply plugin: 'android-library'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-v4.jar')
-    compile project(':Facebook')
+    compile files('libs/android-support-v4.jar')
 }
 
 

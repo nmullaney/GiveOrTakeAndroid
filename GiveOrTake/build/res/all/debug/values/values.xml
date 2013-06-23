@@ -59,6 +59,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="app_name">GiveOrTake</string>
+    <string name="cancelled">Cancelled</string>
     <string name="com_facebook_choose_friends">Choose Friends</string>
     <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
     <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>
@@ -84,9 +85,12 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log In…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged In</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not Logged In</string>
+    <string name="facebook_app_id">165759800241065</string>
     <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
     <string name="offers_title">My Offers</string>
+    <string name="ok">OK</string>
+    <string name="permission_not_granted">Permission not granted.</string>
     <string name="profile_title">Profile</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
