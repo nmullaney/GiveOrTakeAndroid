@@ -19,6 +19,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
 
         <service android:name="com.bitdance.giveortake.ItemService" />
+        <service android:name="com.bitdance.giveortake.UserService" />
 
         <activity android:name="com.bitdance.giveortake.LoginActivity"
                   android:label="@string/app_name" >

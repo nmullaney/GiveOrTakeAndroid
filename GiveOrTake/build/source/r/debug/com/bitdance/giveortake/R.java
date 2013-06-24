@@ -318,13 +318,15 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f070019;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f07001a;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f07001b;
-        public static final int facebook_app_id=0x7f07001c;
-        public static final int free_items_title=0x7f07001d;
-        public static final int hello_world=0x7f07001e;
-        public static final int offers_title=0x7f07001f;
-        public static final int ok=0x7f070020;
-        public static final int permission_not_granted=0x7f070021;
-        public static final int profile_title=0x7f070022;
+        public static final int error=0x7f07001c;
+        public static final int facebook_app_id=0x7f07001d;
+        public static final int free_items_title=0x7f07001e;
+        public static final int hello_world=0x7f07001f;
+        public static final int login_failure=0x7f070020;
+        public static final int offers_title=0x7f070021;
+        public static final int ok=0x7f070022;
+        public static final int permission_not_granted=0x7f070023;
+        public static final int profile_title=0x7f070024;
     }
     public static final class style {
         /** 

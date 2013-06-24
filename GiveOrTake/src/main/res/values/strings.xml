@@ -11,6 +11,8 @@
     <string name="facebook_app_id">165759800241065</string>
     <string name="permission_not_granted">Permission not granted.</string>
     <string name="cancelled">Cancelled</string>
+    <string name="error">Error</string>
+    <string name="login_failure">Login failed.  Please try again.</string>
     <string name="ok">OK</string>
 
 </resources>

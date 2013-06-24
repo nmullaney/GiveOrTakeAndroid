@@ -85,9 +85,11 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log In…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged In</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not Logged In</string>
+    <string name="error">Error</string>
     <string name="facebook_app_id">165759800241065</string>
     <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
+    <string name="login_failure">Login failed.  Please try again.</string>
     <string name="offers_title">My Offers</string>
     <string name="ok">OK</string>
     <string name="permission_not_granted">Permission not granted.</string>

@@ -1,9 +1,13 @@
 package com.bitdance.giveortake;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,9 @@ import android.widget.ImageButton;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,11 +39,36 @@ public class LoginFragment extends Fragment {
         }
     };
 
+    private BroadcastReceiver loginBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Received login result");
+            if (intent.getAction().equals(UserService.LOGIN_RESULT)) {
+                if (intent.hasExtra(UserService.EXTRA_LOGIN_ERROR)) {
+                    // TODO: logout of FB
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(intent.getStringExtra(UserService.EXTRA_LOGIN_ERROR))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                } else {
+                    Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(mainIntent);
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
+
+        LocalBroadcastManager localBroadcastManager =
+                LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
+        IntentFilter loginIntentFilter = new IntentFilter(UserService.LOGIN_RESULT);
+        localBroadcastManager.registerReceiver(loginBroadcastReceiver, loginIntentFilter);
 
     }
 
@@ -51,8 +83,10 @@ public class LoginFragment extends Fragment {
                 Log.i(TAG, "User info fetched: " + user);
                 updateUI();
                 if (user != null) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
+                    ActiveUser.loadActiveUser(user);
+                    Intent intent = new Intent(getActivity(), UserService.class);
+                    intent.setAction(UserService.LOGIN);
+                    getActivity().startService(intent);
                 }
 
             }
@@ -84,11 +118,21 @@ public class LoginFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        LocalBroadcastManager localBroadcastManager =
+                LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
+        localBroadcastManager.unregisterReceiver(loginBroadcastReceiver);
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if ((exception instanceof FacebookOperationCanceledException ||
                         exception instanceof FacebookAuthorizationException)) {
+            Log.e(TAG, "Facebook exception: " + exception);
+            StringBuilder error = new StringBuilder();
+            for (StackTraceElement elem : exception.getStackTrace()) {
+                error.append(elem.toString());
+                error.append("\n");
+            }
+            Log.i(TAG, "Full stactrace: " + error);
             new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.cancelled)
                     .setMessage(R.string.permission_not_granted)
