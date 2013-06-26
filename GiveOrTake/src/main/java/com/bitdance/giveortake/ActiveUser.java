@@ -31,6 +31,16 @@ public class ActiveUser {
         return ourInstance;
     }
 
+    public static Boolean isActiveUser(long userID) {
+        ActiveUser activeUser = getInstance();
+        if (activeUser != null) {
+            if (activeUser.getUserID() == userID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void loadActiveUser(GraphUser graphUser) {
         ourInstance = new ActiveUser();
         ourInstance.facebookID = graphUser.getId();
