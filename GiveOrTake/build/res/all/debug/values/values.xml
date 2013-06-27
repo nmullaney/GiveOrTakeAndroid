@@ -94,6 +94,7 @@
     <string name="ok">OK</string>
     <string name="permission_not_granted">Permission not granted.</string>
     <string name="profile_title">Profile</string>
+    <string name="title_activity_free_item_pager">Free Item Pager</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

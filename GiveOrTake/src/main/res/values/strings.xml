@@ -7,12 +7,12 @@
     <string name="free_items_title">Free Items</string>
     <string name="offers_title">My Offers</string>
     <string name="profile_title">Profile</string>
-
     <string name="facebook_app_id">165759800241065</string>
     <string name="permission_not_granted">Permission not granted.</string>
     <string name="cancelled">Cancelled</string>
     <string name="error">Error</string>
     <string name="login_failure">Login failed.  Please try again.</string>
     <string name="ok">OK</string>
+    <string name="title_activity_free_item_pager">Free Item Pager</string>
 
 </resources>

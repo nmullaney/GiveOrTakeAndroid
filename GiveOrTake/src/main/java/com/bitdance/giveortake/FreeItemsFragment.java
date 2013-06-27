@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import java.util.ArrayList;
  */
 public class FreeItemsFragment extends ListFragment {
     public static final String TAG = "FreeItemsFragment";
+
+    public static final String EXTRA_ITEM_ID = "item_id";
 
     private ArrayList<Item> items;
 
@@ -58,6 +61,14 @@ public class FreeItemsFragment extends ListFragment {
         View v = inflater.inflate(R.layout.fragment_free_items, container, false);
         TabWidget tabWidget = (TabWidget)v.findViewById(android.R.id.tabs);
         return v;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Item item = ((ItemArrayAdapter) getListAdapter()).getItem(position);
+        Intent i = new Intent(getActivity(), FreeItemPagerActivity.class);
+        i.putExtra(FreeItemsFragment.EXTRA_ITEM_ID, item.getId());
+        startActivityForResult(i, 0);
     }
 
     @Override
