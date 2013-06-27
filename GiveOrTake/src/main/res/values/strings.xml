@@ -15,4 +15,23 @@
     <string name="ok">OK</string>
     <string name="title_activity_free_item_pager">Free Item Pager</string>
 
+    <string name="posted_by">Posted By:</string>
+    <string name="status">Status:</string>
+    <string name="distance">Distance:</string>
+    <string name="updated">Updated:</string>
+    <string name="posted">Posted:</string>
+
+    <string name="less_than_1_mile">Less than 1 mile</string>
+    <string name="distance_format">%1$d miles</string>
+
+    <string name="less_than_1_minute">Less than 1 minute ago</string>
+    <string name="a_minute_ago">1 minute ago</string>
+    <string name="minutes_ago_format">%1$d minutes ago</string>
+    <string name="an_hour_ago">1 hour ago</string>
+    <string name="hours_ago_format">%1$d hours ago</string>
+    <string name="a_day_ago">1 day ago</string>
+    <string name="days_ago_format">%1$d days ago</string>
+    <string name="more_than_month">More than a month ago</string>
+
+
 </resources>

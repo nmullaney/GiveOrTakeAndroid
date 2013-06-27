@@ -57,7 +57,10 @@
     <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
 
+    <string name="a_day_ago">1 day ago</string>
+    <string name="a_minute_ago">1 minute ago</string>
     <string name="action_settings">Settings</string>
+    <string name="an_hour_ago">1 hour ago</string>
     <string name="app_name">GiveOrTake</string>
     <string name="cancelled">Cancelled</string>
     <string name="com_facebook_choose_friends">Choose Friends</string>
@@ -85,16 +88,28 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log In…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged In</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not Logged In</string>
+    <string name="days_ago_format">%1$d days ago</string>
+    <string name="distance">Distance:</string>
+    <string name="distance_format">%1$d miles</string>
     <string name="error">Error</string>
     <string name="facebook_app_id">165759800241065</string>
     <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
+    <string name="hours_ago_format">%1$d hours ago</string>
+    <string name="less_than_1_mile">Less than 1 mile</string>
+    <string name="less_than_1_minute">Less than 1 minute ago</string>
     <string name="login_failure">Login failed.  Please try again.</string>
+    <string name="minutes_ago_format">%1$d minutes ago</string>
+    <string name="more_than_month">More than a month ago</string>
     <string name="offers_title">My Offers</string>
     <string name="ok">OK</string>
     <string name="permission_not_granted">Permission not granted.</string>
+    <string name="posted">Posted:</string>
+    <string name="posted_by">Posted By:</string>
     <string name="profile_title">Profile</string>
+    <string name="status">Status:</string>
     <string name="title_activity_free_item_pager">Free Item Pager</string>
+    <string name="updated">Updated:</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

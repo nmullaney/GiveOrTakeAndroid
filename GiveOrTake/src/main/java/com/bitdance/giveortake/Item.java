@@ -204,5 +204,9 @@ public class Item implements Serializable {
             if (resID == 0) return null;
             return context.getResources().getDrawable(resID);
         }
+
+        public String getName() {
+            return name;
+        }
     }
 }
