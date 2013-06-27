@@ -14,6 +14,7 @@
     <string name="login_failure">Login failed.  Please try again.</string>
     <string name="ok">OK</string>
     <string name="title_activity_free_item_pager">Free Item Pager</string>
+    <string name="no_item_found">No item was found.</string>
 
     <string name="posted_by">Posted By:</string>
     <string name="status">Status:</string>

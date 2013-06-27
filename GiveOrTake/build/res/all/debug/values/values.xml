@@ -101,6 +101,7 @@
     <string name="login_failure">Login failed.  Please try again.</string>
     <string name="minutes_ago_format">%1$d minutes ago</string>
     <string name="more_than_month">More than a month ago</string>
+    <string name="no_item_found">No item was found.</string>
     <string name="offers_title">My Offers</string>
     <string name="ok">OK</string>
     <string name="permission_not_granted">Permission not granted.</string>

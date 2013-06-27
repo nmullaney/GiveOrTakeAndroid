@@ -3,15 +3,17 @@ package com.bitdance.giveortake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by nora on 6/23/13.
  */
-public class User {
-    private long userID;
+public class User implements Serializable {
+    private Long userID;
     private String userName;
-    private double latitude;
-    private double longitude;
-    private int karma;
+    private Double latitude;
+    private Double longitude;
+    private Integer karma;
 
     private static final String JSON_ID = "id";
     private static final String JSON_USERNAME = "username";
@@ -24,13 +26,14 @@ public class User {
         if (jsonObject.has(JSON_USERNAME)) setUserName(jsonObject.getString(JSON_USERNAME));
         if (jsonObject.has(JSON_LATITUDE)) setLatitude(jsonObject.getDouble(JSON_LATITUDE));
         if (jsonObject.has(JSON_LONGITUDE)) setLongitude(jsonObject.getDouble(JSON_LONGITUDE));
+        if (jsonObject.has(JSON_KARMA)) setKarma(jsonObject.getInt(JSON_KARMA));
     }
 
-    public long getUserID() {
+    public Long getUserID() {
         return userID;
     }
 
-    public void setUserID(long userID) {
+    public void setUserID(Long userID) {
         this.userID = userID;
     }
 
@@ -42,27 +45,27 @@ public class User {
         this.userName = userName;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public int getKarma() {
+    public Integer getKarma() {
         return karma;
     }
 
-    public void setKarma(int karma) {
+    public void setKarma(Integer karma) {
         this.karma = karma;
     }
 }

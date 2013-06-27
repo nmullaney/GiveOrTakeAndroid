@@ -347,15 +347,16 @@ containing a value of this type.
         public static final int login_failure=0x7f070029;
         public static final int minutes_ago_format=0x7f07002a;
         public static final int more_than_month=0x7f07002b;
-        public static final int offers_title=0x7f07002c;
-        public static final int ok=0x7f07002d;
-        public static final int permission_not_granted=0x7f07002e;
-        public static final int posted=0x7f07002f;
-        public static final int posted_by=0x7f070030;
-        public static final int profile_title=0x7f070031;
-        public static final int status=0x7f070032;
-        public static final int title_activity_free_item_pager=0x7f070033;
-        public static final int updated=0x7f070034;
+        public static final int no_item_found=0x7f07002c;
+        public static final int offers_title=0x7f07002d;
+        public static final int ok=0x7f07002e;
+        public static final int permission_not_granted=0x7f07002f;
+        public static final int posted=0x7f070030;
+        public static final int posted_by=0x7f070031;
+        public static final int profile_title=0x7f070032;
+        public static final int status=0x7f070033;
+        public static final int title_activity_free_item_pager=0x7f070034;
+        public static final int updated=0x7f070035;
     }
     public static final class style {
         /** 

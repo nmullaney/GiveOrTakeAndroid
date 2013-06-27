@@ -7,11 +7,16 @@ import com.facebook.Session;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -69,6 +74,31 @@ public class UserFetcher {
         return success;
     }
 
+    public User fetchUser(Long userID) {
+        String urlSpec = Constants.BASE_URL + "/user.php?";
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("user_id", userID.toString()));
+        String paramString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
+        HttpGet get = new HttpGet(urlSpec + paramString);
+
+        try {
+            HttpResponse response = client.execute(get);
+            JSONObject result = parseResponse(response);
+            User user = new User();
+            user.updateFromJSON(result);
+            return user;
+        } catch (ClientProtocolException e) {
+            Log.e(TAG, "Failed to get user:", e);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to get user:", e);
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse user:", e);
+        }
+        return null;
+    }
+
     private JSONObject parseResponse(HttpResponse response) throws IOException, JSONException {
         StringBuilder sb = new StringBuilder();
         InputStream in = response.getEntity().getContent();
@@ -86,6 +116,7 @@ public class UserFetcher {
                 reader.close();
             }
         }
+        Log.i(TAG, "Got user data: " + sb.toString());
         JSONTokener tokener = new JSONTokener(sb.toString());
         return (JSONObject) tokener.nextValue();
     }

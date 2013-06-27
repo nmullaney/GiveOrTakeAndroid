@@ -18,6 +18,7 @@ public class GiveOrTakeApplication extends Application {
     private static final String TAG = "GiveOrTakeApplication";
 
     private HashMap<Long, Item> items;
+    private HashMap<Long, User> users;
 
     private ArrayList<Long> freeItemIDs;
     private ArrayList<Long> offerIDs;
@@ -50,17 +51,32 @@ public class GiveOrTakeApplication extends Application {
         }
     };
 
+    private BroadcastReceiver userBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(UserService.USER_FETCHED)) {
+                User user = (User)intent.getSerializableExtra(UserService.EXTRA_USER_DATA);
+                if (user != null) {
+                    users.put(user.getUserID(), user);
+                }
+            }
+        }
+    };
+
     public void onCreate() {
         super.onCreate();
         freeItemIDs = new ArrayList<Long>();
         offerIDs = new ArrayList<Long>();
         items = new HashMap<Long, Item>();
+        users = new HashMap<Long, User>();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         localBroadcastManager.registerReceiver(freeItemBroadcastReceiver,
                 new IntentFilter(ItemService.FREE_ITEMS_UPDATED));
         localBroadcastManager.registerReceiver(offersBroadcastReceiver,
                 new IntentFilter(ItemService.MY_ITEMS_UPDATED));
+        localBroadcastManager.registerReceiver(userBroadcastReceiver,
+                new IntentFilter(UserService.USER_FETCHED));
     }
 
     public ArrayList<Item> getFreeItems() {
@@ -95,6 +111,10 @@ public class GiveOrTakeApplication extends Application {
         return offers;
     }
 
+    public User getUser(Long userID) {
+        return users.get(userID);
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -102,5 +122,6 @@ public class GiveOrTakeApplication extends Application {
                 .getInstance(getApplicationContext());
         localBroadcastManager.unregisterReceiver(freeItemBroadcastReceiver);
         localBroadcastManager.unregisterReceiver(offersBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(userBroadcastReceiver);
     }
 }
