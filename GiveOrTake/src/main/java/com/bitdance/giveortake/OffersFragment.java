@@ -29,8 +29,6 @@ public class OffersFragment extends ListFragment {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
                 items = (ArrayList<Item>) intent.getSerializableExtra(ItemService.ITEMS_DATA);
-                Log.i(TAG, "setting items to " + items);
-                Log.i(TAG, "setting context to " + context);
                 setListAdapter(new ItemArrayAdapter(context, items));
             }
         }
@@ -40,9 +38,10 @@ public class OffersFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        items = new ArrayList<Item>();
+        items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.MY_ITEMS_UPDATED);
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
 
@@ -55,5 +54,13 @@ public class OffersFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_offers, container, false);
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity().getApplicationContext());
+        localBroadcastManager.unregisterReceiver(newItemsBroadcastReceiver);
     }
 }

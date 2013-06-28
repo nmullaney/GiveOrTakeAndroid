@@ -29,6 +29,7 @@ public class GiveOrTakeApplication extends Application {
             if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
                 ArrayList<Item> freeItems = (ArrayList<Item>)
                         intent.getSerializableExtra(ItemService.ITEMS_DATA);
+                freeItemIDs.clear();
                 for (Item item : freeItems) {
                     freeItemIDs.add(item.getId());
                     items.put(item.getId(), item);
@@ -43,6 +44,7 @@ public class GiveOrTakeApplication extends Application {
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
                 ArrayList<Item> offers = (ArrayList<Item>)
                         intent.getSerializableExtra(ItemService.ITEMS_DATA);
+                offerIDs.clear();
                 for (Item item : offers) {
                     offerIDs.add(item.getId());
                     items.put(item.getId(), item);

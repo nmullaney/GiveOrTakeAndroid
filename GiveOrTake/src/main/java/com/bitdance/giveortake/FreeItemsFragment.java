@@ -45,7 +45,7 @@ public class FreeItemsFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        items = new ArrayList<Item>();
+        items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.FREE_ITEMS_UPDATED);
