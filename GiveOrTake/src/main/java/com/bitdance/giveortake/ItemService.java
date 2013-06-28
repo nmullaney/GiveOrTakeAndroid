@@ -26,6 +26,12 @@ public class ItemService extends IntentService {
     public static final String ITEM_IMAGE_FETCHED = "item_image_fetched";
     public static final String EXTRA_IMAGE_FETCH_ERROR = "image_fetch_error";
 
+    public static final String SEND_MESSAGE = "send_message";
+    public static final String EXTRA_ITEM_ID = "extra_item_id";
+    public static final String EXTRA_MESSAGE = "extra_message";
+    public static final String MESSAGE_SENT = "message_sent";
+    public static final String EXTRA_MESSAGE_SENT_ERROR = "extra_message_sent_error";
+
     public ItemService() {
         super(TAG);
         Log.i(TAG, "Created a new item service");
@@ -41,6 +47,11 @@ public class ItemService extends IntentService {
         } else if (intent.getAction() == FETCH_ITEM_IMAGE) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM_DATA);
             fetchItemImage(item);
+        } else if (intent.getAction() == SEND_MESSAGE) {
+            Log.i(TAG, "Service sendingm message");
+            Long itemID = intent.getLongExtra(EXTRA_ITEM_ID, 0);
+            String message = intent.getStringExtra(EXTRA_MESSAGE);
+            sendMessage(itemID, message);
         }
     }
 
@@ -82,6 +93,19 @@ public class ItemService extends IntentService {
         Intent i = new Intent(ITEM_IMAGE_FETCHED);
         if (!success) {
             i.putExtra(EXTRA_IMAGE_FETCH_ERROR, true);
+        }
+        localBroadcastManager.sendBroadcast(i);
+    }
+
+    private void sendMessage(Long itemID, String message) {
+        MessageSender sender = new MessageSender();
+        boolean success = sender.sendMessage(itemID, message);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent i = new Intent(MESSAGE_SENT);
+        i.putExtra(EXTRA_ITEM_ID, itemID);
+        if (!success) {
+            i.putExtra(EXTRA_MESSAGE_SENT_ERROR, true);
         }
         localBroadcastManager.sendBroadcast(i);
     }

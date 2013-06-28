@@ -6,14 +6,14 @@ import java.util.ArrayList;
  * Created by nora on 6/20/13.
  */
 public class ItemsFilter {
-    private Integer ownedBy;
-    private Integer userID;
+    private Long ownedBy;
+    private Long userID;
     private Integer distance;
     private Boolean showMyItems;
     private String query;
     private Integer limit;
     private Integer offset;
-    private Integer itemID;
+    private Long itemID;
 
     public String buildQueryString() {
         ArrayList<String> args = new ArrayList<String>();
@@ -55,20 +55,20 @@ public class ItemsFilter {
         return sb.toString();
     }
 
-    public Integer getOwnedBy() {
+    public Long getOwnedBy() {
         return ownedBy;
     }
 
-    public ItemsFilter setOwnedBy(Integer ownedBy) {
+    public ItemsFilter setOwnedBy(Long ownedBy) {
         this.ownedBy = ownedBy;
         return this;
     }
 
-    public Integer getUserID() {
+    public Long getUserID() {
         return userID;
     }
 
-    public ItemsFilter setUserID(Integer userID) {
+    public ItemsFilter setUserID(Long userID) {
         this.userID = userID;
         return this;
     }
@@ -118,11 +118,11 @@ public class ItemsFilter {
         return this;
     }
 
-    public Integer getItemID() {
+    public Long getItemID() {
         return itemID;
     }
 
-    public ItemsFilter setItemID(Integer itemID) {
+    public ItemsFilter setItemID(Long itemID) {
         this.itemID = itemID;
         return this;
     }

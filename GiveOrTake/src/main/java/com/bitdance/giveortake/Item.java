@@ -179,7 +179,9 @@ public class Item implements Serializable {
     }
 
     public void clearImage() {
-        image.getBitmap().recycle();
+        if (image != null) {
+            image.getBitmap().recycle();
+        }
         image = null;
     }
 

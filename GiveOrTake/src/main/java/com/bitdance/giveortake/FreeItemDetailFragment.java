@@ -1,5 +1,6 @@
 package com.bitdance.giveortake;
 
+import android.app.AlertDialog;
 import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,6 +62,31 @@ public class FreeItemDetailFragment extends Fragment {
         }
     };
 
+    private BroadcastReceiver messageSentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ItemService.MESSAGE_SENT)) {
+                Long itemID = intent.getLongExtra(ItemService.EXTRA_ITEM_ID, 0);
+                // only handle my item's messages
+                if (!itemID.equals(item.getId())) return;
+                boolean error = intent.getBooleanExtra(ItemService.EXTRA_MESSAGE_SENT_ERROR, false);
+                Resources resources = getResources();
+                if (error) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(resources.getString(R.string.message_sent_error))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                } else {
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage(resources.getString(R.string.message_sent))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +109,8 @@ public class FreeItemDetailFragment extends Fragment {
                 new IntentFilter(UserService.USER_FETCHED));
         localBroadcastManager.registerReceiver(imageBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_IMAGE_FETCHED));
+        localBroadcastManager.registerReceiver(messageSentReceiver,
+                new IntentFilter(ItemService.MESSAGE_SENT));
 
         Intent userIntent = new Intent(getActivity(), UserService.class);
         userIntent.setAction(UserService.FETCH_USER);
@@ -130,6 +159,15 @@ public class FreeItemDetailFragment extends Fragment {
 
         TextView createdView = (TextView)v.findViewById(R.id.free_item_detail_date_created);
         createdView.setText(dateDescription(item.getDateCreated()));
+
+        Button wantButton = (Button)v.findViewById(R.id.free_item_detail_want_button);
+        wantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MessageDialogFragment messageDialogFragment = new MessageDialogFragment(item, owner);
+                messageDialogFragment.show(getActivity().getSupportFragmentManager(), item.getId().toString());
+            }
+        });
 
         return v;
     }
@@ -188,6 +226,7 @@ public class FreeItemDetailFragment extends Fragment {
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(userBroadcastReceiver);
         localBroadcastManager.unregisterReceiver(imageBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(messageSentReceiver);
         item.clearImage();
     }
 }

@@ -79,7 +79,14 @@
                       android:layout_height="wrap_content" />
         </TableRow>
 
-
     </TableLayout>
+
+    <Button android:id="@+id/free_item_detail_want_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/i_want_this"/>
+
+
 
 </LinearLayout>

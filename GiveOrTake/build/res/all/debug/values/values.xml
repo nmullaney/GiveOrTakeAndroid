@@ -62,6 +62,7 @@
     <string name="action_settings">Settings</string>
     <string name="an_hour_ago">1 hour ago</string>
     <string name="app_name">GiveOrTake</string>
+    <string name="cancel">Cancel</string>
     <string name="cancelled">Cancelled</string>
     <string name="com_facebook_choose_friends">Choose Friends</string>
     <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
@@ -96,9 +97,15 @@
     <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
     <string name="hours_ago_format">%1$d hours ago</string>
+    <string name="i_want_this">I want this!</string>
     <string name="less_than_1_mile">Less than 1 mile</string>
     <string name="less_than_1_minute">Less than 1 minute ago</string>
     <string name="login_failure">Login failed.  Please try again.</string>
+    <string name="message_hint">        Compose a message to the owner of this item.
+        Ask a question about the item or inquire if it\'s still available.
+        Your email address will be shared with the recipient of this message.</string>
+    <string name="message_sent">Message sent!</string>
+    <string name="message_sent_error">Failed to send message.</string>
     <string name="minutes_ago_format">%1$d minutes ago</string>
     <string name="more_than_month">More than a month ago</string>
     <string name="no_item_found">No item was found.</string>
@@ -108,8 +115,13 @@
     <string name="posted">Posted:</string>
     <string name="posted_by">Posted By:</string>
     <string name="profile_title">Profile</string>
+    <string name="reply_to">Reply-To:</string>
+    <string name="send">Send</string>
+    <string name="send_a_message">Send a Message</string>
     <string name="status">Status:</string>
+    <string name="subject">Subject:</string>
     <string name="title_activity_free_item_pager">Free Item Pager</string>
+    <string name="to">To:</string>
     <string name="updated">Updated:</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">

@@ -61,7 +61,7 @@ public class UserFetcher {
         try {
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = client.execute(post);
-            JSONObject result = parseResponse(response);
+            JSONObject result = JSONUtils.parseResponse(response);
             Log.i(TAG, result.toString());
             // TODO: handle parsing error json
             activeUser.updateFromJSON(result);
@@ -85,7 +85,7 @@ public class UserFetcher {
 
         try {
             HttpResponse response = client.execute(get);
-            JSONObject result = parseResponse(response);
+            JSONObject result = JSONUtils.parseResponse(response);
             User user = new User();
             user.updateFromJSON(result);
             return user;
@@ -99,26 +99,6 @@ public class UserFetcher {
         return null;
     }
 
-    private JSONObject parseResponse(HttpResponse response) throws IOException, JSONException {
-        StringBuilder sb = new StringBuilder();
-        InputStream in = response.getEntity().getContent();
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(in));
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                sb.append("\n");
-            }
-        } finally {
-            in.close();
-            if (reader != null) {
-                reader.close();
-            }
-        }
-        Log.i(TAG, "Got user data: " + sb.toString());
-        JSONTokener tokener = new JSONTokener(sb.toString());
-        return (JSONObject) tokener.nextValue();
-    }
+
 
 }

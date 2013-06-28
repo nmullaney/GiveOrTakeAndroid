@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TableLayout android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:stretchColumns="0,1">
+
+        <TableRow>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/to" />
+            <TextView android:id="@+id/message_dialog_to"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/reply_to" />
+            <TextView android:id="@+id/message_dialog_reply_to"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/subject" />
+            <TextView android:id="@+id/message_dialog_subject"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" />
+        </TableRow>
+
+    </TableLayout>
+
+    <EditText android:id="@+id/message_dialog_message"
+              android:layout_width="match_parent"
+              android:layout_height="200dp"
+              android:gravity="top|left"
+              android:hint="@string/message_hint"
+              android:inputType="textMultiLine"/>
+
+</LinearLayout>

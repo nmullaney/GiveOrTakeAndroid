@@ -45,14 +45,17 @@ public class ItemsFetcher {
 
     public ArrayList<Item> fetchMyItems() {
         ItemsFilter filter = new ItemsFilter();
-        filter.setOwnedBy(3);
+        filter.setOwnedBy(ActiveUser.getInstance().getUserID());
         return fetchItemsWithFilter(filter);
     }
 
     public ArrayList<Item> fetchMostRecentItems() {
         Log.i(TAG, "Fetching the most recent items");
         ItemsFilter filter = new ItemsFilter();
-        filter.setDistance(20).setUserID(3).setShowMyItems(true);
+        filter
+                .setDistance(20)
+                .setUserID(ActiveUser.getInstance().getUserID())
+                .setShowMyItems(true);
         return fetchItemsWithFilter(filter);
     }
 
