@@ -1,12 +1,14 @@
 package com.bitdance.giveortake;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -34,6 +36,8 @@ public class Item implements Serializable {
 
     private int distance;
     private int numMessagesSent;
+
+    private transient BitmapDrawable image;
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
@@ -154,6 +158,29 @@ public class Item implements Serializable {
 
     public String getImageURL() {
         return imageURL;
+    }
+
+    public File getLocalImageFile(Context context) {
+        if (getImageURL() == null) return null;
+        String filename = getId() + "_image.png";
+        return new File(context.getFilesDir() + "/" + filename);
+    }
+
+    public Drawable getImage(Context context) {
+        if (image != null) {
+            return image;
+        }
+        File file = getLocalImageFile(context);
+        if (file != null && file.exists()) {
+            image = new BitmapDrawable(context.getResources(), file.getPath());
+            return image;
+        }
+        return null;
+    }
+
+    public void clearImage() {
+        image.getBitmap().recycle();
+        image = null;
     }
 
     public Date getDateCreated() {

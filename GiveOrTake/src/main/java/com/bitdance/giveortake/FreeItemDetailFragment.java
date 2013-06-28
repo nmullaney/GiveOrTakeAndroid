@@ -1,5 +1,6 @@
 package com.bitdance.giveortake;
 
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ public class FreeItemDetailFragment extends Fragment {
 
     private TextView usernameView;
     private TextView karmaView;
+    private ImageView imageView;
 
     private BroadcastReceiver userBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -41,6 +43,19 @@ public class FreeItemDetailFragment extends Fragment {
                     owner = user;
                     updateUI();
                 }
+            }
+        }
+    };
+
+    private BroadcastReceiver imageBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().endsWith(ItemService.ITEM_IMAGE_FETCHED)) {
+                boolean failure = intent.getBooleanExtra(ItemService.EXTRA_IMAGE_FETCH_ERROR, false);
+                if (!failure) {
+                    updateUI();
+                }
+                // TODO: alert on failure
             }
         }
     };
@@ -65,11 +80,20 @@ public class FreeItemDetailFragment extends Fragment {
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.registerReceiver(userBroadcastReceiver,
                 new IntentFilter(UserService.USER_FETCHED));
+        localBroadcastManager.registerReceiver(imageBroadcastReceiver,
+                new IntentFilter(ItemService.ITEM_IMAGE_FETCHED));
 
         Intent userIntent = new Intent(getActivity(), UserService.class);
         userIntent.setAction(UserService.FETCH_USER);
         userIntent.putExtra(UserService.EXTRA_USER_ID, item.getUserID());
         getActivity().startService(userIntent);
+
+        if (item.getImage(getActivity()) == null) {
+            Intent imageIntent = new Intent(getActivity(), ItemService.class);
+            imageIntent.setAction(ItemService.FETCH_ITEM_IMAGE);
+            imageIntent.putExtra(ItemService.EXTRA_ITEM_DATA, item);
+            getActivity().startService(imageIntent);
+        }
     }
 
     @Override
@@ -82,7 +106,8 @@ public class FreeItemDetailFragment extends Fragment {
             return v;
         }
 
-        // TODO: get image
+        imageView = (ImageView)v.findViewById(R.id.free_item_detail_image);
+        updateUI();
 
         TextView descView = (TextView)v.findViewById(R.id.free_item_detail_desc);
         descView.setText(item.getDescription());
@@ -113,6 +138,9 @@ public class FreeItemDetailFragment extends Fragment {
         if (owner != null && usernameView != null && karmaView != null) {
             usernameView.setText(owner.getUserName());
             karmaView.setText(owner.getKarma().toString());
+        }
+        if (item.getImage(getActivity()) != null && imageView != null) {
+            imageView.setImageDrawable(item.getImage(getActivity()));
         }
     }
 
@@ -159,5 +187,7 @@ public class FreeItemDetailFragment extends Fragment {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(userBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(imageBroadcastReceiver);
+        item.clearImage();
     }
 }

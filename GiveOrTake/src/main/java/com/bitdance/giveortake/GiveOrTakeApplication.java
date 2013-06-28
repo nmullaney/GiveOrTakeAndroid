@@ -116,6 +116,15 @@ public class GiveOrTakeApplication extends Application {
     }
 
     @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        for (Item item : items.values()) {
+            // Clear all in-memory images
+            item.clearImage();
+        }
+    }
+
+    @Override
     public void onTerminate() {
         super.onTerminate();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
