@@ -1,12 +1,15 @@
 package com.bitdance.giveortake;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,11 @@ public class FreeItemPagerActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "OnCreate");
         setContentView(R.layout.activity_free_item_pager);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= 14) {
+            getActionBar().setIcon(getResources().getDrawable(R.drawable.ic_take_selected_30));
+        }
 
         final ViewPager viewPager = (ViewPager)findViewById(R.id.viewPager);
         final ArrayList<Item> freeItems = ((GiveOrTakeApplication) getApplication()).getFreeItems();
@@ -62,5 +70,14 @@ public class FreeItemPagerActivity extends FragmentActivity {
         }
         viewPager.setCurrentItem(index);
     }
-    
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
