@@ -16,19 +16,9 @@ import android.view.View;
  * Time: 12:06 PM
  * To change this template use File | Settings | File Templates.
  */
-public class LoginActivity extends FragmentActivity {
+public class LoginActivity extends SingleFragmentActivity {
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_fragment);
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = (Fragment) fm.findFragmentById(R.id.fragmentContainer);
-        if (fragment == null) {
-            fragment = new LoginFragment();
-            fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
-        }
+    public Fragment createFragment() {
+        return new LoginFragment();
     }
 }
