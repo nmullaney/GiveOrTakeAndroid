@@ -18,7 +18,7 @@ import android.view.View;
  */
 public class LoginActivity extends SingleFragmentActivity {
 
-    public Fragment createFragment() {
+    protected Fragment createFragment() {
         return new LoginFragment();
     }
 }

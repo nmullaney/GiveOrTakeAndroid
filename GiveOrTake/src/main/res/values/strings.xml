@@ -7,15 +7,18 @@
     <string name="free_items_title">Free Items</string>
     <string name="offers_title">My Offers</string>
     <string name="profile_title">Profile</string>
+    <string name="title_activity_free_item_pager">Free Item</string>
+
+    <!-- Facebook strings and error strings -->
     <string name="facebook_app_id">165759800241065</string>
     <string name="permission_not_granted">Permission not granted.</string>
     <string name="cancelled">Cancelled</string>
     <string name="error">Error</string>
     <string name="login_failure">Login failed.  Please try again.</string>
     <string name="ok">OK</string>
-    <string name="title_activity_free_item_pager">Free Item Pager</string>
     <string name="no_item_found">No item was found.</string>
 
+    <!-- Item detail strings -->
     <string name="posted_by">Posted By:</string>
     <string name="status">Status:</string>
     <string name="distance">Distance:</string>
@@ -23,6 +26,7 @@
     <string name="posted">Posted:</string>
     <string name="i_want_this">I want this!</string>
 
+    <!-- Message sending strings -->
     <string name="cancel">Cancel</string>
     <string name="send">Send</string>
     <string name="send_a_message">Send a Message</string>
@@ -37,9 +41,11 @@
     <string name="message_sent_error">Failed to send message.</string>
     <string name="message_sent">Message sent!</string>
 
+    <!-- Descriptive distance strings -->
     <string name="less_than_1_mile">Less than 1 mile</string>
     <string name="distance_format">%1$d miles</string>
 
+    <!-- Descriptive time strings -->
     <string name="less_than_1_minute">Less than 1 minute ago</string>
     <string name="a_minute_ago">1 minute ago</string>
     <string name="minutes_ago_format">%1$d minutes ago</string>
@@ -48,6 +54,15 @@
     <string name="a_day_ago">1 day ago</string>
     <string name="days_ago_format">%1$d days ago</string>
     <string name="more_than_month">More than a month ago</string>
+
+    <!-- Edit offer strings -->
+    <string name="edit_name_hint">Choose a name for your item.</string>
+    <string name="edit_offer_item_state">Item State:</string>
+    <string name="change">Change</string>
+    <string name="describe_item">Describe your item.</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="post_offer">Post Offer</string>
+    <string name="edit_offer">Edit Offer</string>
 
 
 </resources>

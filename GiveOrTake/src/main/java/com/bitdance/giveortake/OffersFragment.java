@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,11 @@ import java.util.ArrayList;
  */
 public class OffersFragment extends ListFragment {
     private static final String TAG = "OffersFragment";
+
+    private static final int ADD_OFFER_REQUEST_CODE = 1;
+    private static final int EDIT_OFFER_REQUEST_CODE = 2;
+
+    public static final String EXTRA_ITEM = "item";
 
     private ArrayList<Item> items;
 
@@ -54,6 +60,14 @@ public class OffersFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_offers, container, false);
         return v;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Item item = (Item) getListAdapter().getItem(position);
+        Intent intent = new Intent(getActivity(), EditOfferActivity.class);
+        intent.putExtra(EXTRA_ITEM, item);
+        startActivityForResult(intent, EDIT_OFFER_REQUEST_CODE);
     }
 
     @Override
