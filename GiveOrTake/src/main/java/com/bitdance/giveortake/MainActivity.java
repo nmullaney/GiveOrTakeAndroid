@@ -12,9 +12,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+    public static final String TAG = "MainActivity";
+
+    private static final int DEFAULT_SELECTED_TAB = 1;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -71,7 +75,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             .setTabListener(this));
         }
 
-        actionBar.selectTab(actionBar.getTabAt(1));
+        actionBar.selectTab(actionBar.getTabAt(DEFAULT_SELECTED_TAB));
     }
     
     @Override

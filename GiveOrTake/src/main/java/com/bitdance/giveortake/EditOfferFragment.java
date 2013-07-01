@@ -4,10 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,6 +48,13 @@ public class EditOfferFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= 14) {
+            getActivity().getActionBar().setIcon(getResources()
+                    .getDrawable(R.drawable.ic_give_selected_30));
+        }
+
         item = (Item) getActivity().getIntent().getSerializableExtra(OffersFragment.EXTRA_ITEM);
         if (item.getId() != null && item.getImage(getActivity()) == null) {
             Intent intent = new Intent(getActivity(), ItemService.class);
@@ -79,6 +90,17 @@ public class EditOfferFragment extends Fragment {
         itemImage.setImageDrawable(item.getImage(getActivity()));
         Button postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(getActivity());
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
     }
 
     public void updateUI() {
