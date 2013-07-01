@@ -231,7 +231,6 @@ containing a value of this type.
         public static final int taken=0x7f020036;
     }
     public static final class id {
-        public static final int action_settings=0x7f050035;
         public static final int com_facebook_login_activity_progress_bar=0x7f050008;
         public static final int com_facebook_picker_activity_circle=0x7f050007;
         public static final int com_facebook_picker_checkbox=0x7f05000a;
@@ -275,6 +274,7 @@ containing a value of this type.
         public static final int list_item_state=0x7f050034;
         public static final int list_item_thumbnail=0x7f050032;
         public static final int login_button=0x7f05002d;
+        public static final int menu_item_new_item=0x7f050035;
         public static final int message_dialog_message=0x7f050031;
         public static final int message_dialog_reply_to=0x7f05002f;
         public static final int message_dialog_subject=0x7f050030;
@@ -313,9 +313,7 @@ containing a value of this type.
         public static final int list_item_item=0x7f030017;
     }
     public static final class menu {
-        public static final int free_items=0x7f090000;
-        public static final int main=0x7f090001;
-        public static final int tab=0x7f090002;
+        public static final int offers_list_options=0x7f090000;
     }
     public static final class string {
         public static final int a_day_ago=0x7f070000;
@@ -373,22 +371,23 @@ containing a value of this type.
         public static final int message_sent_error=0x7f070034;
         public static final int minutes_ago_format=0x7f070035;
         public static final int more_than_month=0x7f070036;
-        public static final int no_item_found=0x7f070037;
-        public static final int offers_title=0x7f070038;
-        public static final int ok=0x7f070039;
-        public static final int permission_not_granted=0x7f07003a;
-        public static final int post_offer=0x7f07003b;
-        public static final int posted=0x7f07003c;
-        public static final int posted_by=0x7f07003d;
-        public static final int profile_title=0x7f07003e;
-        public static final int reply_to=0x7f07003f;
-        public static final int send=0x7f070040;
-        public static final int send_a_message=0x7f070041;
-        public static final int status=0x7f070042;
-        public static final int subject=0x7f070043;
-        public static final int title_activity_free_item_pager=0x7f070044;
-        public static final int to=0x7f070045;
-        public static final int updated=0x7f070046;
+        public static final int new_item=0x7f070037;
+        public static final int no_item_found=0x7f070038;
+        public static final int offers_title=0x7f070039;
+        public static final int ok=0x7f07003a;
+        public static final int permission_not_granted=0x7f07003b;
+        public static final int post_offer=0x7f07003c;
+        public static final int posted=0x7f07003d;
+        public static final int posted_by=0x7f07003e;
+        public static final int profile_title=0x7f07003f;
+        public static final int reply_to=0x7f070040;
+        public static final int send=0x7f070041;
+        public static final int send_a_message=0x7f070042;
+        public static final int status=0x7f070043;
+        public static final int subject=0x7f070044;
+        public static final int title_activity_free_item_pager=0x7f070045;
+        public static final int to=0x7f070046;
+        public static final int updated=0x7f070047;
     }
     public static final class style {
         /** 

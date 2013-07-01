@@ -70,6 +70,10 @@ public class EditOfferFragment extends Fragment {
         stateText = (TextView)view.findViewById(R.id.edit_offer_state);
         stateText.setText(item.getState().getName());
         Button changeStateButton = (Button)view.findViewById(R.id.edit_offer_change_state_button);
+        if (item.getState().equals(Item.ItemState.DRAFT)) {
+            changeStateButton.setEnabled(false);
+            changeStateButton.setVisibility(View.INVISIBLE);
+        }
         Button addPhotoButton = (Button)view.findViewById(R.id.edit_offer_photo_button);
         itemImage = (ImageView)view.findViewById(R.id.edit_offer_photo);
         itemImage.setImageDrawable(item.getImage(getActivity()));

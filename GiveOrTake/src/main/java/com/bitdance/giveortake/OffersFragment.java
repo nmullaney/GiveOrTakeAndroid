@@ -10,6 +10,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -43,6 +46,7 @@ public class OffersFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
@@ -60,6 +64,29 @@ public class OffersFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_offers, container, false);
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.offers_list_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case R.id.menu_item_new_item:
+                return createNewItem();
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+    public boolean createNewItem() {
+        Intent i = new Intent(getActivity(), EditOfferActivity.class);
+        i.putExtra(EXTRA_ITEM, new Item());
+        startActivityForResult(i, ADD_OFFER_REQUEST_CODE);
+        return true;
     }
 
     @Override

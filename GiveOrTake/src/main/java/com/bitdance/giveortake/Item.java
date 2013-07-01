@@ -52,6 +52,11 @@ public class Item implements Serializable {
     private static final String JSON_DISTANCE = "distance";
     private static final String JSON_NUM_MESSAGES_SENT = "numMessagesSent";
 
+    public Item() {
+        userID = ActiveUser.getInstance().getUserID();
+        state = ItemState.DRAFT;
+    }
+
     public Item(JSONObject jsonObject) throws JSONException {
         id = jsonObject.getLong(JSON_ID);
         name = jsonObject.getString(JSON_NAME);

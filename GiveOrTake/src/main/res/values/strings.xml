@@ -63,6 +63,7 @@
     <string name="add_photo">Add Photo</string>
     <string name="post_offer">Post Offer</string>
     <string name="edit_offer">Edit Offer</string>
+    <string name="new_item">New Item</string>
 
 
 </resources>
