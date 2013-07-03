@@ -272,12 +272,15 @@ containing a value of this type.
         public static final int free_item_detail_status_text=0x7f05002b;
         public static final int free_item_detail_username=0x7f050028;
         public static final int free_item_detail_want_button=0x7f05002f;
+        public static final int header_title=0x7f050035;
+        public static final int label_field_field=0x7f05003a;
+        public static final int label_field_label=0x7f050039;
         public static final int large=0x7f050002;
-        public static final int list_item_name=0x7f050038;
-        public static final int list_item_state=0x7f050039;
-        public static final int list_item_thumbnail=0x7f050037;
+        public static final int list_item_name=0x7f050037;
+        public static final int list_item_state=0x7f050038;
+        public static final int list_item_thumbnail=0x7f050036;
         public static final int login_button=0x7f050030;
-        public static final int menu_item_new_item=0x7f05003a;
+        public static final int menu_item_new_item=0x7f05003b;
         public static final int message_dialog_message=0x7f050034;
         public static final int message_dialog_reply_to=0x7f050032;
         public static final int message_dialog_subject=0x7f050033;
@@ -285,8 +288,6 @@ containing a value of this type.
         public static final int normal=0x7f050001;
         public static final int pager=0x7f050004;
         public static final int picker_subtitle=0x7f050017;
-        public static final int profile_email=0x7f050036;
-        public static final int profile_username=0x7f050035;
         public static final int search_box=0x7f050016;
         public static final int small=0x7f050000;
         public static final int viewPager=0x7f050003;
@@ -316,7 +317,9 @@ containing a value of this type.
         public static final int fragment_message_dialog=0x7f030015;
         public static final int fragment_offers=0x7f030016;
         public static final int fragment_profile=0x7f030017;
-        public static final int list_item_item=0x7f030018;
+        public static final int list_header_item=0x7f030018;
+        public static final int list_item_item=0x7f030019;
+        public static final int list_label_field=0x7f03001a;
     }
     public static final class menu {
         public static final int offers_list_options=0x7f090000;
@@ -376,7 +379,7 @@ containing a value of this type.
         public static final int less_than_1_minute=0x7f070033;
         public static final int location=0x7f070034;
         public static final int login_failure=0x7f070035;
-        public static final int lougout=0x7f070036;
+        public static final int logout=0x7f070036;
         public static final int message_hint=0x7f070037;
         public static final int message_sent=0x7f070038;
         public static final int message_sent_error=0x7f070039;
