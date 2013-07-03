@@ -9,12 +9,16 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:name=".GiveOrTakeApplication"
+        android:debuggable="true"
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -43,6 +47,11 @@
             android:label="@string/edit_offer"
             android:parentActivityName="com.bitdance.giveortake.MainActivity">
 
+        </activity>
+        <activity
+            android:name="com.bitdance.giveortake.CameraActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.bitdance.giveortake.EditOfferActivity">
         </activity>
         <activity
             android:name="com.bitdance.giveortake.FreeItemPagerActivity"

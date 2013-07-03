@@ -92,6 +92,21 @@ public class Item implements Serializable {
         }
     }
 
+    public void loadThumbnailFromFile(Context context, String filename) {
+        Drawable newThumbnail = Drawable
+                .createFromPath(context.getFileStreamPath(filename).getAbsolutePath());
+        setThumbnail(newThumbnail);
+        context.deleteFile(filename);
+    }
+
+    public void loadImageFromFile(Context context, String filename) {
+        File imageFile = context.getFileStreamPath(filename);
+        imageFile.renameTo(getLocalImageFile(context));
+        // reload the image from the file
+        image = null;
+        getImage(context);
+    }
+
     private Date dateFromJSONString(String jsonString) {
         try {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(jsonString);
@@ -166,9 +181,8 @@ public class Item implements Serializable {
     }
 
     public File getLocalImageFile(Context context) {
-        if (getImageURL() == null) return null;
         String filename = getId() + "_image.png";
-        return new File(context.getFilesDir() + "/" + filename);
+        return context.getFileStreamPath(filename);
     }
 
     public Drawable getImage(Context context) {

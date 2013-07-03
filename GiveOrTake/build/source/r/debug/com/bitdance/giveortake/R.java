@@ -231,6 +231,9 @@ containing a value of this type.
         public static final int taken=0x7f020036;
     }
     public static final class id {
+        public static final int camera_preview=0x7f05001b;
+        public static final int camera_surface=0x7f05001c;
+        public static final int camera_take_picture_button=0x7f05001d;
         public static final int com_facebook_login_activity_progress_bar=0x7f050008;
         public static final int com_facebook_picker_activity_circle=0x7f050007;
         public static final int com_facebook_picker_checkbox=0x7f05000a;
@@ -250,35 +253,35 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f05001a;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f050018;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f050019;
-        public static final int edit_offer_change_state_button=0x7f05001e;
-        public static final int edit_offer_description=0x7f05001f;
-        public static final int edit_offer_name=0x7f05001b;
-        public static final int edit_offer_photo=0x7f050021;
-        public static final int edit_offer_photo_button=0x7f050020;
-        public static final int edit_offer_post_button=0x7f050022;
-        public static final int edit_offer_state=0x7f05001d;
-        public static final int edit_offer_state_icon=0x7f05001c;
+        public static final int edit_offer_change_state_button=0x7f050021;
+        public static final int edit_offer_description=0x7f050022;
+        public static final int edit_offer_name=0x7f05001e;
+        public static final int edit_offer_photo=0x7f050024;
+        public static final int edit_offer_photo_button=0x7f050023;
+        public static final int edit_offer_post_button=0x7f050025;
+        public static final int edit_offer_state=0x7f050020;
+        public static final int edit_offer_state_icon=0x7f05001f;
         public static final int fragmentContainer=0x7f050005;
-        public static final int free_item_detail_date_created=0x7f05002b;
-        public static final int free_item_detail_date_updated=0x7f05002a;
-        public static final int free_item_detail_desc=0x7f050024;
-        public static final int free_item_detail_distance=0x7f050029;
-        public static final int free_item_detail_image=0x7f050023;
-        public static final int free_item_detail_karma=0x7f050026;
-        public static final int free_item_detail_status_icon=0x7f050027;
-        public static final int free_item_detail_status_text=0x7f050028;
-        public static final int free_item_detail_username=0x7f050025;
-        public static final int free_item_detail_want_button=0x7f05002c;
+        public static final int free_item_detail_date_created=0x7f05002e;
+        public static final int free_item_detail_date_updated=0x7f05002d;
+        public static final int free_item_detail_desc=0x7f050027;
+        public static final int free_item_detail_distance=0x7f05002c;
+        public static final int free_item_detail_image=0x7f050026;
+        public static final int free_item_detail_karma=0x7f050029;
+        public static final int free_item_detail_status_icon=0x7f05002a;
+        public static final int free_item_detail_status_text=0x7f05002b;
+        public static final int free_item_detail_username=0x7f050028;
+        public static final int free_item_detail_want_button=0x7f05002f;
         public static final int large=0x7f050002;
-        public static final int list_item_name=0x7f050033;
-        public static final int list_item_state=0x7f050034;
-        public static final int list_item_thumbnail=0x7f050032;
-        public static final int login_button=0x7f05002d;
-        public static final int menu_item_new_item=0x7f050035;
-        public static final int message_dialog_message=0x7f050031;
-        public static final int message_dialog_reply_to=0x7f05002f;
-        public static final int message_dialog_subject=0x7f050030;
-        public static final int message_dialog_to=0x7f05002e;
+        public static final int list_item_name=0x7f050036;
+        public static final int list_item_state=0x7f050037;
+        public static final int list_item_thumbnail=0x7f050035;
+        public static final int login_button=0x7f050030;
+        public static final int menu_item_new_item=0x7f050038;
+        public static final int message_dialog_message=0x7f050034;
+        public static final int message_dialog_reply_to=0x7f050032;
+        public static final int message_dialog_subject=0x7f050033;
+        public static final int message_dialog_to=0x7f050031;
         public static final int normal=0x7f050001;
         public static final int pager=0x7f050004;
         public static final int picker_subtitle=0x7f050017;
@@ -303,14 +306,15 @@ containing a value of this type.
         public static final int com_facebook_placepickerfragment=0x7f03000d;
         public static final int com_facebook_placepickerfragment_list_row=0x7f03000e;
         public static final int com_facebook_usersettingsfragment=0x7f03000f;
-        public static final int fragment_edit_offer=0x7f030010;
-        public static final int fragment_free_item_detail=0x7f030011;
-        public static final int fragment_free_items=0x7f030012;
-        public static final int fragment_login=0x7f030013;
-        public static final int fragment_message_dialog=0x7f030014;
-        public static final int fragment_offers=0x7f030015;
-        public static final int fragment_profile=0x7f030016;
-        public static final int list_item_item=0x7f030017;
+        public static final int fragment_camera=0x7f030010;
+        public static final int fragment_edit_offer=0x7f030011;
+        public static final int fragment_free_item_detail=0x7f030012;
+        public static final int fragment_free_items=0x7f030013;
+        public static final int fragment_login=0x7f030014;
+        public static final int fragment_message_dialog=0x7f030015;
+        public static final int fragment_offers=0x7f030016;
+        public static final int fragment_profile=0x7f030017;
+        public static final int list_item_item=0x7f030018;
     }
     public static final class menu {
         public static final int offers_list_options=0x7f090000;
@@ -385,9 +389,10 @@ containing a value of this type.
         public static final int send_a_message=0x7f070042;
         public static final int status=0x7f070043;
         public static final int subject=0x7f070044;
-        public static final int title_activity_free_item_pager=0x7f070045;
-        public static final int to=0x7f070046;
-        public static final int updated=0x7f070047;
+        public static final int take_photo=0x7f070045;
+        public static final int title_activity_free_item_pager=0x7f070046;
+        public static final int to=0x7f070047;
+        public static final int updated=0x7f070048;
     }
     public static final class style {
         /** 

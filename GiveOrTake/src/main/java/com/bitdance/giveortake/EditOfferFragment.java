@@ -25,6 +25,8 @@ import android.widget.TextView;
 public class EditOfferFragment extends Fragment {
     public static final String TAG = "EditOfferFragment";
 
+    public static final int REQUEST_IMAGE_RESULT = 1;
+
     private Item item;
 
     private EditText nameText;
@@ -86,6 +88,13 @@ public class EditOfferFragment extends Fragment {
             changeStateButton.setVisibility(View.INVISIBLE);
         }
         Button addPhotoButton = (Button)view.findViewById(R.id.edit_offer_photo_button);
+        addPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), CameraActivity.class);
+                startActivityForResult(i, REQUEST_IMAGE_RESULT);
+            }
+        });
         itemImage = (ImageView)view.findViewById(R.id.edit_offer_photo);
         itemImage.setImageDrawable(item.getImage(getActivity()));
         Button postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
@@ -100,6 +109,21 @@ public class EditOfferFragment extends Fragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_IMAGE_RESULT:
+                String thumbnailFile = data.getStringExtra(CameraFragment.EXTRA_THUMBNAIL_FILENAME);
+                String imageFile = data.getStringExtra(CameraFragment.EXTRA_IMAGE_FILENAME);
+                item.loadThumbnailFromFile(getActivity(), thumbnailFile);
+                item.loadImageFromFile(getActivity(), imageFile);
+                updateUI();
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
