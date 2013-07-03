@@ -52,8 +52,7 @@ public class LoginFragment extends Fragment {
                             .setPositiveButton(R.string.ok, null)
                             .show();
                 } else {
-                    Intent mainIntent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(mainIntent);
+                    launchMainActivity();
                 }
             }
         }
@@ -62,6 +61,13 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (ActiveUser.getInstance() != null) {
+            // we are still logged in and can go directly to the main activity
+            launchMainActivity();
+            return;
+        }
+
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
 
@@ -94,6 +100,13 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
+    private void launchMainActivity() {
+        Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(mainIntent);
+        getActivity().finish();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -117,7 +130,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        uiHelper.onDestroy();
+        if (uiHelper != null) {
+            uiHelper.onDestroy();
+        }
         LocalBroadcastManager localBroadcastManager =
                 LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(loginBroadcastReceiver);
