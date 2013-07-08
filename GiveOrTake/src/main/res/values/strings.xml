@@ -33,11 +33,9 @@
     <string name="to">To:</string>
     <string name="reply_to">Reply-To:</string>
     <string name="subject">Subject:</string>
-    <string name="message_hint">
-        Compose a message to the owner of this item.
+    <string name="message_hint">        Compose a message to the owner of this item.
         Ask a question about the item or inquire if it\'s still available.
-        Your email address will be shared with the recipient of this message.
-    </string>
+        Your email address will be shared with the recipient of this message.</string>
     <string name="message_sent_error">Failed to send message.</string>
     <string name="message_sent">Message sent!</string>
 
@@ -72,6 +70,7 @@
     <string name="more_information">More Information</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
-
+    <string name="maps_api_key">AIzaSyCubyA4jGRyFP_-BUCTY0QCdwz60yw2GLk</string>
+    <string name="title_activity_test">TestActivity</string>
 
 </resources>

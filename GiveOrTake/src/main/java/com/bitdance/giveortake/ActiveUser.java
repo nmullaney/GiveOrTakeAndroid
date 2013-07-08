@@ -102,8 +102,16 @@ public class ActiveUser {
         return getUser().getLatitude();
     }
 
+    public int getMicroLatitude() {
+        return (int) (getLatitude() * 1E6);
+    }
+
     public double getLongitude() {
         return getUser().getLongitude();
+    }
+
+    public int getMicroLongitude() {
+        return (int) (getLongitude() * 1E6);
     }
 
     public int getKarma() {

@@ -1,1 +1,1 @@
-include ':GiveOrTake', ':Facebook'
+include ':GiveOrTake', ':Facebook', ':google-play-services_lib'

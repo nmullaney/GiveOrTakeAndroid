@@ -3,6 +3,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$APPLICATION_HOME_DIR$/sdk/extras/google/google_play_services/libproject/google-play-services_lib/build.gradle" />
+        <option name="gradleHome" value="/usr/local/gradle-1.6" />
+        <option name="preferLocalInstallationToWrapper" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/build.gradle" />
         <option name="gradleHome" value="/usr/local/gradle-1.6" />
         <option name="useAutoImport" value="true" />
