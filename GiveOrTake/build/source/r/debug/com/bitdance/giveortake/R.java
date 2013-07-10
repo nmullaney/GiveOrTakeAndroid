@@ -436,7 +436,7 @@ containing a value of this type.
         public static final int list_item_state=0x7f05003c;
         public static final int list_item_thumbnail=0x7f05003a;
         public static final int login_button=0x7f050034;
-        public static final int mapview=0x7f05003f;
+        public static final int map=0x7f05003f;
         public static final int menu_item_new_item=0x7f050040;
         public static final int message_dialog_message=0x7f050038;
         public static final int message_dialog_reply_to=0x7f050036;

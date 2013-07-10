@@ -1,5 +1,6 @@
 *.iml
 GiveOrTake/build/*
 Facebook/build/*
+google-play-services_lib/build/*
 .gradle/
 .idea/*
