@@ -53,6 +53,7 @@ public class ProfileFragment extends ListFragment {
         items.add(new MapStaticListItem());
 
         items.add(new HeaderStaticListItem(getString(R.string.karma)));
+        items.add(new KarmaStaticListItem());
         items.add(new HeaderStaticListItem(getString(R.string.logout)));
         items.add(new HeaderStaticListItem(getString(R.string.more_information)));
 
@@ -164,6 +165,24 @@ public class ProfileFragment extends ListFragment {
                     .title("My location"));
 
             return fullView;
+        }
+    }
+
+    public class KarmaStaticListItem extends StaticListItem {
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+        @Override
+        public View getView(Context context, View convertView) {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            convertView = layoutInflater.inflate(R.layout.list_karma, null);
+            TextView karmaView = (TextView)convertView.findViewById(R.id.karma);
+            ActiveUser activeUser = ActiveUser.getInstance();
+            karmaView.setText(String.valueOf(activeUser.getKarma()));
+            return convertView;
         }
     }
 

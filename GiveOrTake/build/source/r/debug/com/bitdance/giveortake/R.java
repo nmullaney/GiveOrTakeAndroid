@@ -385,7 +385,7 @@ containing a value of this type.
         public static final int taken=0x7f02004e;
     }
     public static final class id {
-        public static final int action_settings=0x7f050041;
+        public static final int action_settings=0x7f050042;
         public static final int camera_preview=0x7f05001f;
         public static final int camera_surface=0x7f050020;
         public static final int camera_take_picture_button=0x7f050021;
@@ -429,15 +429,16 @@ containing a value of this type.
         public static final int free_item_detail_want_button=0x7f050033;
         public static final int header_title=0x7f050039;
         public static final int hybrid=0x7f050004;
-        public static final int label_field_field=0x7f05003e;
-        public static final int label_field_label=0x7f05003d;
+        public static final int karma=0x7f05003d;
+        public static final int label_field_field=0x7f05003f;
+        public static final int label_field_label=0x7f05003e;
         public static final int large=0x7f050006;
         public static final int list_item_name=0x7f05003b;
         public static final int list_item_state=0x7f05003c;
         public static final int list_item_thumbnail=0x7f05003a;
         public static final int login_button=0x7f050034;
-        public static final int map=0x7f05003f;
-        public static final int menu_item_new_item=0x7f050040;
+        public static final int map=0x7f050040;
+        public static final int menu_item_new_item=0x7f050041;
         public static final int message_dialog_message=0x7f050038;
         public static final int message_dialog_reply_to=0x7f050036;
         public static final int message_dialog_subject=0x7f050037;
@@ -479,8 +480,9 @@ containing a value of this type.
         public static final int fragment_profile=0x7f030017;
         public static final int list_header_item=0x7f030018;
         public static final int list_item_item=0x7f030019;
-        public static final int list_label_field=0x7f03001a;
-        public static final int list_map=0x7f03001b;
+        public static final int list_karma=0x7f03001a;
+        public static final int list_label_field=0x7f03001b;
+        public static final int list_map=0x7f03001c;
     }
     public static final class menu {
         public static final int offers_list_options=0x7f090000;
