@@ -382,8 +382,7 @@ containing a value of this type.
         public static final int icon_take_config_60=0x7f02004b;
         public static final int karma=0x7f02004c;
         public static final int promised=0x7f02004d;
-        public static final int red_background=0x7f02004e;
-        public static final int taken=0x7f02004f;
+        public static final int taken=0x7f02004e;
     }
     public static final class id {
         public static final int action_settings=0x7f050043;
@@ -494,7 +493,7 @@ containing a value of this type.
     public static final class string {
         public static final int a_day_ago=0x7f070000;
         public static final int a_minute_ago=0x7f070001;
-        public static final int abount=0x7f070002;
+        public static final int about=0x7f070002;
         public static final int account=0x7f070003;
         public static final int action_settings=0x7f070004;
         public static final int add_photo=0x7f070005;

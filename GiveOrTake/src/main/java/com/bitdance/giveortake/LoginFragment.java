@@ -30,6 +30,9 @@ import java.util.List;
 public class LoginFragment extends Fragment {
     public static final String TAG = "LoginFragment";
 
+    public static final String EXTRA_LOGIN_ACTION = "login_action";
+    public static final String LOGOUT = "logout";
+
     private UiLifecycleHelper uiHelper;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -61,6 +64,12 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
+        if (loginAction != null && loginAction.equals(LOGOUT)) {
+            Session.getActiveSession().closeAndClearTokenInformation();
+            ActiveUser.logout();
+        }
 
         if (ActiveUser.getInstance() != null) {
             // we are still logged in and can go directly to the main activity

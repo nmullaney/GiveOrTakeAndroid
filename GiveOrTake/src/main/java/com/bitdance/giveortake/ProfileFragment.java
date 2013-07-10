@@ -2,8 +2,10 @@ package com.bitdance.giveortake;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-
+import com.facebook.android.Facebook;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +49,7 @@ public class ProfileFragment extends ListFragment {
         username.setLabel(getString(R.string.username));
         username.setField(activeUser.getUserName());
         items.add(username);
+
         LabelFieldStaticListItem email = new LabelFieldStaticListItem();
         email.setLabel(getString(R.string.email));
         email.setField(activeUser.getEmail());
@@ -57,17 +60,36 @@ public class ProfileFragment extends ListFragment {
 
         items.add(new HeaderStaticListItem(getString(R.string.karma)));
         items.add(new KarmaStaticListItem());
+
         items.add(new HeaderStaticListItem(getString(R.string.logout)));
         ButtonListItem logoutButtonListItem = new ButtonListItem();
         logoutButtonListItem.setText(getString(R.string.logout));
         logoutButtonListItem.setBackgroundColor(Color.RED);
         logoutButtonListItem.setTextColor(Color.WHITE);
+        logoutButtonListItem.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent logoutIntent = new Intent(getActivity(), LoginActivity.class);
+                logoutIntent.putExtra(LoginFragment.EXTRA_LOGIN_ACTION, LoginFragment.LOGOUT);
+                startActivity(logoutIntent);
+            }
+        });
         items.add(logoutButtonListItem);
+
         items.add(new HeaderStaticListItem(getString(R.string.more_information)));
         ButtonListItem aboutButtonListItem = new ButtonListItem();
-        aboutButtonListItem.setText(getString(R.string.abount));
+        aboutButtonListItem.setText(getString(R.string.about));
         aboutButtonListItem.setTextColor(Color.BLUE);
         aboutButtonListItem.setBackgroundColor(Color.LTGRAY);
+        aboutButtonListItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openAboutPage = new Intent(Intent.ACTION_VIEW);
+                openAboutPage.setData(Uri.parse(Constants.ABOUT_URL));
+                startActivity(openAboutPage);
+            }
+        });
         items.add(aboutButtonListItem);
 
         StaticListAdapter adapter = new StaticListAdapter(getActivity(), items);
@@ -204,6 +226,7 @@ public class ProfileFragment extends ListFragment {
         private String text;
         private int textColor;
         private int backgroundColor;
+        private View.OnClickListener onClickListener;
 
         public void setText(String text) {
             this.text = text;
@@ -215,6 +238,10 @@ public class ProfileFragment extends ListFragment {
 
         public void setBackgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
+        }
+
+        public void setOnClickListener(View.OnClickListener onClickListener) {
+            this.onClickListener = onClickListener;
         }
 
         @Override
@@ -230,6 +257,7 @@ public class ProfileFragment extends ListFragment {
             button.setText(text);
             button.setTextColor(textColor);
             button.setBackgroundColor(backgroundColor);
+            button.setOnClickListener(onClickListener);
             return convertView;
         }
     }
