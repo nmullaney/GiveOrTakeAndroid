@@ -63,10 +63,13 @@
     <string name="edit_offer">Edit Offer</string>
     <string name="new_item">New Item</string>
     <string name="take_photo">Take Photo</string>
+
+    <!-- Profile Strings -->
     <string name="account">Account</string>
     <string name="location">Location</string>
     <string name="karma">Karma</string>
     <string name="logout">Logout</string>
+    <string name="abount">About</string>
     <string name="more_information">More Information</string>
     <string name="username">Username</string>
     <string name="email">Email</string>

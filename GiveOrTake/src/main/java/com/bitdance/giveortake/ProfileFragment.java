@@ -2,13 +2,16 @@ package com.bitdance.giveortake;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -55,7 +58,17 @@ public class ProfileFragment extends ListFragment {
         items.add(new HeaderStaticListItem(getString(R.string.karma)));
         items.add(new KarmaStaticListItem());
         items.add(new HeaderStaticListItem(getString(R.string.logout)));
+        ButtonListItem logoutButtonListItem = new ButtonListItem();
+        logoutButtonListItem.setText(getString(R.string.logout));
+        logoutButtonListItem.setBackgroundColor(Color.RED);
+        logoutButtonListItem.setTextColor(Color.WHITE);
+        items.add(logoutButtonListItem);
         items.add(new HeaderStaticListItem(getString(R.string.more_information)));
+        ButtonListItem aboutButtonListItem = new ButtonListItem();
+        aboutButtonListItem.setText(getString(R.string.abount));
+        aboutButtonListItem.setTextColor(Color.BLUE);
+        aboutButtonListItem.setBackgroundColor(Color.LTGRAY);
+        items.add(aboutButtonListItem);
 
         StaticListAdapter adapter = new StaticListAdapter(getActivity(), items);
         setListAdapter(adapter);
@@ -182,6 +195,41 @@ public class ProfileFragment extends ListFragment {
             TextView karmaView = (TextView)convertView.findViewById(R.id.karma);
             ActiveUser activeUser = ActiveUser.getInstance();
             karmaView.setText(String.valueOf(activeUser.getKarma()));
+            return convertView;
+        }
+    }
+
+    public class ButtonListItem extends StaticListItem {
+
+        private String text;
+        private int textColor;
+        private int backgroundColor;
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public void setTextColor(int textColor) {
+            this.textColor = textColor;
+        }
+
+        public void setBackgroundColor(int backgroundColor) {
+            this.backgroundColor = backgroundColor;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+        @Override
+        public View getView(Context context, View convertView) {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            convertView = layoutInflater.inflate(R.layout.list_button, null);
+            Button button = (Button)convertView.findViewById(R.id.list_button);
+            button.setText(text);
+            button.setTextColor(textColor);
+            button.setBackgroundColor(backgroundColor);
             return convertView;
         }
     }
