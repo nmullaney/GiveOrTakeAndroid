@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.facebook.Session;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -118,6 +119,14 @@ public class UserFetcher {
     public UpdateResponse cancelPendingEmail() {
         Log.i(TAG, "Cancelling pending email");
         return updateEmailField("cancel_pending", "1");
+    }
+
+    public UpdateResponse updateLocation(LatLng latLng) {
+        String urlSpec = Constants.BASE_URL + "/user.php";
+        List <NameValuePair> data = new ArrayList<NameValuePair>();
+        data.add(new BasicNameValuePair("latitude", String.valueOf(latLng.latitude)));
+        data.add(new BasicNameValuePair("longitude", String.valueOf(latLng.longitude)));
+        return updateUser(data, urlSpec);
     }
 
     private UpdateResponse updateUser(List<NameValuePair> data, String urlSpec) {

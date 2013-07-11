@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by nora on 6/23/13.
  */
@@ -34,6 +36,10 @@ public class UserService extends IntentService {
     public static final String CANCEL_PENDING_EMAIL = "cancel_pending_email";
     public static final String PENDING_EMAIL_CANCELLED = "pending_email_cancelled";
 
+    public static final String UPDATE_LOCATION = "update_location";
+    public static final String EXTRA_LATLNG = "extra_latlng";
+    public static final String LOCATION_UPDATED = "location_updated";
+
     public UserService() {
         super(TAG);
     }
@@ -56,6 +62,9 @@ public class UserService extends IntentService {
             sendEmailCode(code);
         } else if (intent.getAction().equals(CANCEL_PENDING_EMAIL)) {
             cancelPendingEmail();
+        } else if (intent.getAction().equals(UPDATE_LOCATION)) {
+            LatLng latLng = intent.getParcelableExtra(EXTRA_LATLNG);
+            updateLocation(latLng);
         }
     }
 
@@ -136,6 +145,18 @@ public class UserService extends IntentService {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         Intent intent = new Intent(PENDING_EMAIL_CANCELLED);
+        if (!response.isSuccess()) {
+            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+        }
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void updateLocation(LatLng latLng) {
+        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher.UpdateResponse response = fetcher.updateLocation(latLng);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent intent = new Intent(LOCATION_UPDATED);
         if (!response.isSuccess()) {
             intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
         }

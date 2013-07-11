@@ -76,9 +76,9 @@
     <string name="more_information">More Information</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
+    <string name="my_location">My Location</string>
     <string name="maps_api_key">AIzaSyCubyA4jGRyFP_-BUCTY0QCdwz60yw2GLk</string>
     <string name="title_activity_test">TestActivity</string>
-
 
     <!-- Update username strings -->
     <string name="update_username">Update Username</string>
@@ -99,11 +99,14 @@
     <string name="error_code_four_digits">The code must be 4-digits.</string>
     <string name="update_email">Update Email</string>
     <string name="cancel_email_update">Cancel Email Change</string>
+
+    <!-- Update location strings -->
     <string name="update_location">Update Location</string>
     <string name="update_location_hint">Drop a pin to choose a location. Other users will see this
         location, so you may want to choose an approximate location.
     </string>
     <string name="center_map">Center Map on Current Location</string>
+    <string name="error_no_location">Please choose a location by dropping a pin on the map.</string>
 
 
 </resources>

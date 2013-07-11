@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -123,6 +124,8 @@ public class ProfileFragment extends ListFragment {
                 String email = ActiveUser.getInstance().getEmail();
                 emailItem.getFieldView().setText(email);
                 break;
+            case UPDATE_LOCATION_RESULT:
+                mapItem.updateLocation();
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
@@ -211,10 +214,26 @@ public class ProfileFragment extends ListFragment {
         private View fullView;
         private Intent intent;
         private int intentResult;
+        private GoogleMap map;
+        private Marker marker;
 
         public void setIntentAndResult(Intent intent, int intentResult) {
             this.intent = intent;
             this.intentResult = intentResult;
+        }
+
+        public void updateLocation() {
+            ActiveUser activeUser = ActiveUser.getInstance();
+            if (activeUser != null) {
+                LatLng latLng = new LatLng(activeUser.getLatitude(), activeUser.getLongitude());
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+                map.animateCamera(cameraUpdate);
+                if (marker == null) {
+                    marker = createMarker(latLng);
+                } else {
+                    marker.setPosition(latLng);
+                }
+            }
         }
 
         public boolean isEnabled() {
@@ -224,6 +243,12 @@ public class ProfileFragment extends ListFragment {
         @Override
         public void handleOnClick() {
             startActivityForResult(intent, intentResult);
+        }
+
+        private Marker createMarker(LatLng position) {
+            return map.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(getString(R.string.my_location)));
         }
 
         @Override
@@ -236,7 +261,7 @@ public class ProfileFragment extends ListFragment {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             SupportMapFragment mapFragment = ((SupportMapFragment) fm.findFragmentById(R.id.map));
 
-            GoogleMap map = mapFragment.getMap();
+            map = mapFragment.getMap();
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
@@ -249,17 +274,7 @@ public class ProfileFragment extends ListFragment {
             map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setZoomGesturesEnabled(false);
 
-            ActiveUser activeUser = ActiveUser.getInstance();
-            LatLng latLng = new LatLng(0, 0);
-            if (activeUser != null) {
-                latLng = new LatLng(activeUser.getLatitude(), activeUser.getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
-                map.animateCamera(cameraUpdate);
-            }
-
-            map.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title("My location"));
+            updateLocation();
 
             return fullView;
         }

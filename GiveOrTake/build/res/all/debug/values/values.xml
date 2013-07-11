@@ -160,6 +160,7 @@
         change your email, we\'ll send an email to this address to verify that it\'s yours.</string>
     <string name="error">Error</string>
     <string name="error_code_four_digits">The code must be 4-digits.</string>
+    <string name="error_no_location">Please choose a location by dropping a pin on the map.</string>
     <string name="error_try_again">Something went wrong.  Please try again.</string>
     <string name="error_username_too_short">Username must be at least 6 characters.</string>
     <string name="facebook_app_id">165759800241065</string>
@@ -185,6 +186,7 @@
     <string name="minutes_ago_format">%1$d minutes ago</string>
     <string name="more_information">More Information</string>
     <string name="more_than_month">More than a month ago</string>
+    <string name="my_location">My Location</string>
     <string name="new_item">New Item</string>
     <string name="no_item_found">No item was found.</string>
     <string name="offers_title">My Offers</string>
