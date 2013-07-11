@@ -36,6 +36,9 @@ public class UserService extends IntentService {
         } else if (intent.getAction().equals(FETCH_USER)) {
             Long userID = intent.getLongExtra(EXTRA_USER_ID, 0);
             fetchUser(userID);
+        } else if (intent.getAction().endsWith(UPDATE_USERNAME)) {
+            String username = intent.getStringExtra(EXTRA_NEW_USERNAME);
+            updateUsername(username);
         }
     }
 
@@ -71,6 +74,18 @@ public class UserService extends IntentService {
                 .getInstance(getApplicationContext());
         Intent intent = new Intent(USER_FETCHED);
         intent.putExtra(EXTRA_USER_DATA, user);
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void updateUsername(String newUsername) {
+        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher.UpdateResponse response = fetcher.updateUsername(newUsername);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent intent = new Intent(USERNAME_UPDATED);
+        if (!response.isSuccess()) {
+            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+        }
         localBroadcastManager.sendBroadcast(intent);
     }
 }

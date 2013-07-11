@@ -85,6 +85,7 @@ public class UserFetcher {
 
         try {
             HttpResponse response = client.execute(get);
+            Log.e(TAG, response.toString());
             JSONObject result = JSONUtils.parseResponse(response);
             User user = new User();
             user.updateFromJSON(result);
@@ -99,6 +100,59 @@ public class UserFetcher {
         return null;
     }
 
+    public UpdateResponse updateUsername(String newUsername) {
+        Log.i(TAG, "Updating username to: " + newUsername);
+        ActiveUser activeUser = ActiveUser.getInstance();
+        String urlSpec = Constants.BASE_URL + "/user.php";
+        boolean success = false;
+        // TODO: put this string in strings.xml
+        UpdateResponse updateResponse = new UpdateResponse(success,
+                "Something went wrong.  Please try again later.");
 
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+        HttpPost post = new HttpPost(urlSpec);
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("user_id", activeUser.getUserID().toString()));
+        nameValuePairs.add(new BasicNameValuePair("token", activeUser.getToken()));
+        nameValuePairs.add(new BasicNameValuePair("username", newUsername));
+        try {
+            post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = client.execute(post);
+            JSONObject result = JSONUtils.parseResponse(response);
+            Log.i(TAG, result.toString());
+
+            if (result.has("error")) {
+                updateResponse = new UpdateResponse(success, result.getString("error"));
+            } else {
+                activeUser.updateFromJSON(result);
+                success = true;
+                updateResponse = new UpdateResponse(success, null);
+            }
+        } catch(IOException ioe) {
+            Log.e(TAG, "Login failed due to exception:", ioe);
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse json:", je);
+        }
+
+        return updateResponse;
+    }
+
+    public class UpdateResponse {
+        private boolean success;
+        private String errorMessage;
+
+        public UpdateResponse(boolean success, String errorMessage) {
+            this.success = success;
+            this.errorMessage = errorMessage;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getErrorMessage() {
+            return errorMessage;
+        }
+    }
 
 }

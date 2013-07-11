@@ -1,12 +1,17 @@
 package com.bitdance.giveortake;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,23 @@ public class UpdateUsernameFragment extends Fragment {
     private EditText usernameText;
     private TextView errorTextView;
 
+    BroadcastReceiver updateUsernameReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(UserService.USERNAME_UPDATED)) {
+                String errorMessage = intent.getStringExtra(UserService.EXTRA_UPDATE_ERROR);
+                if (errorMessage != null) {
+                    displayError(errorMessage);
+                } else {
+                    Intent resultIntent = new Intent();
+                    // no data to pass back -- we can update from the active user
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    getActivity().finish();
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +57,11 @@ public class UpdateUsernameFragment extends Fragment {
             getActivity().getActionBar().setIcon(getResources()
                     .getDrawable(R.drawable.ic_profile_selected_30));
         }
+
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity().getApplicationContext());
+        IntentFilter intentFilter = new IntentFilter(UserService.USERNAME_UPDATED);
+        localBroadcastManager.registerReceiver(updateUsernameReceiver, intentFilter);
     }
 
     @Override
@@ -44,9 +71,12 @@ public class UpdateUsernameFragment extends Fragment {
         usernameText.setText(ActiveUser.getInstance().getUserName());
         InputFilter noSpaceFilter = new InputFilter() {
             @Override
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
                 for (int i = start; i < end; i++) {
-                    if (!Character.isLetterOrDigit(source.charAt(i))) {
+                    if (!Character.isLetterOrDigit(source.charAt(i))
+                            && source.charAt(i) != '_'
+                            && source.charAt(i) != '.') {
                         return "";
                     }
                 }
@@ -67,6 +97,7 @@ public class UpdateUsernameFragment extends Fragment {
                 // clear any old errors
                 clearError();
                 String newUsername = usernameText.getText().toString();
+                Log.i(TAG, "Updating username to: " + newUsername);
                 if (newUsername.length() < MIN_USERNAME_LENGTH) {
                     String error = getString(R.string.error_username_too_short);
                     displayError(error);
@@ -74,7 +105,7 @@ public class UpdateUsernameFragment extends Fragment {
                 }
                 Intent intent = new Intent(getActivity(), UserService.class);
                 intent.setAction(UserService.UPDATE_USERNAME);
-                intent.putExtra(UserService.EXTRA_NEW_USERNAME, usernameText.getText());
+                intent.putExtra(UserService.EXTRA_NEW_USERNAME, newUsername);
                 getActivity().startService(intent);
             }
         });
@@ -89,5 +120,13 @@ public class UpdateUsernameFragment extends Fragment {
     private void clearError() {
         errorTextView.setVisibility(View.INVISIBLE);
         errorTextView.setText(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getActivity().getApplicationContext());
+        localBroadcastManager.unregisterReceiver(updateUsernameReceiver);
     }
 }

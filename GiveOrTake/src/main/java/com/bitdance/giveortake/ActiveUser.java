@@ -90,7 +90,7 @@ public class ActiveUser {
         return user;
     }
 
-    public long getUserID() {
+    public Long getUserID() {
         return getUser().getUserID();
     }
 
@@ -98,23 +98,15 @@ public class ActiveUser {
         return getUser().getUserName();
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return getUser().getLatitude();
     }
 
-    public int getMicroLatitude() {
-        return (int) (getLatitude() * 1E6);
-    }
-
-    public double getLongitude() {
+    public Double getLongitude() {
         return getUser().getLongitude();
     }
 
-    public int getMicroLongitude() {
-        return (int) (getLongitude() * 1E6);
-    }
-
-    public int getKarma() {
+    public Integer getKarma() {
         return getUser().getKarma();
     }
 }
