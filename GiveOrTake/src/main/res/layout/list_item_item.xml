@@ -19,6 +19,7 @@
             android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/list_item_thumbnail"
+            android:textColor="@android:color/black"
             />
 
     <ImageView

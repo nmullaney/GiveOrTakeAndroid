@@ -1,9 +1,14 @@
 package com.bitdance.giveortake;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -191,7 +196,20 @@ public class Item implements Serializable {
         }
         File file = getLocalImageFile(context);
         if (file != null && file.exists()) {
-            image = new BitmapDrawable(context.getResources(), file.getPath());
+            BitmapDrawable fullImage = new BitmapDrawable(context.getResources(), file.getPath());
+            Display display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE))
+                    .getDefaultDisplay();
+            Rect size = new Rect();
+            display.getRectSize(size);
+            int maxDimen = Math.min(size.width(), size.height());
+            if (fullImage.getIntrinsicHeight() > maxDimen ||
+                    fullImage.getIntrinsicWidth() > maxDimen) {
+                image = new BitmapDrawable(context.getResources(),
+                        Bitmap.createScaledBitmap(fullImage.getBitmap(), maxDimen, maxDimen, false));
+            } else {
+                image = fullImage;
+            }
+
             return image;
         }
         return null;
