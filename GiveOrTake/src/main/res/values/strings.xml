@@ -64,6 +64,9 @@
     <string name="new_item">New Item</string>
     <string name="take_photo">Take Photo</string>
 
+    <!-- General error strings -->
+    <string name="error_try_again">Something went wrong.  Please try again.</string>
+
     <!-- Profile Strings -->
     <string name="account">Account</string>
     <string name="location">Location</string>
@@ -96,6 +99,11 @@
     <string name="error_code_four_digits">The code must be 4-digits.</string>
     <string name="update_email">Update Email</string>
     <string name="cancel_email_update">Cancel Email Change</string>
+    <string name="update_location">Update Location</string>
+    <string name="update_location_hint">Drop a pin to choose a location. Other users will see this
+        location, so you may want to choose an approximate location.
+    </string>
+    <string name="center_map">Center Map on Current Location</string>
 
 
 </resources>

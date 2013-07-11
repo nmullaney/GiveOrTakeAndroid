@@ -34,9 +34,11 @@ public class ProfileFragment extends ListFragment {
 
     public static final int UPDATE_USERNAME_RESULT = 1;
     public static final int UPDATE_EMAIL_RESULT = 2;
+    public static final int UPDATE_LOCATION_RESULT = 3;
 
     private LabelFieldStaticListItem usernameItem;
     private LabelFieldStaticListItem emailItem;
+    private MapStaticListItem mapItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,10 @@ public class ProfileFragment extends ListFragment {
         items.add(emailItem);
 
         items.add(new HeaderStaticListItem(getString(R.string.location)));
-        items.add(new MapStaticListItem());
+        mapItem = new MapStaticListItem();
+        Intent locationIntent = new Intent(getActivity(), UpdateLocationActivity.class);
+        mapItem.setIntentAndResult(locationIntent, UPDATE_LOCATION_RESULT);
+        items.add(mapItem);
 
         items.add(new HeaderStaticListItem(getString(R.string.karma)));
         items.add(new KarmaStaticListItem());
@@ -204,9 +209,21 @@ public class ProfileFragment extends ListFragment {
         public static final String TAG = "MapStaticListItem";
 
         private View fullView;
+        private Intent intent;
+        private int intentResult;
+
+        public void setIntentAndResult(Intent intent, int intentResult) {
+            this.intent = intent;
+            this.intentResult = intentResult;
+        }
 
         public boolean isEnabled() {
             return true;
+        }
+
+        @Override
+        public void handleOnClick() {
+            startActivityForResult(intent, intentResult);
         }
 
         @Override
@@ -220,6 +237,12 @@ public class ProfileFragment extends ListFragment {
             SupportMapFragment mapFragment = ((SupportMapFragment) fm.findFragmentById(R.id.map));
 
             GoogleMap map = mapFragment.getMap();
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    handleOnClick();
+                }
+            });
 
             map.getUiSettings().setMyLocationButtonEnabled(false);
             map.setMyLocationEnabled(true);

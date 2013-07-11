@@ -104,6 +104,7 @@
     <string name="cancel">Cancel</string>
     <string name="cancel_email_update">Cancel Email Change</string>
     <string name="cancelled">Cancelled</string>
+    <string name="center_map">Center Map on Current Location</string>
     <string name="change">Change</string>
     <string name="code_send_hint">An email has been sent to the new address with a 4-digit code.
         Please enter it below to update your email address.</string>
@@ -159,6 +160,7 @@
         change your email, we\'ll send an email to this address to verify that it\'s yours.</string>
     <string name="error">Error</string>
     <string name="error_code_four_digits">The code must be 4-digits.</string>
+    <string name="error_try_again">Something went wrong.  Please try again.</string>
     <string name="error_username_too_short">Username must be at least 6 characters.</string>
     <string name="facebook_app_id">165759800241065</string>
     <string name="free_items_title">Free Items</string>
@@ -204,6 +206,9 @@
     <string name="to">To:</string>
     <string name="update">Update</string>
     <string name="update_email">Update Email</string>
+    <string name="update_location">Update Location</string>
+    <string name="update_location_hint">Drop a pin to choose a location. Other users will see this
+        location, so you may want to choose an approximate location.</string>
     <string name="update_username">Update Username</string>
     <string name="updated">Updated:</string>
     <string name="username">Username</string>

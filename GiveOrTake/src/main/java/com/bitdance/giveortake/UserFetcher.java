@@ -123,9 +123,8 @@ public class UserFetcher {
     private UpdateResponse updateUser(List<NameValuePair> data, String urlSpec) {
         ActiveUser activeUser = ActiveUser.getInstance();
         boolean success = false;
-        // TODO: put this string in strings.xml
         UpdateResponse updateResponse = new UpdateResponse(success,
-                "Something went wrong.  Please try again later.");
+                context.getString(R.string.error_try_again));
 
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         HttpPost post = new HttpPost(urlSpec);
