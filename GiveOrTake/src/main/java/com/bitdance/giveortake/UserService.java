@@ -25,6 +25,15 @@ public class UserService extends IntentService {
     public static final String USERNAME_UPDATED = "username_updated";
     public static final String EXTRA_UPDATE_ERROR = "extra_update_error";
 
+    public static final String ADD_PENDING_EMAIL = "add_pending_email";
+    public static final String EXTRA_NEW_EMAIL = "extra_new_email";
+    public static final String PENDING_EMAIL_ADDED = "pending_email_added";
+    public static final String SEND_EMAIL_CODE = "send_email_code";
+    public static final String EXTRA_EMAIL_CODE = "extra_email_code";
+    public static final String EMAIL_CODE_SENT = "email_code_sent";
+    public static final String CANCEL_PENDING_EMAIL = "cancel_pending_email";
+    public static final String PENDING_EMAIL_CANCELLED = "pending_email_cancelled";
+
     public UserService() {
         super(TAG);
     }
@@ -36,9 +45,17 @@ public class UserService extends IntentService {
         } else if (intent.getAction().equals(FETCH_USER)) {
             Long userID = intent.getLongExtra(EXTRA_USER_ID, 0);
             fetchUser(userID);
-        } else if (intent.getAction().endsWith(UPDATE_USERNAME)) {
+        } else if (intent.getAction().equals(UPDATE_USERNAME)) {
             String username = intent.getStringExtra(EXTRA_NEW_USERNAME);
             updateUsername(username);
+        } else if (intent.getAction().equals(ADD_PENDING_EMAIL)) {
+            String email = intent.getStringExtra(EXTRA_NEW_EMAIL);
+            addPendingEmail(email);
+        } else if (intent.getAction().equals(SEND_EMAIL_CODE)) {
+            String code = intent.getStringExtra(EXTRA_EMAIL_CODE);
+            sendEmailCode(code);
+        } else if (intent.getAction().equals(CANCEL_PENDING_EMAIL)) {
+            cancelPendingEmail();
         }
     }
 
@@ -83,6 +100,42 @@ public class UserService extends IntentService {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         Intent intent = new Intent(USERNAME_UPDATED);
+        if (!response.isSuccess()) {
+            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+        }
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void addPendingEmail(String newEmail) {
+        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher.UpdateResponse response = fetcher.addPendingEmail(newEmail);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent intent = new Intent(PENDING_EMAIL_ADDED);
+        if (!response.isSuccess()) {
+            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+        }
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void sendEmailCode(String emailCode) {
+        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher.UpdateResponse response = fetcher.sendEmailCode(emailCode);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent intent = new Intent(EMAIL_CODE_SENT);
+        if (!response.isSuccess()) {
+            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+        }
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void cancelPendingEmail() {
+        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher.UpdateResponse response = fetcher.cancelPendingEmail();
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent intent = new Intent(PENDING_EMAIL_CANCELLED);
         if (!response.isSuccess()) {
             intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
         }

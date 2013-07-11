@@ -102,8 +102,26 @@ public class UserFetcher {
 
     public UpdateResponse updateUsername(String newUsername) {
         Log.i(TAG, "Updating username to: " + newUsername);
+        return updateUserField("username", newUsername);
+    }
+
+    public UpdateResponse addPendingEmail(String newEmail) {
+        Log.i(TAG, "Adding pending email: " + newEmail);
+        return updateEmailField("email", newEmail);
+    }
+
+    public UpdateResponse sendEmailCode(String emailCode) {
+        Log.i(TAG, "Sending email code: " + emailCode);
+        return updateEmailField("code", emailCode);
+    }
+
+    public UpdateResponse cancelPendingEmail() {
+        Log.i(TAG, "Cancelling pending email");
+        return updateEmailField("cancel_pending", "1");
+    }
+
+    private UpdateResponse updateUser(List<NameValuePair> data, String urlSpec) {
         ActiveUser activeUser = ActiveUser.getInstance();
-        String urlSpec = Constants.BASE_URL + "/user.php";
         boolean success = false;
         // TODO: put this string in strings.xml
         UpdateResponse updateResponse = new UpdateResponse(success,
@@ -111,13 +129,12 @@ public class UserFetcher {
 
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         HttpPost post = new HttpPost(urlSpec);
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("user_id", activeUser.getUserID().toString()));
-        nameValuePairs.add(new BasicNameValuePair("token", activeUser.getToken()));
-        nameValuePairs.add(new BasicNameValuePair("username", newUsername));
+        data.add(new BasicNameValuePair("user_id", activeUser.getUserID().toString()));
+        data.add(new BasicNameValuePair("token", activeUser.getToken()));
         try {
-            post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            post.setEntity(new UrlEncodedFormEntity(data));
             HttpResponse response = client.execute(post);
+            Log.i(TAG, "response = " + response.toString());
             JSONObject result = JSONUtils.parseResponse(response);
             Log.i(TAG, result.toString());
 
@@ -135,6 +152,20 @@ public class UserFetcher {
         }
 
         return updateResponse;
+    }
+
+    private UpdateResponse updateUserField(String fieldName, String fieldValue) {
+        String urlSpec = Constants.BASE_URL + "/user.php";
+        List <NameValuePair> data = new ArrayList<NameValuePair>();
+        data.add(new BasicNameValuePair(fieldName, fieldValue));
+        return updateUser(data, urlSpec);
+    }
+
+    private UpdateResponse updateEmailField(String fieldName, String fieldValue) {
+        String urlSpec = Constants.BASE_URL + "/user/email.php";
+        List <NameValuePair> data = new ArrayList<NameValuePair>();
+        data.add(new BasicNameValuePair(fieldName, fieldValue));
+        return updateUser(data, urlSpec);
     }
 
     public class UpdateResponse {

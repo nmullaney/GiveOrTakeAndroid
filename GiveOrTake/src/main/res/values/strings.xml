@@ -85,5 +85,17 @@
     <string name="update">Update</string>
     <string name="error_username_too_short">Username must be at least 6 characters.</string>
 
+    <!-- Update email strings -->
+    <string name="email_update_hint">Please enter the email address you would like to use. If you
+        change your email, we\'ll send an email to this address to verify that it\'s yours.
+    </string>
+    <string name="code_send_hint">An email has been sent to the new address with a 4-digit code.
+        Please enter it below to update your email address.
+    </string>
+    <string name="send_code">Send Code</string>
+    <string name="error_code_four_digits">The code must be 4-digits.</string>
+    <string name="update_email">Update Email</string>
+    <string name="cancel_email_update">Cancel Email Change</string>
+
 
 </resources>

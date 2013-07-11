@@ -49,11 +49,16 @@ public class ActiveUser {
     }
 
     public static void updateFromJSON(JSONObject jsonObject) throws JSONException {
+        Log.i(TAG, "updating from json: " + jsonObject.toString());
         ourInstance.getUser().updateFromJSON(jsonObject);
         if (jsonObject.has(JSON_TOKEN)) ourInstance.token = jsonObject.getString(JSON_TOKEN);
         if (jsonObject.has(JSON_EMAIL)) ourInstance.email = jsonObject.getString(JSON_EMAIL);
         if (jsonObject.has(JSON_PENDING_EMAIL))
-            ourInstance.pendingEmail = jsonObject.getString(JSON_PENDING_EMAIL);
+            if (jsonObject.isNull(JSON_PENDING_EMAIL)) {
+                ourInstance.pendingEmail = null;
+            } else {
+              ourInstance.pendingEmail = jsonObject.getString(JSON_PENDING_EMAIL);
+            }
         if (jsonObject.has(JSON_IS_NEW_USER)) ourInstance.isNewUser =
                 jsonObject.getBoolean(JSON_IS_NEW_USER);
     }

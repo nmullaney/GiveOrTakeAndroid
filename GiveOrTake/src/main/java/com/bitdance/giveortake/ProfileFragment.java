@@ -33,8 +33,10 @@ public class ProfileFragment extends ListFragment {
     public static final String TAG = "ProfileFragment";
 
     public static final int UPDATE_USERNAME_RESULT = 1;
+    public static final int UPDATE_EMAIL_RESULT = 2;
 
     private LabelFieldStaticListItem usernameItem;
+    private LabelFieldStaticListItem emailItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,11 @@ public class ProfileFragment extends ListFragment {
         usernameItem.setIntentAndResult(usernameIntent, UPDATE_USERNAME_RESULT);
         items.add(usernameItem);
 
-        LabelFieldStaticListItem emailItem = new LabelFieldStaticListItem();
+        emailItem = new LabelFieldStaticListItem();
         emailItem.setLabel(getString(R.string.email));
         emailItem.setField(activeUser.getEmail());
+        Intent emailIntent = new Intent(getActivity(), UpdateEmailActivity.class);
+        emailItem.setIntentAndResult(emailIntent, UPDATE_EMAIL_RESULT);
         items.add(emailItem);
 
         items.add(new HeaderStaticListItem(getString(R.string.location)));
@@ -109,6 +113,10 @@ public class ProfileFragment extends ListFragment {
             case UPDATE_USERNAME_RESULT:
                 String username = ActiveUser.getInstance().getUserName();
                 usernameItem.getFieldView().setText(username);
+                break;
+            case UPDATE_EMAIL_RESULT:
+                String email = ActiveUser.getInstance().getEmail();
+                emailItem.getFieldView().setText(email);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
