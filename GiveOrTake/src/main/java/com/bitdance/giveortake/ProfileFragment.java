@@ -4,9 +4,7 @@ package com.bitdance.giveortake;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -14,18 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
-import com.facebook.android.Facebook;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-
 import com.google.android.gms.maps.SupportMapFragment;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -37,6 +32,10 @@ import java.util.ArrayList;
 public class ProfileFragment extends ListFragment {
     public static final String TAG = "ProfileFragment";
 
+    public static final int UPDATE_USERNAME_RESULT = 1;
+
+    private LabelFieldStaticListItem usernameItem;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +44,17 @@ public class ProfileFragment extends ListFragment {
         ArrayList<StaticListItem> items = new ArrayList<StaticListItem>();
 
         items.add(new HeaderStaticListItem(getString(R.string.account)));
-        LabelFieldStaticListItem username = new LabelFieldStaticListItem();
-        username.setLabel(getString(R.string.username));
-        username.setField(activeUser.getUserName());
-        items.add(username);
+        usernameItem = new LabelFieldStaticListItem();
+        usernameItem.setLabel(getString(R.string.username));
+        usernameItem.setField(activeUser.getUserName());
+        Intent usernameIntent = new Intent(getActivity(), UpdateUsernameActivity.class);
+        usernameItem.setIntentAndResult(usernameIntent, UPDATE_USERNAME_RESULT);
+        items.add(usernameItem);
 
-        LabelFieldStaticListItem email = new LabelFieldStaticListItem();
-        email.setLabel(getString(R.string.email));
-        email.setField(activeUser.getEmail());
-        items.add(email);
+        LabelFieldStaticListItem emailItem = new LabelFieldStaticListItem();
+        emailItem.setLabel(getString(R.string.email));
+        emailItem.setField(activeUser.getEmail());
+        items.add(emailItem);
 
         items.add(new HeaderStaticListItem(getString(R.string.location)));
         items.add(new MapStaticListItem());
@@ -97,6 +98,24 @@ public class ProfileFragment extends ListFragment {
     }
 
     @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        StaticListItem item = ((StaticListAdapter) getListAdapter()).getItem(position);
+        item.handleOnClick();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case UPDATE_USERNAME_RESULT:
+                String username = ActiveUser.getInstance().getUserName();
+                usernameItem.getFieldView().setText(username);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         return v;
@@ -131,6 +150,8 @@ public class ProfileFragment extends ListFragment {
         private String field;
 
         private TextView fieldView;
+        private Intent intent;
+        private int intentResult;
 
         public void setLabel(String label) {
             this.label = label;
@@ -140,6 +161,11 @@ public class ProfileFragment extends ListFragment {
             this.field = field;
         }
 
+        public void setIntentAndResult(Intent intent, int intentResult) {
+            this.intent = intent;
+            this.intentResult = intentResult;
+        }
+
         public TextView getFieldView() {
             return fieldView;
         }
@@ -147,6 +173,11 @@ public class ProfileFragment extends ListFragment {
         @Override
         public boolean isEnabled() {
             return true;
+        }
+
+        @Override
+        public void handleOnClick() {
+            startActivityForResult(intent, intentResult);
         }
 
         @Override

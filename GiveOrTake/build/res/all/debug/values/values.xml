@@ -16,6 +16,7 @@
     <color name="common_signin_btn_light_text_disabled">#FFAAAAAA</color>
     <color name="common_signin_btn_light_text_focused">#FF737373</color>
     <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
+    <color name="red">#FF0000</color>
 
     <declare-styleable name="MapAttrs">
         <attr name="mapType" format="enum">
@@ -152,6 +153,7 @@
     <string name="edit_offer_item_state">Item State:</string>
     <string name="email">Email</string>
     <string name="error">Error</string>
+    <string name="error_username_too_short">Username must be at least 6 characters.</string>
     <string name="facebook_app_id">165759800241065</string>
     <string name="free_items_title">Free Items</string>
     <string name="hello_world">Hello world!</string>
@@ -193,8 +195,12 @@
     <string name="title_activity_free_item_pager">Free Item</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="to">To:</string>
+    <string name="update">Update</string>
+    <string name="update_username">Update Username</string>
     <string name="updated">Updated:</string>
     <string name="username">Username</string>
+    <string name="username_update_hint">Please choose a unique username. This name is how you will
+        appear to other users.</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

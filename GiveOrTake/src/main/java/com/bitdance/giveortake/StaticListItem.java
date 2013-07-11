@@ -12,5 +12,9 @@ abstract public class StaticListItem {
         return true;
     }
 
+    public void handleOnClick() {
+        // subclasses should handle clicks, if enabled
+    }
+
     abstract public View getView(Context context, View convertView);
 }

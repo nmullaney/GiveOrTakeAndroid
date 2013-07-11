@@ -76,4 +76,14 @@
     <string name="maps_api_key">AIzaSyCubyA4jGRyFP_-BUCTY0QCdwz60yw2GLk</string>
     <string name="title_activity_test">TestActivity</string>
 
+
+    <!-- Update username strings -->
+    <string name="update_username">Update Username</string>
+    <string name="username_update_hint">Please choose a unique username. This name is how you will
+        appear to other users.
+    </string>
+    <string name="update">Update</string>
+    <string name="error_username_too_short">Username must be at least 6 characters.</string>
+
+
 </resources>

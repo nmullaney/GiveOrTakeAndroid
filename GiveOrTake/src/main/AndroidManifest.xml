@@ -75,13 +75,18 @@
             android:parentActivityName="com.bitdance.giveortake.EditOfferActivity" >
         </activity>
         <activity
-            android:name="com.bitdance.giveortake.FreeItemPagerActivity"
-            android:label="@string/title_activity_free_item_pager"
-            android:parentActivityName="com.bitdance.giveortake.MainActivity" >
+                android:name="com.bitdance.giveortake.FreeItemPagerActivity"
+                android:label="@string/title_activity_free_item_pager"
+                android:parentActivityName="com.bitdance.giveortake.MainActivity" >
+        </activity>
+        <activity android:name="com.bitdance.giveortake.UpdateUsernameActivity"
+                  android:label="@string/update_username"
+                  android:parentActivityName="com.bitdance.giveortake.MainActivity">
+
         </activity>
         <activity
-            android:name="com.bitdance.giveortake.TestActivity"
-            android:label="@string/title_activity_test" >
+                android:name="com.bitdance.giveortake.TestActivity"
+                android:label="@string/title_activity_test" >
 
         </activity>
     </application>

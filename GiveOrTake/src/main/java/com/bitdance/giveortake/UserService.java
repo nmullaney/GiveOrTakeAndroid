@@ -20,6 +20,11 @@ public class UserService extends IntentService {
     public static final String USER_FETCHED = "user_fetched";
     public static final String EXTRA_USER_DATA = "user_data";
 
+    public static final String UPDATE_USERNAME = "update_username";
+    public static final String EXTRA_NEW_USERNAME = "extra_new_username";
+    public static final String USERNAME_UPDATED = "username_updated";
+    public static final String EXTRA_UPDATE_ERROR = "extra_update_error";
+
     public UserService() {
         super(TAG);
     }

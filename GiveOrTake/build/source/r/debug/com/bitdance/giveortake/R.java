@@ -284,8 +284,9 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f04000c;
         public static final int common_signin_btn_light_text_focused=0x7f04000d;
         public static final int common_signin_btn_light_text_pressed=0x7f04000e;
-        public static final int common_signin_btn_text_dark=0x7f04000f;
-        public static final int common_signin_btn_text_light=0x7f040010;
+        public static final int common_signin_btn_text_dark=0x7f040010;
+        public static final int common_signin_btn_text_light=0x7f040011;
+        public static final int red=0x7f04000f;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f060000;
@@ -385,7 +386,7 @@ containing a value of this type.
         public static final int taken=0x7f02004e;
     }
     public static final class id {
-        public static final int action_settings=0x7f050043;
+        public static final int action_settings=0x7f050046;
         public static final int camera_preview=0x7f05001f;
         public static final int camera_surface=0x7f050020;
         public static final int camera_take_picture_button=0x7f050021;
@@ -416,6 +417,7 @@ containing a value of this type.
         public static final int edit_offer_post_button=0x7f050029;
         public static final int edit_offer_state=0x7f050024;
         public static final int edit_offer_state_icon=0x7f050023;
+        public static final int error_message=0x7f05003a;
         public static final int fragmentContainer=0x7f050009;
         public static final int free_item_detail_date_created=0x7f050032;
         public static final int free_item_detail_date_updated=0x7f050031;
@@ -427,19 +429,19 @@ containing a value of this type.
         public static final int free_item_detail_status_text=0x7f05002f;
         public static final int free_item_detail_username=0x7f05002c;
         public static final int free_item_detail_want_button=0x7f050033;
-        public static final int header_title=0x7f05003a;
+        public static final int header_title=0x7f05003d;
         public static final int hybrid=0x7f050004;
-        public static final int karma=0x7f05003e;
-        public static final int label_field_field=0x7f050040;
-        public static final int label_field_label=0x7f05003f;
+        public static final int karma=0x7f050041;
+        public static final int label_field_field=0x7f050043;
+        public static final int label_field_label=0x7f050042;
         public static final int large=0x7f050006;
-        public static final int list_button=0x7f050039;
-        public static final int list_item_name=0x7f05003c;
-        public static final int list_item_state=0x7f05003d;
-        public static final int list_item_thumbnail=0x7f05003b;
+        public static final int list_button=0x7f05003c;
+        public static final int list_item_name=0x7f05003f;
+        public static final int list_item_state=0x7f050040;
+        public static final int list_item_thumbnail=0x7f05003e;
         public static final int login_button=0x7f050034;
-        public static final int map=0x7f050041;
-        public static final int menu_item_new_item=0x7f050042;
+        public static final int map=0x7f050044;
+        public static final int menu_item_new_item=0x7f050045;
         public static final int message_dialog_message=0x7f050038;
         public static final int message_dialog_reply_to=0x7f050036;
         public static final int message_dialog_subject=0x7f050037;
@@ -452,6 +454,8 @@ containing a value of this type.
         public static final int search_box=0x7f05001a;
         public static final int small=0x7f050005;
         public static final int terrain=0x7f050003;
+        public static final int update_button=0x7f05003b;
+        public static final int username=0x7f050039;
         public static final int viewPager=0x7f050007;
     }
     public static final class layout {
@@ -479,12 +483,13 @@ containing a value of this type.
         public static final int fragment_message_dialog=0x7f030015;
         public static final int fragment_offers=0x7f030016;
         public static final int fragment_profile=0x7f030017;
-        public static final int list_button=0x7f030018;
-        public static final int list_header_item=0x7f030019;
-        public static final int list_item_item=0x7f03001a;
-        public static final int list_karma=0x7f03001b;
-        public static final int list_label_field=0x7f03001c;
-        public static final int list_map=0x7f03001d;
+        public static final int fragment_update_username=0x7f030018;
+        public static final int list_button=0x7f030019;
+        public static final int list_header_item=0x7f03001a;
+        public static final int list_item_item=0x7f03001b;
+        public static final int list_karma=0x7f03001c;
+        public static final int list_label_field=0x7f03001d;
+        public static final int list_map=0x7f03001e;
     }
     public static final class menu {
         public static final int offers_list_options=0x7f090000;
@@ -554,47 +559,51 @@ containing a value of this type.
         public static final int edit_offer_item_state=0x7f07003c;
         public static final int email=0x7f07003d;
         public static final int error=0x7f07003e;
-        public static final int facebook_app_id=0x7f07003f;
-        public static final int free_items_title=0x7f070040;
-        public static final int hello_world=0x7f070041;
-        public static final int hours_ago_format=0x7f070042;
-        public static final int i_want_this=0x7f070043;
-        public static final int karma=0x7f070044;
-        public static final int less_than_1_mile=0x7f070045;
-        public static final int less_than_1_minute=0x7f070046;
-        public static final int location=0x7f070047;
-        public static final int location_client_ulr_inactive_age_under_13=0x7f070048;
-        public static final int location_client_ulr_inactive_age_unknown=0x7f070049;
-        public static final int location_client_ulr_inactive_unknown_restriction=0x7f07004a;
-        public static final int login_failure=0x7f07004b;
-        public static final int logout=0x7f07004c;
-        public static final int maps_api_key=0x7f07004d;
-        public static final int message_hint=0x7f07004e;
-        public static final int message_sent=0x7f07004f;
-        public static final int message_sent_error=0x7f070050;
-        public static final int minutes_ago_format=0x7f070051;
-        public static final int more_information=0x7f070052;
-        public static final int more_than_month=0x7f070053;
-        public static final int new_item=0x7f070054;
-        public static final int no_item_found=0x7f070055;
-        public static final int offers_title=0x7f070056;
-        public static final int ok=0x7f070057;
-        public static final int permission_not_granted=0x7f070058;
-        public static final int post_offer=0x7f070059;
-        public static final int posted=0x7f07005a;
-        public static final int posted_by=0x7f07005b;
-        public static final int profile_title=0x7f07005c;
-        public static final int reply_to=0x7f07005d;
-        public static final int send=0x7f07005e;
-        public static final int send_a_message=0x7f07005f;
-        public static final int status=0x7f070060;
-        public static final int subject=0x7f070061;
-        public static final int take_photo=0x7f070062;
-        public static final int title_activity_free_item_pager=0x7f070063;
-        public static final int title_activity_test=0x7f070064;
-        public static final int to=0x7f070065;
-        public static final int updated=0x7f070066;
-        public static final int username=0x7f070067;
+        public static final int error_username_too_short=0x7f07003f;
+        public static final int facebook_app_id=0x7f070040;
+        public static final int free_items_title=0x7f070041;
+        public static final int hello_world=0x7f070042;
+        public static final int hours_ago_format=0x7f070043;
+        public static final int i_want_this=0x7f070044;
+        public static final int karma=0x7f070045;
+        public static final int less_than_1_mile=0x7f070046;
+        public static final int less_than_1_minute=0x7f070047;
+        public static final int location=0x7f070048;
+        public static final int location_client_ulr_inactive_age_under_13=0x7f070049;
+        public static final int location_client_ulr_inactive_age_unknown=0x7f07004a;
+        public static final int location_client_ulr_inactive_unknown_restriction=0x7f07004b;
+        public static final int login_failure=0x7f07004c;
+        public static final int logout=0x7f07004d;
+        public static final int maps_api_key=0x7f07004e;
+        public static final int message_hint=0x7f07004f;
+        public static final int message_sent=0x7f070050;
+        public static final int message_sent_error=0x7f070051;
+        public static final int minutes_ago_format=0x7f070052;
+        public static final int more_information=0x7f070053;
+        public static final int more_than_month=0x7f070054;
+        public static final int new_item=0x7f070055;
+        public static final int no_item_found=0x7f070056;
+        public static final int offers_title=0x7f070057;
+        public static final int ok=0x7f070058;
+        public static final int permission_not_granted=0x7f070059;
+        public static final int post_offer=0x7f07005a;
+        public static final int posted=0x7f07005b;
+        public static final int posted_by=0x7f07005c;
+        public static final int profile_title=0x7f07005d;
+        public static final int reply_to=0x7f07005e;
+        public static final int send=0x7f07005f;
+        public static final int send_a_message=0x7f070060;
+        public static final int status=0x7f070061;
+        public static final int subject=0x7f070062;
+        public static final int take_photo=0x7f070063;
+        public static final int title_activity_free_item_pager=0x7f070064;
+        public static final int title_activity_test=0x7f070065;
+        public static final int to=0x7f070066;
+        public static final int update=0x7f070067;
+        public static final int update_username=0x7f070068;
+        public static final int updated=0x7f070069;
+        public static final int username=0x7f07006a;
+        public static final int username_update_hint=0x7f07006b;
     }
     public static final class style {
         /** 
