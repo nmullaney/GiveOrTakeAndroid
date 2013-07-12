@@ -20,6 +20,9 @@
     <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
 
+    <declare-styleable name="ItemStateView">
+        <attr name="item_state" format="string" />
+    </declare-styleable>
     <declare-styleable name="MapAttrs">
         <attr name="mapType" format="enum">
             <enum name="none" value="0" />

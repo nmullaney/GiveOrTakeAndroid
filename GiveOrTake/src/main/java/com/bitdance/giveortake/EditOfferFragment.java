@@ -78,10 +78,9 @@ public class EditOfferFragment extends Fragment {
         nameText.setText(item.getName());
         descText = (EditText)view.findViewById(R.id.edit_offer_description);
         descText.setText(item.getDescription());
-        stateIcon = (ImageView)view.findViewById(R.id.edit_offer_state_icon);
-        stateIcon.setImageDrawable(item.getDrawableForState(getActivity()));
-        stateText = (TextView)view.findViewById(R.id.edit_offer_state);
-        stateText.setText(item.getState().getName());
+        ItemStateView itemStateView = (ItemStateView)view.findViewById(R.id.item_state);
+        itemStateView.setItemState(item.getState());
+
         Button changeStateButton = (Button)view.findViewById(R.id.edit_offer_change_state_button);
         if (item.getState().equals(Item.ItemState.DRAFT)) {
             changeStateButton.setEnabled(false);
