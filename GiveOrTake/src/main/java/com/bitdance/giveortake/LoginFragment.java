@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
@@ -33,6 +35,8 @@ public class LoginFragment extends Fragment {
     public static final String EXTRA_LOGIN_ACTION = "login_action";
     public static final String LOGOUT = "logout";
 
+    private ProgressBar progressBar;
+
     private UiLifecycleHelper uiHelper;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -47,8 +51,8 @@ public class LoginFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received login result");
             if (intent.getAction().equals(UserService.LOGIN_RESULT)) {
+                progressBar.setVisibility(View.INVISIBLE);
                 if (intent.hasExtra(UserService.EXTRA_LOGIN_ERROR)) {
-                    // TODO: logout of FB
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.error)
                             .setMessage(intent.getStringExtra(UserService.EXTRA_LOGIN_ERROR))
@@ -90,6 +94,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
+        progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
         LoginButton loginButton = (LoginButton)v.findViewById(R.id.login_button);
         loginButton.setFragment(this);
         loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
@@ -98,6 +103,7 @@ public class LoginFragment extends Fragment {
                 Log.i(TAG, "User info fetched: " + user);
                 updateUI();
                 if (user != null) {
+                    progressBar.setVisibility(View.VISIBLE);
                     ActiveUser.loadActiveUser(user);
                     Intent intent = new Intent(getActivity(), UserService.class);
                     intent.setAction(UserService.LOGIN);
