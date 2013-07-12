@@ -441,7 +441,7 @@ containing a value of this type.
         public static final int free_item_detail_want_button=0x7f050032;
         public static final int header_title=0x7f050043;
         public static final int hybrid=0x7f050004;
-        public static final int item_state=0x7f050023;
+        public static final int item_state_spinner=0x7f050023;
         public static final int karma=0x7f050047;
         public static final int label_field_field=0x7f050049;
         public static final int label_field_label=0x7f050048;

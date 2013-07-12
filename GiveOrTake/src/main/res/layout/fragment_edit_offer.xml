@@ -25,12 +25,11 @@
                       android:text="@string/edit_offer_item_state"
                       android:layout_weight="1" />
 
-            <com.bitdance.giveortake.ItemStateView
-                    android:id="@+id/item_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical" />
+            <Spinner android:id="@+id/item_state_spinner"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center_vertical"
+                     android:layout_weight="1"/>
 
             <Button android:id="@+id/edit_offer_change_state_button"
                     android:layout_width="wrap_content"

@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -264,6 +265,14 @@ public class Item implements Serializable {
                 }
             }
             return null;
+        }
+
+        public static ArrayList<ItemState> getSelectableStates() {
+            ArrayList<ItemState> selectableStates = new ArrayList<ItemState>();
+            selectableStates.add(AVAILABLE);
+            selectableStates.add(PROMISED);
+            selectableStates.add(TAKEN);
+            return selectableStates;
         }
 
         public Drawable getDrawable(Context context) {

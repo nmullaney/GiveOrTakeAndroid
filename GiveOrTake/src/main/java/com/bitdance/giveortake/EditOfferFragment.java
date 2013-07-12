@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,10 +15,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by nora on 6/30/13.
@@ -34,6 +41,7 @@ public class EditOfferFragment extends Fragment {
     private ImageView stateIcon;
     private TextView stateText;
     private ImageView itemImage;
+    private Spinner itemStateSpinner;
 
     private BroadcastReceiver imageBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -78,8 +86,16 @@ public class EditOfferFragment extends Fragment {
         nameText.setText(item.getName());
         descText = (EditText)view.findViewById(R.id.edit_offer_description);
         descText.setText(item.getDescription());
-        ItemStateView itemStateView = (ItemStateView)view.findViewById(R.id.item_state);
-        itemStateView.setItemState(item.getState());
+        itemStateSpinner = (Spinner)view.findViewById(R.id.item_state_spinner);
+        ItemStateSpinnerAdapter adapter;
+        if (item.getState().equals(Item.ItemState.DRAFT)) {
+            adapter = new ItemStateSpinnerAdapter(true);
+        } else {
+            adapter = new ItemStateSpinnerAdapter(false);
+        }
+
+        itemStateSpinner.setAdapter(adapter);
+        itemStateSpinner.setSelection(adapter.getPosition(item.getState()));
 
         Button changeStateButton = (Button)view.findViewById(R.id.edit_offer_change_state_button);
         if (item.getState().equals(Item.ItemState.DRAFT)) {
@@ -138,5 +154,42 @@ public class EditOfferFragment extends Fragment {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(imageBroadcastReceiver);
+    }
+
+    private class ItemStateSpinnerAdapter extends ArrayAdapter implements SpinnerAdapter {
+
+        public ItemStateSpinnerAdapter(boolean isDraft) {
+            super(getActivity(), 0, 0, new ArrayList<Item.ItemState>());
+            if (isDraft) {
+                add(Item.ItemState.DRAFT);
+            } else {
+                addAll(Item.ItemState.getSelectableStates());
+            }
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            Item.ItemState itemState = (Item.ItemState) getItem(position);
+            if (convertView == null) {
+                convertView = new ItemStateView(getActivity(), null);
+            }
+            ((ItemStateView)convertView).setItemState(itemState);
+            return convertView;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Item.ItemState itemState = (Item.ItemState) getItem(position);
+            if (convertView == null) {
+                convertView = new ItemStateView(getActivity(), null);
+            }
+            ((ItemStateView)convertView).setItemState(itemState);
+            return convertView;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return getCount();
+        }
     }
 }
