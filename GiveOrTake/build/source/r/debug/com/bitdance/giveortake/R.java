@@ -284,9 +284,11 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f04000c;
         public static final int common_signin_btn_light_text_focused=0x7f04000d;
         public static final int common_signin_btn_light_text_pressed=0x7f04000e;
-        public static final int common_signin_btn_text_dark=0x7f040010;
-        public static final int common_signin_btn_text_light=0x7f040011;
-        public static final int red=0x7f04000f;
+        public static final int common_signin_btn_text_dark=0x7f040012;
+        public static final int common_signin_btn_text_light=0x7f040013;
+        public static final int darkPink=0x7f04000f;
+        public static final int red=0x7f040010;
+        public static final int white=0x7f040011;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f060000;
