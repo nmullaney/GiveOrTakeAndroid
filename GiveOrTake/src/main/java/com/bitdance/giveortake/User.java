@@ -1,5 +1,8 @@
 package com.bitdance.giveortake;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,7 +11,7 @@ import java.io.Serializable;
 /**
  * Created by nora on 6/23/13.
  */
-public class User implements Serializable {
+public class User implements Serializable, Parcelable {
     private Long userID;
     private String userName;
     private Double latitude;
@@ -20,6 +23,8 @@ public class User implements Serializable {
     private static final String JSON_LATITUDE = "latitude";
     private static final String JSON_LONGITUDE = "longitude";
     private static final String JSON_KARMA = "karma";
+
+    public User () {}
 
     public void updateFromJSON(JSONObject jsonObject) throws JSONException {
         if (jsonObject.has(JSON_ID)) setUserID(jsonObject.getLong(JSON_ID));
@@ -68,4 +73,32 @@ public class User implements Serializable {
     public void setKarma(Integer karma) {
         this.karma = karma;
     }
+
+    /**
+     * Methods to make this Parcelable
+     */
+
+    public User(Parcel in) {
+        userID = in.readLong();
+        userName = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        karma = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(getUserID());
+        parcel.writeString(getUserName());
+        parcel.writeDouble(getLatitude());
+        parcel.writeDouble(getLongitude());
+        parcel.writeInt(getKarma());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 }

@@ -5,13 +5,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.NinePatchDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.service.textservice.SpellCheckerService;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -36,6 +44,7 @@ public class LoginFragment extends Fragment {
     public static final String LOGOUT = "logout";
 
     private ProgressBar progressBar;
+    private LoginButton loginButton;
 
     private UiLifecycleHelper uiHelper;
 
@@ -68,6 +77,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "OnCreate");
 
         String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
         if (loginAction != null && loginAction.equals(LOGOUT)) {
@@ -94,8 +104,9 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
+        Log.i(TAG, "OnCreateView");
         progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
-        LoginButton loginButton = (LoginButton)v.findViewById(R.id.login_button);
+        loginButton = (LoginButton)v.findViewById(R.id.login_button);
         loginButton.setFragment(this);
         loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override

@@ -38,10 +38,10 @@ public class EditOfferFragment extends Fragment {
 
     private EditText nameText;
     private EditText descText;
-    private ImageView stateIcon;
-    private TextView stateText;
     private ImageView itemImage;
     private Spinner itemStateSpinner;
+    private Spinner stateUser;
+
 
     private BroadcastReceiver imageBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -51,6 +51,19 @@ public class EditOfferFragment extends Fragment {
                 if (!failure) {
                     updateUI();
                 }
+            }
+        }
+    };
+
+    private BroadcastReceiver usersWhoWantItemReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(UserService.FETCH_USERS_WHO_WANT_ITEM)) {
+                ArrayList<User> usersWhoWant =
+                        intent.getParcelableArrayListExtra(UserService.EXTRA_USERS);
+                stateUser.setAdapter(new ArrayAdapter<User>(getActivity(),
+                        android.R.layout.simple_list_item_1, usersWhoWant));
+
             }
         }
     };
@@ -73,10 +86,19 @@ public class EditOfferFragment extends Fragment {
             getActivity().startService(intent);
         }
 
+        if (item.getId() != null) {
+            Intent intent = new Intent(getActivity(), UserService.class);
+            intent.setAction(UserService.FETCH_USERS_WHO_WANT_ITEM);
+            intent.putExtra(UserService.EXTRA_ITEM_ID, item.getId());
+            intent.putExtra(UserService.EXTRA_MIN_MESSAGES, 1);
+        }
+
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.registerReceiver(imageBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_IMAGE_FETCHED));
+        localBroadcastManager.registerReceiver(usersWhoWantItemReceiver,
+                new IntentFilter(UserService.USERS_WHO_WANT_ITEM_FETCHED));
     }
 
     @Override
@@ -97,11 +119,9 @@ public class EditOfferFragment extends Fragment {
         itemStateSpinner.setAdapter(adapter);
         itemStateSpinner.setSelection(adapter.getPosition(item.getState()));
 
-        Button changeStateButton = (Button)view.findViewById(R.id.edit_offer_change_state_button);
-        if (item.getState().equals(Item.ItemState.DRAFT)) {
-            changeStateButton.setEnabled(false);
-            changeStateButton.setVisibility(View.INVISIBLE);
-        }
+        stateUser = (Spinner)view.findViewById(R.id.state_user);
+
+
         Button addPhotoButton = (Button)view.findViewById(R.id.edit_offer_photo_button);
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +174,7 @@ public class EditOfferFragment extends Fragment {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(imageBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(usersWhoWantItemReceiver);
     }
 
     private class ItemStateSpinnerAdapter extends ArrayAdapter implements SpinnerAdapter {

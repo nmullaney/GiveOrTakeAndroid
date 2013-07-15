@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
 
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml -->
     <color name="com_facebook_blue">#3B5998</color>
     <color name="com_facebook_loginview_text_color">#FFFFFF</color>
     <color name="com_facebook_usersettingsfragment_connected_shadow_color">#000000</color>
     <color name="com_facebook_usersettingsfragment_connected_text_color">#FFFFFF</color>
     <color name="com_facebook_usersettingsfragment_not_connected_text_color">#A6AED7</color>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml -->
     <color name="common_action_bar_splitter">#d2d2d2</color>
     <color name="common_signin_btn_dark_text_default">@android:color/white</color>
     <color name="common_signin_btn_dark_text_disabled">#FFAAAAAA</color>
@@ -16,13 +18,15 @@
     <color name="common_signin_btn_light_text_disabled">#FFAAAAAA</color>
     <color name="common_signin_btn_light_text_focused">#FF737373</color>
     <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/colors.xml -->
     <color name="darkPink">#B6279D</color>
     <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
-
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/attrs.xml -->
     <declare-styleable name="ItemStateView">
         <attr name="item_state" format="string" />
     </declare-styleable>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml -->
     <declare-styleable name="MapAttrs">
         <attr name="mapType" format="enum">
             <enum name="none" value="0" />
@@ -45,6 +49,7 @@
         <attr name="useViewLifecycle" format="boolean" />
         <attr name="zOrderOnTop" format="boolean" />
     </declare-styleable>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml -->
     <declare-styleable name="com_facebook_friend_picker_fragment">
         <attr name="multi_select" format="boolean" />
     </declare-styleable>
@@ -79,9 +84,10 @@
         </attr>
         <attr name="is_cropped" format="boolean" />
     </declare-styleable>
-
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/dimens.xml -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml -->
     <dimen name="com_facebook_loginview_height">44dp</dimen>
     <dimen name="com_facebook_loginview_padding_bottom">0dp</dimen>
     <dimen name="com_facebook_loginview_padding_left">42dp</dimen>
@@ -94,7 +100,7 @@
     <dimen name="com_facebook_profilepictureview_preset_size_small">50dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
-
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml -->
     <string name="a_day_ago">1 day ago</string>
     <string name="a_minute_ago">1 minute ago</string>
     <string name="about">About</string>
@@ -103,9 +109,11 @@
     <string name="add_photo">Add Photo</string>
     <string name="an_hour_ago">1 hour ago</string>
     <string name="app_name">GiveOrTake</string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml -->
     <string name="auth_client_availability_notification_title">Install/Update/Enable Google Play services</string>
     <string name="auth_client_play_services_err_notification_msg">Google Play services error</string>
     <string name="auth_client_requested_by_msg">Requested by <ns1:g id="app_name">%1$s</ns1:g></string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml -->
     <string name="cancel">Cancel</string>
     <string name="cancel_email_update">Cancel Email Change</string>
     <string name="cancelled">Cancelled</string>
@@ -113,6 +121,7 @@
     <string name="change">Change</string>
     <string name="code_send_hint">An email has been sent to the new address with a 4-digit code.
         Please enter it below to update your email address.</string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml -->
     <string name="com_facebook_choose_friends">Choose Friends</string>
     <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
     <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>
@@ -138,6 +147,7 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log In…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged In</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not Logged In</string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml -->
     <string name="common_google_play_services_enable_button" msgid="2523291102206661146">Enable Google Play services</string>
     <string name="common_google_play_services_enable_text" msgid="227660514972886228">This app won\'t work unless you enable Google Play services.</string>
     <string name="common_google_play_services_enable_title" msgid="5122002158466380389">Enable Google Play services</string>
@@ -153,6 +163,7 @@
     <string name="common_google_play_services_update_title" msgid="1788179980625863495">Update Google Play services</string>
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml -->
     <string name="days_ago_format">%1$d days ago</string>
     <string name="describe_item">Describe your item.</string>
     <string name="distance">Distance:</string>
@@ -177,9 +188,11 @@
     <string name="less_than_1_mile">Less than 1 mile</string>
     <string name="less_than_1_minute">Less than 1 minute ago</string>
     <string name="location">Location</string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml -->
     <string name="location_client_ulr_inactive_age_under_13" translatable="false">        AgeUnder13</string>
     <string name="location_client_ulr_inactive_age_unknown" translatable="false">AgeUnknown</string>
     <string name="location_client_ulr_inactive_unknown_restriction" translatable="false">        UnknownRestriction</string>
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml -->
     <string name="login_failure">Login failed.  Please try again.</string>
     <string name="logout">Logout</string>
     <string name="maps_api_key">AIzaSyCubyA4jGRyFP_-BUCTY0QCdwz60yw2GLk</string>
@@ -221,7 +234,7 @@
     <string name="username">Username</string>
     <string name="username_update_hint">Please choose a unique username. This name is how you will
         appear to other users.</string>
-
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/styles.xml -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
@@ -233,7 +246,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml -->
     <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">
         <item name="android:width">@dimen/com_facebook_loginview_width</item>
         <item name="android:height">@dimen/com_facebook_loginview_height</item>

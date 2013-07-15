@@ -18,6 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -99,6 +100,38 @@ public class UserFetcher {
             Log.e(TAG, "Failed to parse user:", e);
         }
         return null;
+    }
+
+    public ArrayList<User> fetchUsersWhoWantItem(Long itemID, int minMessagesSent) {
+        String urlSpec = Constants.BASE_URL + "/users.php?";
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+        ArrayList<User> users = new ArrayList<User>();
+
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("wantItemID", itemID.toString()));
+        nameValuePairs.add(new BasicNameValuePair("minMessages", String.valueOf(minMessagesSent)));
+        String paramString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
+        HttpGet get = new HttpGet(urlSpec + paramString);
+
+        try {
+            HttpResponse response = client.execute(get);
+            Log.e(TAG, response.toString());
+            JSONArray result = JSONUtils.parseArrayResponse(response);
+            for (int i = 0; i < result.length(); i++) {
+                JSONObject userJson = (JSONObject) result.get(i);
+                User user = new User();
+                user.updateFromJSON(userJson);
+                users.add(user);
+            }
+        } catch (ClientProtocolException e) {
+            Log.e(TAG, "Failed to get user:", e);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to get user:", e);
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse user:", e);
+        }
+
+        return users;
     }
 
     public UpdateResponse updateUsername(String newUsername) {

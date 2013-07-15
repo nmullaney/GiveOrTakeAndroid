@@ -2,10 +2,13 @@ package com.bitdance.giveortake;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 /**
  * Created by nora on 6/23/13.
@@ -40,6 +43,13 @@ public class UserService extends IntentService {
     public static final String EXTRA_LATLNG = "extra_latlng";
     public static final String LOCATION_UPDATED = "location_updated";
 
+    public static final String FETCH_USERS_WHO_WANT_ITEM = "fetch_users_who_want_item";
+    public static final String EXTRA_ITEM_ID = "extra_item_id";
+    public static final String EXTRA_MIN_MESSAGES = "extra_min_messages";
+    public static final String USERS_WHO_WANT_ITEM_FETCHED = "users_who_want_item_fetched";
+    public static final String EXTRA_USERS = "extra_users";
+
+
     public UserService() {
         super(TAG);
     }
@@ -65,6 +75,10 @@ public class UserService extends IntentService {
         } else if (intent.getAction().equals(UPDATE_LOCATION)) {
             LatLng latLng = intent.getParcelableExtra(EXTRA_LATLNG);
             updateLocation(latLng);
+        } else if (intent.getAction().equals(FETCH_USERS_WHO_WANT_ITEM)) {
+            Long itemID = intent.getLongExtra(EXTRA_ITEM_ID, 0);
+            int minMessages = intent.getIntExtra(EXTRA_MIN_MESSAGES, 0);
+            fetchUsersWhoWantItem(itemID, minMessages);
         }
     }
 
@@ -99,7 +113,7 @@ public class UserService extends IntentService {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         Intent intent = new Intent(USER_FETCHED);
-        intent.putExtra(EXTRA_USER_DATA, user);
+        intent.putExtra(EXTRA_USER_DATA, (Parcelable) user);
         localBroadcastManager.sendBroadcast(intent);
     }
 
@@ -160,6 +174,16 @@ public class UserService extends IntentService {
         if (!response.isSuccess()) {
             intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
         }
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void fetchUsersWhoWantItem(Long itemID, int minMessages) {
+        UserFetcher fetcher = new UserFetcher(this);
+        ArrayList<User> users = fetcher.fetchUsersWhoWantItem(itemID, minMessages);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        Intent intent = new Intent(USERS_WHO_WANT_ITEM_FETCHED);
+        intent.putExtra(EXTRA_USERS, users);
         localBroadcastManager.sendBroadcast(intent);
     }
 }

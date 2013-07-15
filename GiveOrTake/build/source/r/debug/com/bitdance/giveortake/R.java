@@ -277,11 +277,15 @@ containing a value of this type.
         public static final int zOrderOnTop=0x7f01000e;
     }
     public static final class color {
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml 
+         */
         public static final int com_facebook_blue=0x7f040000;
         public static final int com_facebook_loginview_text_color=0x7f040001;
         public static final int com_facebook_usersettingsfragment_connected_shadow_color=0x7f040002;
         public static final int com_facebook_usersettingsfragment_connected_text_color=0x7f040003;
         public static final int com_facebook_usersettingsfragment_not_connected_text_color=0x7f040004;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml 
+         */
         public static final int common_action_bar_splitter=0x7f040005;
         public static final int common_signin_btn_dark_text_default=0x7f040006;
         public static final int common_signin_btn_dark_text_disabled=0x7f040007;
@@ -294,13 +298,20 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_pressed=0x7f04000e;
         public static final int common_signin_btn_text_dark=0x7f040012;
         public static final int common_signin_btn_text_light=0x7f040013;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/colors.xml 
+         */
         public static final int darkPink=0x7f04000f;
         public static final int red=0x7f040010;
         public static final int white=0x7f040011;
     }
     public static final class dimen {
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/dimens.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values-sw720dp-land/dimens.xml 
+         */
         public static final int activity_horizontal_margin=0x7f060000;
         public static final int activity_vertical_margin=0x7f060001;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml 
+         */
         public static final int com_facebook_loginview_height=0x7f060002;
         public static final int com_facebook_loginview_padding_bottom=0x7f060003;
         public static final int com_facebook_loginview_padding_left=0x7f060004;
@@ -420,7 +431,6 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f05001e;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f05001c;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f05001d;
-        public static final int edit_offer_change_state_button=0x7f050024;
         public static final int edit_offer_description=0x7f050025;
         public static final int edit_offer_name=0x7f050022;
         public static final int edit_offer_photo=0x7f050027;
@@ -466,6 +476,7 @@ containing a value of this type.
         public static final int search_box=0x7f05001a;
         public static final int send_code_button=0x7f05003d;
         public static final int small=0x7f050005;
+        public static final int state_user=0x7f050024;
         public static final int terrain=0x7f050003;
         public static final int update_button=0x7f050040;
         public static final int update_email=0x7f05003a;
@@ -514,6 +525,8 @@ containing a value of this type.
         public static final int test=0x7f090001;
     }
     public static final class string {
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml 
+         */
         public static final int a_day_ago=0x7f070000;
         public static final int a_minute_ago=0x7f070001;
         public static final int about=0x7f070002;
@@ -522,15 +535,24 @@ containing a value of this type.
         public static final int add_photo=0x7f070005;
         public static final int an_hour_ago=0x7f070006;
         public static final int app_name=0x7f070007;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml 
+         */
         public static final int auth_client_availability_notification_title=0x7f070008;
         public static final int auth_client_play_services_err_notification_msg=0x7f070009;
         public static final int auth_client_requested_by_msg=0x7f07000a;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml 
+         */
         public static final int cancel=0x7f07000b;
         public static final int cancel_email_update=0x7f07000c;
         public static final int cancelled=0x7f07000d;
         public static final int center_map=0x7f07000e;
         public static final int change=0x7f07000f;
         public static final int code_send_hint=0x7f070010;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values-es/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values-he/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values-iw/values.xml 
+         */
         public static final int com_facebook_choose_friends=0x7f070011;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070012;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -556,6 +578,57 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f070027;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f070028;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f070029;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-af/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-am/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ar/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-be/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-bg/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ca/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-cs/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-da/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-de/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-el/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-en-rGB/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-es/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-es-rUS/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-et/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-fa/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-fi/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-fr/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-hi/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-hr/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-hu/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-in/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-it/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-iw/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ja/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ko/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-lt/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-lv/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ms/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-nb/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-nl/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-pl/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-pt/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-pt-rBR/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-pt-rPT/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ro/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-ru/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-sk/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-sl/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-sr/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-sv/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-sw/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-th/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-tl/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-tr/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-uk/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-vi/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-zh-rCN/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-zh-rTW/values.xml 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values-zu/values.xml 
+         */
         public static final int common_google_play_services_enable_button=0x7f07002a;
         public static final int common_google_play_services_enable_text=0x7f07002b;
         public static final int common_google_play_services_enable_title=0x7f07002c;
@@ -571,6 +644,8 @@ containing a value of this type.
         public static final int common_google_play_services_update_title=0x7f070036;
         public static final int common_signin_button_text=0x7f070037;
         public static final int common_signin_button_text_long=0x7f070038;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml 
+         */
         public static final int days_ago_format=0x7f070039;
         public static final int describe_item=0x7f07003a;
         public static final int distance=0x7f07003b;
@@ -594,9 +669,13 @@ containing a value of this type.
         public static final int less_than_1_mile=0x7f07004d;
         public static final int less_than_1_minute=0x7f07004e;
         public static final int location=0x7f07004f;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml 
+         */
         public static final int location_client_ulr_inactive_age_under_13=0x7f070050;
         public static final int location_client_ulr_inactive_age_unknown=0x7f070051;
         public static final int location_client_ulr_inactive_unknown_restriction=0x7f070052;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/strings.xml 
+         */
         public static final int login_failure=0x7f070053;
         public static final int logout=0x7f070054;
         public static final int maps_api_key=0x7f070055;
@@ -636,23 +715,28 @@ containing a value of this type.
         public static final int username_update_hint=0x7f070077;
     }
     public static final class style {
-        /** 
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/styles.xml 
+
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values-v11/styles.xml 
  API 11 theme customizations can go here. 
+ From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values-v14/styles.xml 
  API 14 theme customizations can go here. 
          */
         public static final int AppBaseTheme=0x7f080000;
         /**  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml 
+         */
         public static final int com_facebook_loginview_default_style=0x7f080002;
         public static final int com_facebook_loginview_silver_style=0x7f080003;
     }
     public static final class styleable {
-        /** Attributes that can be used with a ItemStateView.
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/attrs.xml 
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
@@ -679,7 +763,7 @@ containing a value of this type.
           @attr name android:item_state
         */
         public static final int ItemStateView_item_state = 0;
-        /** Attributes that can be used with a MapAttrs.
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectGooglePlayServices_libUnspecified.aar/res/values/values.xml 
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
@@ -923,7 +1007,7 @@ containing a value of this type.
           @attr name android:zOrderOnTop
         */
         public static final int MapAttrs_zOrderOnTop = 13;
-        /** Attributes that can be used with a com_facebook_friend_picker_fragment.
+        /**  From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml 
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />

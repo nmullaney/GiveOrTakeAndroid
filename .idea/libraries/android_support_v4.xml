@@ -2,8 +2,6 @@
   <library name="android-support-v4">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/GiveOrTake/libs/android-support-v4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/Facebook/libs/android-support-v4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/GiveOrTake/build/exploded-bundles/Facebook.aar/libs/android-support-v4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
