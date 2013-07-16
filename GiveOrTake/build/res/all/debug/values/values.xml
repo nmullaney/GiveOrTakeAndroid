@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
 
+    <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/src/main/res/values/colors.xml -->
+    <color name="black">#000000</color>
     <!-- From: /Users/nora/AndroidStudioProjects/GiveOrTakeProject/GiveOrTake/build/exploded-bundles/GiveOrTakeProjectFacebookUnspecified.aar/res/values/values.xml -->
     <color name="com_facebook_blue">#3B5998</color>
     <color name="com_facebook_loginview_text_color">#FFFFFF</color>
@@ -220,6 +222,7 @@
     <string name="send_code">Send Code</string>
     <string name="status">Status:</string>
     <string name="subject">Subject:</string>
+    <string name="switch_camera">Switch Camera</string>
     <string name="take_photo">Take Photo</string>
     <string name="title_activity_free_item_pager">Free Item</string>
     <string name="title_activity_test">TestActivity</string>

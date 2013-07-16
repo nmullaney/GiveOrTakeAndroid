@@ -151,11 +151,16 @@ public class EditOfferFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_IMAGE_RESULT:
+                if (data == null) {
+                    break;
+                }
                 String thumbnailFile = data.getStringExtra(CameraFragment.EXTRA_THUMBNAIL_FILENAME);
                 String imageFile = data.getStringExtra(CameraFragment.EXTRA_IMAGE_FILENAME);
-                item.loadThumbnailFromFile(getActivity(), thumbnailFile);
-                item.loadImageFromFile(getActivity(), imageFile);
-                updateUI();
+                if (thumbnailFile != null && imageFile != null) {
+                    item.loadThumbnailFromFile(getActivity(), thumbnailFile);
+                    item.loadImageFromFile(getActivity(), imageFile);
+                    updateUI();
+                }
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
