@@ -74,6 +74,11 @@ public class User implements Serializable, Parcelable {
         this.karma = karma;
     }
 
+    @Override
+    public String toString() {
+        return getUserName();
+    }
+
     /**
      * Methods to make this Parcelable
      */

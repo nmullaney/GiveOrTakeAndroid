@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.s;
+
 /**
  * Created by nora on 7/12/13.
  */
@@ -41,13 +43,14 @@ public class ItemStateView extends LinearLayout {
         layoutParams.gravity = Gravity.CENTER_VERTICAL;
 
         stateIconView = new ImageView(getContext());
-        stateIconView.setPadding(5, 0, 5, 0);
+        stateIconView.setPadding(5, 5, 5, 5);
         if (itemState != null) {
             stateIconView.setImageDrawable(itemState.getDrawable(getContext()));
         }
         addView(stateIconView, layoutParams);
 
         stateTextView = new TextView(getContext());
+        stateTextView.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
         if (itemState != null) {
             stateTextView.setText(itemState.getName());
         }

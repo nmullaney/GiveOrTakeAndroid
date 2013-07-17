@@ -26,18 +26,6 @@ public class JSONUtils {
         return (JSONObject) tokener.nextValue();
     }
 
-    public static JSONArray parseArrayResponse(HttpResponse response) throws IOException, JSONException {
-        String strResponse = getStringFromResponse(response);
-        Log.i(TAG, "Got data: " + strResponse);
-        JSONTokener tokener = new JSONTokener(strResponse);
-        JSONArray jsonArray = new JSONArray();
-        while (tokener.more()) {
-            JSONObject jsonObject = (JSONObject) tokener.nextValue();
-            jsonArray.put(jsonObject);
-        }
-        return jsonArray;
-    }
-
     private static String getStringFromResponse(HttpResponse response) throws IOException {
         StringBuilder sb = new StringBuilder();
         InputStream in = response.getEntity().getContent();

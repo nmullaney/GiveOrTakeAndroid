@@ -4,3 +4,5 @@ Facebook/build/*
 google-play-services_lib/build/*
 .gradle/
 .idea/*
+build/*
+.DS_Store

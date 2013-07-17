@@ -116,9 +116,10 @@ public class UserFetcher {
         try {
             HttpResponse response = client.execute(get);
             Log.e(TAG, response.toString());
-            JSONArray result = JSONUtils.parseArrayResponse(response);
-            for (int i = 0; i < result.length(); i++) {
-                JSONObject userJson = (JSONObject) result.get(i);
+            JSONObject fullResult = JSONUtils.parseResponse(response);
+            JSONArray usersJson = fullResult.getJSONArray("users");
+            for (int i = 0; i < usersJson.length(); i++) {
+                JSONObject userJson = (JSONObject) usersJson.get(i);
                 User user = new User();
                 user.updateFromJSON(userJson);
                 users.add(user);

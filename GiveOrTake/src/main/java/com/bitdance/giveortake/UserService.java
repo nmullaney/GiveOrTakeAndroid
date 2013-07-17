@@ -76,6 +76,7 @@ public class UserService extends IntentService {
             LatLng latLng = intent.getParcelableExtra(EXTRA_LATLNG);
             updateLocation(latLng);
         } else if (intent.getAction().equals(FETCH_USERS_WHO_WANT_ITEM)) {
+            Log.i(TAG, "Handling fetch users who want item");
             Long itemID = intent.getLongExtra(EXTRA_ITEM_ID, 0);
             int minMessages = intent.getIntExtra(EXTRA_MIN_MESSAGES, 0);
             fetchUsersWhoWantItem(itemID, minMessages);
@@ -178,8 +179,10 @@ public class UserService extends IntentService {
     }
 
     private void fetchUsersWhoWantItem(Long itemID, int minMessages) {
+        Log.i(TAG, "Fetching users who want item");
         UserFetcher fetcher = new UserFetcher(this);
         ArrayList<User> users = fetcher.fetchUsersWhoWantItem(itemID, minMessages);
+        Log.i(TAG, "Found users who want item: " + users);
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         Intent intent = new Intent(USERS_WHO_WANT_ITEM_FETCHED);

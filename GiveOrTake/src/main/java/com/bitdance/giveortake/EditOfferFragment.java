@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,14 +14,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -58,11 +56,14 @@ public class EditOfferFragment extends Fragment {
     private BroadcastReceiver usersWhoWantItemReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(UserService.FETCH_USERS_WHO_WANT_ITEM)) {
+            Log.i(TAG, "inside usersWhoWantItemReceiver");
+            if (intent.getAction().equals(UserService.USERS_WHO_WANT_ITEM_FETCHED)) {
                 ArrayList<User> usersWhoWant =
                         intent.getParcelableArrayListExtra(UserService.EXTRA_USERS);
+                Log.i(TAG, "Got usersWhoWant: " + usersWhoWant);
                 stateUser.setAdapter(new ArrayAdapter<User>(getActivity(),
-                        android.R.layout.simple_list_item_1, usersWhoWant));
+                        android.R.layout.simple_spinner_dropdown_item, usersWhoWant));
+                updateUI();
 
             }
         }
@@ -87,10 +88,12 @@ public class EditOfferFragment extends Fragment {
         }
 
         if (item.getId() != null) {
+            Log.i(TAG, "Building intent for users who want item");
             Intent intent = new Intent(getActivity(), UserService.class);
             intent.setAction(UserService.FETCH_USERS_WHO_WANT_ITEM);
             intent.putExtra(UserService.EXTRA_ITEM_ID, item.getId());
             intent.putExtra(UserService.EXTRA_MIN_MESSAGES, 1);
+            getActivity().startService(intent);
         }
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
@@ -118,6 +121,17 @@ public class EditOfferFragment extends Fragment {
 
         itemStateSpinner.setAdapter(adapter);
         itemStateSpinner.setSelection(adapter.getPosition(item.getState()));
+        itemStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                updateUI();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                updateUI();
+            }
+        });
 
         stateUser = (Spinner)view.findViewById(R.id.state_user);
 
@@ -171,6 +185,12 @@ public class EditOfferFragment extends Fragment {
         if (item.getImage(getActivity()) != null && itemImage != null) {
             itemImage.setImageDrawable(item.getImage(getActivity()));
         }
+        if (itemStateSpinner.getSelectedItem().equals(Item.ItemState.PROMISED) ||
+                itemStateSpinner.getSelectedItem().equals(Item.ItemState.TAKEN)) {
+            stateUser.setVisibility(View.VISIBLE);
+        } else {
+            stateUser.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -197,9 +217,12 @@ public class EditOfferFragment extends Fragment {
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             Item.ItemState itemState = (Item.ItemState) getItem(position);
             if (convertView == null) {
-                convertView = new ItemStateView(getActivity(), null);
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                convertView = layoutInflater.inflate(R.layout.dropdown_item_state, null);
             }
-            ((ItemStateView)convertView).setItemState(itemState);
+            ItemStateView itemStateView = (ItemStateView)
+                    convertView.findViewById(R.id.itemStateView);
+            itemStateView.setItemState(itemState);
             return convertView;
         }
 
@@ -207,9 +230,12 @@ public class EditOfferFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             Item.ItemState itemState = (Item.ItemState) getItem(position);
             if (convertView == null) {
-                convertView = new ItemStateView(getActivity(), null);
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                convertView = layoutInflater.inflate(R.layout.dropdown_item_state, null);
             }
-            ((ItemStateView)convertView).setItemState(itemState);
+            ItemStateView itemStateView = (ItemStateView)
+                    convertView.findViewById(R.id.itemStateView);
+            itemStateView.setItemState(itemState);
             return convertView;
         }
 
