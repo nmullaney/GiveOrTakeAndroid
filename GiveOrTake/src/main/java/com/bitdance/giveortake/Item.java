@@ -265,8 +265,13 @@ public class Item implements Serializable {
         if (getId() == null) {
             throw new Error("The temp file should only be moved once we have an id");
         }
+        if (tempImageFile == null) {
+            // no need to move non-existent file
+            return true;
+        }
         File newFile = getLocalImageFile(context);
         File tempFile = context.getFileStreamPath(tempImageFile);
+        Log.i(TAG, "Moving " + tempFile.getName() + " to " + newFile.getName());
         return tempFile.renameTo(newFile);
     }
 
