@@ -260,7 +260,7 @@ public class CameraFragment extends Fragment {
             try {
                 out = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
                 thumbOut = getActivity().openFileOutput(thumbnailFilename, Context.MODE_PRIVATE);
-                image.compress(Bitmap.CompressFormat.PNG, 100, out);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 thumbnail.compress(Bitmap.CompressFormat.PNG, 100, thumbOut);
                 success = true;
             } catch (FileNotFoundException fnfe) {

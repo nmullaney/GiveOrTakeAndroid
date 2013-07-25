@@ -3,10 +3,21 @@ package com.bitdance.giveortake;
 import android.content.Context;
 import android.util.Log;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -73,5 +84,38 @@ public class ImageFetcher {
             }
         }
         return success;
+    }
+
+    public boolean postImage(Item item) {
+        String urlSpec = Constants.BASE_URL + "/item/image.php";
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+        HttpPost post = new HttpPost(urlSpec);
+        MultipartEntity multipartEntity = new MultipartEntity();
+
+        try {
+        multipartEntity.addPart("item_id", new StringBody(String.valueOf(item.getId())));
+        multipartEntity.addPart("user_id", new StringBody(String.valueOf(item.getUserID())));
+        multipartEntity.addPart("token", new StringBody(ActiveUser.getInstance().getToken()));
+        multipartEntity.addPart("image", new ByteArrayBody(item.getImageData(context),
+                "image"));
+        } catch (UnsupportedEncodingException uee) {
+            Log.e(TAG, "Failed to build request", uee);
+            return false;
+        }
+
+        try {
+            post.setEntity(multipartEntity);
+            HttpResponse response = client.execute(post);
+            JSONObject result = JSONUtils.parseResponse(response);
+            // check for error?
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to post item", ioe);
+            return false;
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse item", je);
+            return false;
+        }
+
+        return true;
     }
 }

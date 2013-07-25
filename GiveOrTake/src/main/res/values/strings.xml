@@ -63,6 +63,7 @@
     <string name="edit_offer">Edit Offer</string>
     <string name="new_item">New Item</string>
     <string name="take_photo">Take Photo</string>
+    <string name="image_upload_failed">Failed to upload the picture of the item.</string>
 
     <!-- General error strings -->
     <string name="error_try_again">Something went wrong.  Please try again.</string>

@@ -119,13 +119,23 @@ public class ItemService extends IntentService {
     }
 
     private void postItem(Item item) {
-        Log.i(TAG, "Item name: " + item.getName());
         ItemsFetcher fetcher = new ItemsFetcher(this);
         item = fetcher.postItem(item);
+        boolean updatedImage = postImage(item);
         Intent intent = new Intent(ITEM_POSTED);
         intent.putExtra(EXTRA_ITEM, item);
+        if (!updatedImage) {
+            intent.putExtra(EXTRA_ERROR, getResources().getString(R.string.image_upload_failed));
+        } else {
+            item.moveTempFile(this);
+        }
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private boolean postImage(Item item) {
+        ImageFetcher fetcher = new ImageFetcher(this);
+        return fetcher.postImage(item);
     }
 }

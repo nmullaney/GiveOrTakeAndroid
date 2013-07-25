@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +45,7 @@ public class Item implements Serializable {
     private int numMessagesSent;
 
     private transient BitmapDrawable image;
-
+    private String tempImageFile;
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
@@ -203,15 +204,24 @@ public class Item implements Serializable {
         return thumbnail;
     }
 
+    private byte[] getDataFromDrawable(Drawable drawable, Bitmap.CompressFormat format) {
+        if (drawable == null) {
+            throw new RuntimeException("Drawable is null");
+        }
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(format, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public byte[] getImageData(Context context) {
+        Drawable image = getImage(context);
+        return getDataFromDrawable(image, Bitmap.CompressFormat.JPEG);
+    }
+
     public byte[] getThumbnailData(Context context) {
         Drawable thumbnailDrawable = getThumbnail(context);
-        if (thumbnailDrawable == null) {
-            throw new RuntimeException("Thumbnail is null");
-        }
-        Bitmap bitmap = ((BitmapDrawable)thumbnailDrawable).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
+        return getDataFromDrawable(thumbnailDrawable, Bitmap.CompressFormat.PNG);
     }
 
     public void setThumbnail(BitmapDrawable thumbnail) {
@@ -231,8 +241,33 @@ public class Item implements Serializable {
     }
 
     public File getLocalImageFile(Context context) {
-        String filename = getId() + "_image.png";
-        return context.getFileStreamPath(filename);
+        String filename = null;
+        if (getId() != null) {
+            filename = getId() + "_image.jpg";
+        } else if (tempImageFile != null) {
+            filename = tempImageFile;
+        }
+
+        if (filename != null)
+            return context.getFileStreamPath(filename);
+        else
+            try {
+                File tempFile = File.createTempFile("image", "jpg", context.getFilesDir());
+                tempImageFile = tempFile.getName();
+                return tempFile;
+            } catch (IOException ioe) {
+                Log.e(TAG, "Failed to open temp file for image.", ioe);
+            }
+        return null;
+    }
+
+    public boolean moveTempFile(Context context) {
+        if (getId() == null) {
+            throw new Error("The temp file should only be moved once we have an id");
+        }
+        File newFile = getLocalImageFile(context);
+        File tempFile = context.getFileStreamPath(tempImageFile);
+        return tempFile.renameTo(newFile);
     }
 
     public File getLocalThumbnailFile(Context context) {
@@ -245,6 +280,9 @@ public class Item implements Serializable {
             return image;
         }
         File file = getLocalImageFile(context);
+        if (file != null && !file.exists() && tempImageFile != null) {
+            file = context.getFileStreamPath(tempImageFile);
+        }
         if (file != null && file.exists()) {
             BitmapDrawable fullImage = new BitmapDrawable(context.getResources(), file.getPath());
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
