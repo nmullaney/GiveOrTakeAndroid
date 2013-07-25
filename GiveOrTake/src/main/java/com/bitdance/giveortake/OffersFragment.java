@@ -1,5 +1,6 @@
 package com.bitdance.giveortake;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,6 +61,11 @@ public class OffersFragment extends ListFragment {
         getActivity().startService(intent);
     }
 
+    private void refreshItems() {
+        items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
+        getView().requestLayout();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_offers, container, false);
@@ -95,6 +101,19 @@ public class OffersFragment extends ListFragment {
         Intent intent = new Intent(getActivity(), EditOfferActivity.class);
         intent.putExtra(EXTRA_ITEM, item);
         startActivityForResult(intent, EDIT_OFFER_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case EDIT_OFFER_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    refreshItems();
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override

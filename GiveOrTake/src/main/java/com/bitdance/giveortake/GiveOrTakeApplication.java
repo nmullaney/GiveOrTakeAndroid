@@ -65,6 +65,24 @@ public class GiveOrTakeApplication extends Application {
         }
     };
 
+    private BroadcastReceiver itemPostedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ItemService.ITEM_POSTED)) {
+                String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
+                if (error == null) {
+                    Item item = (Item) intent.getSerializableExtra(ItemService.EXTRA_ITEM);
+                    int index = offerIDs.indexOf(item.getId());
+                    if (index != -1) {
+                        offerIDs.remove(index);
+                    }
+                    items.put(item.getId(), item);
+                    offerIDs.add(0, item.getId());
+                }
+            }
+        }
+    };
+
     public void onCreate() {
         super.onCreate();
         freeItemIDs = new ArrayList<Long>();
@@ -79,6 +97,8 @@ public class GiveOrTakeApplication extends Application {
                 new IntentFilter(ItemService.MY_ITEMS_UPDATED));
         localBroadcastManager.registerReceiver(userBroadcastReceiver,
                 new IntentFilter(UserService.USER_FETCHED));
+        localBroadcastManager.registerReceiver(itemPostedBroadcastReceiver,
+                new IntentFilter(ItemService.ITEM_POSTED));
     }
 
     public ArrayList<Item> getFreeItems() {

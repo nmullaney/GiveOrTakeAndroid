@@ -1,7 +1,6 @@
 package com.bitdance.giveortake;
 
 import android.app.AlertDialog;
-import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by nora on 6/26/13.
@@ -120,7 +117,7 @@ public class FreeItemDetailFragment extends Fragment {
         if (item.getImage(getActivity()) == null) {
             Intent imageIntent = new Intent(getActivity(), ItemService.class);
             imageIntent.setAction(ItemService.FETCH_ITEM_IMAGE);
-            imageIntent.putExtra(ItemService.EXTRA_ITEM_DATA, item);
+            imageIntent.putExtra(ItemService.EXTRA_ITEM, item);
             getActivity().startService(imageIntent);
         }
     }

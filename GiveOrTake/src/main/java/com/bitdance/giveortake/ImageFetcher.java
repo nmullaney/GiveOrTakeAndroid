@@ -27,17 +27,28 @@ public class ImageFetcher {
     public boolean fetchImageForItem(Item item) {
         File imageFile = item.getLocalImageFile(context);
         try {
-            return fetchImageToFile(item.getImageURL(), imageFile);
+            return fetchImageToFile(item.getImageURL(), imageFile, ".image");
         } catch (IOException e) {
             Log.e(TAG, "Failed to get image", e);
             return false;
         }
     }
 
-    public boolean fetchImageToFile(String urlSpec, File file) throws IOException {
+    public boolean fetchThumbnailForItem(Item item) {
+        File thumbnailFile = item.getLocalThumbnailFile(context);
+        try {
+            return fetchImageToFile(item.getThumbnailURL(), thumbnailFile, ".thumbnail");
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to get image", e);
+            return false;
+        }
+    }
+
+    public boolean fetchImageToFile(String urlSpec, File file, String suffix) throws IOException {
+        Log.i(TAG, "Fetching image to " + file.getName() + " for type " + suffix);
         boolean success = false;
         URL url = new URL(urlSpec);
-        File tempFile = File.createTempFile("download", ".image", file.getParentFile());
+        File tempFile = File.createTempFile("download", suffix, file.getParentFile());
         FileOutputStream out = null;
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

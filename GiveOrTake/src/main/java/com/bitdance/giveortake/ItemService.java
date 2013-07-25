@@ -2,7 +2,6 @@ package com.bitdance.giveortake;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -22,7 +21,7 @@ public class ItemService extends IntentService {
     public static final String ITEMS_DATA = "items_data";
 
     public static final String FETCH_ITEM_IMAGE = "fetch_item_image";
-    public static final String EXTRA_ITEM_DATA = "extra_item_data";
+    public static final String EXTRA_ITEM = "extra_item";
     public static final String ITEM_IMAGE_FETCHED = "item_image_fetched";
     public static final String EXTRA_IMAGE_FETCH_ERROR = "image_fetch_error";
 
@@ -31,6 +30,10 @@ public class ItemService extends IntentService {
     public static final String EXTRA_MESSAGE = "extra_message";
     public static final String MESSAGE_SENT = "message_sent";
     public static final String EXTRA_MESSAGE_SENT_ERROR = "extra_message_sent_error";
+
+    public static final String POST_ITEM = "post_item";
+    public static final String ITEM_POSTED = "item_posted";
+    public static final String EXTRA_ERROR = "extra_error";
 
     public ItemService() {
         super(TAG);
@@ -45,13 +48,16 @@ public class ItemService extends IntentService {
         } else if (intent.getAction() == UPDATE_MY_ITEMS) {
             fetchMyItems();
         } else if (intent.getAction() == FETCH_ITEM_IMAGE) {
-            Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM_DATA);
+            Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             fetchItemImage(item);
         } else if (intent.getAction() == SEND_MESSAGE) {
-            Log.i(TAG, "Service sendingm message");
+            Log.i(TAG, "Service sending message");
             Long itemID = intent.getLongExtra(EXTRA_ITEM_ID, 0);
             String message = intent.getStringExtra(EXTRA_MESSAGE);
             sendMessage(itemID, message);
+        } else if (intent.getAction() == POST_ITEM) {
+            Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
+            postItem(item);
         }
     }
 
@@ -70,10 +76,12 @@ public class ItemService extends IntentService {
     }
 
     private void fetchThumbnails(ArrayList<Item> items) {
-        ItemsFetcher fetcher = new ItemsFetcher(this);
+        ImageFetcher fetcher = new ImageFetcher(this);
+        //ItemsFetcher itemFetcher = new ItemsFetcher(this);
         for (Item item : items) {
-            Drawable thumbnail = fetcher.fetchItemThumbnail(item);
-            item.setThumbnail(thumbnail);
+            boolean success = fetcher.fetchThumbnailForItem(item);
+            //ItemsFetcher itemsFetcher = new ItemsFetcher(this);
+            //itemsFetcher.fetchItemThumbnail(item);
         }
     }
 
@@ -108,5 +116,16 @@ public class ItemService extends IntentService {
             i.putExtra(EXTRA_MESSAGE_SENT_ERROR, true);
         }
         localBroadcastManager.sendBroadcast(i);
+    }
+
+    private void postItem(Item item) {
+        Log.i(TAG, "Item name: " + item.getName());
+        ItemsFetcher fetcher = new ItemsFetcher(this);
+        item = fetcher.postItem(item);
+        Intent intent = new Intent(ITEM_POSTED);
+        intent.putExtra(EXTRA_ITEM, item);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        localBroadcastManager.sendBroadcast(intent);
     }
 }

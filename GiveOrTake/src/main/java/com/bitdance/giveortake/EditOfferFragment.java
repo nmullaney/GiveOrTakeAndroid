@@ -1,5 +1,6 @@
 package com.bitdance.giveortake;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -69,6 +70,19 @@ public class EditOfferFragment extends Fragment {
         }
     };
 
+    private BroadcastReceiver itemPostedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ItemService.ITEM_POSTED)) {
+                String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
+                if (error == null) {
+                    getActivity().setResult(Activity.RESULT_OK);
+                    getActivity().finish();
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +97,7 @@ public class EditOfferFragment extends Fragment {
         if (item.getId() != null && item.getImage(getActivity()) == null) {
             Intent intent = new Intent(getActivity(), ItemService.class);
             intent.setAction(ItemService.FETCH_ITEM_IMAGE);
-            intent.putExtra(ItemService.EXTRA_ITEM_DATA, item);
+            intent.putExtra(ItemService.EXTRA_ITEM, item);
             getActivity().startService(intent);
         }
 
@@ -102,6 +116,8 @@ public class EditOfferFragment extends Fragment {
                 new IntentFilter(ItemService.ITEM_IMAGE_FETCHED));
         localBroadcastManager.registerReceiver(usersWhoWantItemReceiver,
                 new IntentFilter(UserService.USERS_WHO_WANT_ITEM_FETCHED));
+        localBroadcastManager.registerReceiver(itemPostedReceiver,
+                new IntentFilter(ItemService.ITEM_POSTED));
     }
 
     @Override
@@ -147,7 +163,28 @@ public class EditOfferFragment extends Fragment {
         itemImage = (ImageView)view.findViewById(R.id.edit_offer_photo);
         itemImage.setImageDrawable(item.getImage(getActivity()));
         Button postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateItem();
+                Intent intent = new Intent(getActivity(), ItemService.class);
+                intent.setAction(ItemService.POST_ITEM);
+                intent.putExtra(ItemService.EXTRA_ITEM, item);
+                getActivity().startService(intent);
+            }
+        });
         return view;
+    }
+
+    public void updateItem() {
+        item.setName(nameText.getText().toString());
+        item.setDescription(descText.getText().toString());
+        item.setState((Item.ItemState) itemStateSpinner.getSelectedItem());
+        if (stateUser.getSelectedItem() != null) {
+            item.setStateUser((User)stateUser.getSelectedItem());
+        } else {
+            item.setStateUser(null);
+        }
     }
 
     @Override
@@ -200,6 +237,7 @@ public class EditOfferFragment extends Fragment {
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(imageBroadcastReceiver);
         localBroadcastManager.unregisterReceiver(usersWhoWantItemReceiver);
+        localBroadcastManager.unregisterReceiver(itemPostedReceiver);
     }
 
     private class ItemStateSpinnerAdapter extends ArrayAdapter implements SpinnerAdapter {

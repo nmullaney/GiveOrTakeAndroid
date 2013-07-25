@@ -35,9 +35,10 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         Item i = getItem(position);
 
         ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
-        if (i.getThumbnail() != null) {
+        Drawable thumbnail = i.getThumbnail(getContext());
+        if (thumbnail != null) {
             Log.i(TAG, "Setting image drawable for item: " + i);
-            thumbnailView.setImageDrawable(i.getThumbnail());
+            thumbnailView.setImageDrawable(thumbnail);
         } else {
             Log.i(TAG, "Item image is null for item: " + i);
         }

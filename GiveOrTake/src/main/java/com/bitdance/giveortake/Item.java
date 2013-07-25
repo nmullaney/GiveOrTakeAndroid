@@ -2,10 +2,10 @@ package com.bitdance.giveortake;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -13,9 +13,9 @@ import android.view.WindowManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by nora on 6/17/13.
+ * Model class for an Item.
  */
 public class Item implements Serializable {
     private static final String TAG = "Item";
@@ -35,7 +35,7 @@ public class Item implements Serializable {
     private ItemState state;
     private Long stateUserID;
     private String thumbnailURL;
-    private transient Drawable thumbnail;
+    private transient BitmapDrawable thumbnail;
     private String imageURL;
     private Date dateCreated;
     private Date dateUpdated;
@@ -44,6 +44,7 @@ public class Item implements Serializable {
     private int numMessagesSent;
 
     private transient BitmapDrawable image;
+
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
@@ -64,6 +65,11 @@ public class Item implements Serializable {
     }
 
     public Item(JSONObject jsonObject) throws JSONException {
+        updateFromJSON(jsonObject);
+    }
+
+    public void updateFromJSON(JSONObject jsonObject) throws JSONException {
+        Log.i(TAG, "jsonObject to parse: " + jsonObject);
         id = jsonObject.getLong(JSON_ID);
         name = jsonObject.getString(JSON_NAME);
         if (jsonObject.isNull(JSON_DESC)) {
@@ -99,15 +105,20 @@ public class Item implements Serializable {
     }
 
     public void loadThumbnailFromFile(Context context, String filename) {
-        Drawable newThumbnail = Drawable
-                .createFromPath(context.getFileStreamPath(filename).getAbsolutePath());
-        setThumbnail(newThumbnail);
-        context.deleteFile(filename);
+        File thumbnailFile = context.getFileStreamPath(filename);
+        if (!thumbnailFile.renameTo(getLocalThumbnailFile(context))) {
+            throw new RuntimeException("Failed to move thumbnail");
+        }
+        // reload the image from the file
+        thumbnail = null;
+        getThumbnail(context);
     }
 
     public void loadImageFromFile(Context context, String filename) {
         File imageFile = context.getFileStreamPath(filename);
-        imageFile.renameTo(getLocalImageFile(context));
+        if (!imageFile.renameTo(getLocalImageFile(context))) {
+            throw new RuntimeException("Failed to move file to fix it's name");
+        }
         // reload the image from the file
         image = null;
         getImage(context);
@@ -154,6 +165,13 @@ public class Item implements Serializable {
         this.state = ItemState.valueOf(state);
     }
 
+    public void setStateUser(User stateUser) {
+        if (stateUser != null)
+            this.stateUserID = stateUser.getUserID();
+        else
+            this.stateUserID = null;
+    }
+
     public Drawable getDrawableForState(Context context) {
         if (state != null) {
             return state.getDrawable(context);
@@ -166,11 +184,37 @@ public class Item implements Serializable {
         return thumbnailURL;
     }
 
-    public Drawable getThumbnail() {
+    public Drawable getThumbnail(Context context) {
+        if (thumbnail == null) {
+            Log.i(TAG, "Thumbnail is null, loading from file");
+            File file = getLocalThumbnailFile(context);
+            Log.i(TAG, "File to load is " + file.getName());
+            if (file != null && file.exists()) {
+                Log.i(TAG, "Pulling thumbnail from file");
+                thumbnail = new BitmapDrawable(context.getResources(), file.getPath());
+                DisplayMetrics dm = context.getResources().getDisplayMetrics();
+                thumbnail.setTargetDensity(dm);
+            }
+        }
+        if (thumbnail != null) {
+            Log.i(TAG, "Thumbnail height/width = " + thumbnail.getIntrinsicHeight() + "/" +
+                    thumbnail.getIntrinsicWidth());
+        }
         return thumbnail;
     }
 
-    public void setThumbnail(Drawable thumbnail) {
+    public byte[] getThumbnailData(Context context) {
+        Drawable thumbnailDrawable = getThumbnail(context);
+        if (thumbnailDrawable == null) {
+            throw new RuntimeException("Thumbnail is null");
+        }
+        Bitmap bitmap = ((BitmapDrawable)thumbnailDrawable).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public void setThumbnail(BitmapDrawable thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -191,6 +235,11 @@ public class Item implements Serializable {
         return context.getFileStreamPath(filename);
     }
 
+    public File getLocalThumbnailFile(Context context) {
+        String filename = getId() + "_thumbnail.png";
+        return context.getFileStreamPath(filename);
+    }
+
     public Drawable getImage(Context context) {
         if (image != null) {
             return image;
@@ -198,6 +247,8 @@ public class Item implements Serializable {
         File file = getLocalImageFile(context);
         if (file != null && file.exists()) {
             BitmapDrawable fullImage = new BitmapDrawable(context.getResources(), file.getPath());
+            DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            fullImage.setTargetDensity(dm);
             Display display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE))
                     .getDefaultDisplay();
             Rect size = new Rect();

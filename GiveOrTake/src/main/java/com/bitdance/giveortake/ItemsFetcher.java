@@ -6,6 +6,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,26 +22,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 /**
- * Created by nora on 6/17/13.
+ * The class handles the fetching and posting of Items.
  */
 public class ItemsFetcher {
     public static final String TAG = "ItemsFetcher";
-
-    private static final int BUFFER_SIZE = 1024;
 
     private Context context;
 
@@ -61,12 +60,10 @@ public class ItemsFetcher {
 
     private ArrayList<Item> fetchItemsWithFilter(ItemsFilter filter) {
         ArrayList<Item> items = new ArrayList<Item>();
-        StringBuilder urlsb = new StringBuilder();
-        urlsb.append(Constants.BASE_URL).append("/items.php?").append(filter.buildQueryString());
-        String urlspec = urlsb.toString();
-        String result = null;
+        String urlSpec = Constants.BASE_URL + "/items.php?" + filter.buildQueryString();
+        String result;
         try {
-            result = fetchURLStringData(urlspec);
+            result = fetchURLStringData(urlSpec);
             Log.i(TAG, "JSON = \n" + result);
             items = parseItems(result);
             Log.i(TAG, "Items = " + items);
@@ -111,9 +108,9 @@ public class ItemsFetcher {
         try {
             StringBuilder result = new StringBuilder();
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
-                result.append(line + "\n");
+                result.append(line).append("\n");
             }
             return result.toString();
         } finally {
@@ -124,20 +121,56 @@ public class ItemsFetcher {
         }
     }
 
-    private BitmapDrawable fetchURLBitmapDrawable(String urlspec) throws IOException {
-        URL url = new URL(urlspec);
+    private BitmapDrawable fetchURLBitmapDrawable(String urlSpec) throws IOException {
+        URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         InputStream in = null;
         try {
             in = connection.getInputStream();
-            BitmapDrawable drawable = new BitmapDrawable(context.getResources(),
+            return new BitmapDrawable(context.getResources(),
                     BitmapFactory.decodeStream(in));
-            return drawable;
         } finally {
             connection.disconnect();
             if (in != null) {
                 in.close();
             }
         }
+    }
+
+    public Item postItem(Item item) {
+        String urlSpec = Constants.BASE_URL + "/item.php";
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+        HttpPost post = new HttpPost(urlSpec);
+        MultipartEntity multipartEntity = new MultipartEntity();
+        try {
+            if (item.getId() != null) {
+                multipartEntity.addPart("item_id", new StringBody(String.valueOf(item.getId())));
+            }
+            multipartEntity.addPart("user_id", new StringBody(String.valueOf(item.getUserID())));
+            multipartEntity.addPart("token", new StringBody(ActiveUser.getInstance().getToken()));
+            multipartEntity.addPart("name", new StringBody(item.getName()));
+            multipartEntity.addPart("desc", new StringBody(item.getDescription()));
+            multipartEntity.addPart("state", new StringBody(item.getState().getName()));
+            if (item.getStateUserID() != null)
+                multipartEntity.addPart("state_user_id",
+                        new StringBody(String.valueOf(item.getStateUserID())));
+            multipartEntity.addPart("thumbnail", new ByteArrayBody(item.getThumbnailData(context),
+                    "thumbnail"));
+        } catch (UnsupportedEncodingException uee) {
+            Log.e(TAG, "Failed to build request", uee);
+        }
+
+        try {
+            post.setEntity(multipartEntity);
+            HttpResponse response = client.execute(post);
+            JSONObject result = JSONUtils.parseResponse(response);
+            JSONObject itemJSON = result.getJSONObject("item");
+            item.updateFromJSON(itemJSON);
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to post item", ioe);
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse item", je);
+        }
+        return item;
     }
 }
