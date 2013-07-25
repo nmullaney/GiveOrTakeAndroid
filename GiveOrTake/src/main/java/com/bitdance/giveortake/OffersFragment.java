@@ -88,6 +88,19 @@ public class OffersFragment extends ListFragment {
         }
     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
+        setListAdapter(new ItemArrayAdapter(getActivity(), items));
+    }
+
     public boolean createNewItem() {
         Intent i = new Intent(getActivity(), EditOfferActivity.class);
         i.putExtra(EXTRA_ITEM, new Item());

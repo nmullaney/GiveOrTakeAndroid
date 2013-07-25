@@ -64,6 +64,13 @@ public class FreeItemsFragment extends ListFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+        setListAdapter(new ItemArrayAdapter(getActivity(), items));
+    }
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Item item = ((ItemArrayAdapter) getListAdapter()).getItem(position);
         Intent i = new Intent(getActivity(), FreeItemPagerActivity.class);
