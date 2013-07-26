@@ -33,16 +33,14 @@ public class GiveOrTakeApplication extends Application {
         if (newItems.size() < Constants.MAX_ITEMS_TO_REQUEST) {
             freeItemsMap.setHasMoreData(false);
         }
-        // TODO: this should be a merge
-        freeItemsMap.addAll(newItems);
+        freeItemsMap.mergeNewItems(newItems);
     }
 
     public void mergeNewOffers(ArrayList<Item> newOffers) {
         if (newOffers.size() < Constants.MAX_ITEMS_TO_REQUEST) {
             offersMap.setHasMoreData(false);
         }
-        // TODO: this should be a merge
-        offersMap.addAll(newOffers);
+        offersMap.mergeNewItems(newOffers);
     }
 
     public void addPostedItem(Item item) {

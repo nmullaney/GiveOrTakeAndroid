@@ -19,7 +19,6 @@ public class ItemService extends IntentService {
 
     public static final String FREE_ITEMS_UPDATED = "free_items_updated";
     public static final String MY_ITEMS_UPDATED = "my_items_updated";
-    public static final String ITEMS_DATA = "items_data";
 
     public static final String FETCH_ITEM_THUMBNAIL = "fetch_item_thumbnail";
     public static final String ITEM_THUMBNAIL_FETCHED = "item_thumbnail_fetched";
