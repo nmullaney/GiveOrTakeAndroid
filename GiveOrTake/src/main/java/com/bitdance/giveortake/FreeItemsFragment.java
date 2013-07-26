@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,7 +37,7 @@ public class FreeItemsFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
-                items = (ArrayList<Item>) intent.getSerializableExtra(ItemService.ITEMS_DATA);
+                items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
                 setListAdapter(new ItemArrayAdapter(getActivity(), items));
             }
         }
@@ -78,8 +80,36 @@ public class FreeItemsFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_free_items, container, false);
-        TabWidget tabWidget = (TabWidget)v.findViewById(android.R.id.tabs);
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Log.d(TAG, "On scrollStateChanged: " + scrollState);
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                if (totalItemCount == 0) {
+                    return;
+                }
+                Log.d(TAG, "OnScroll: first: " + firstVisibleItem + ", count: " + visibleItemCount
+                    + ", totalCount: " + totalItemCount);
+                if (firstVisibleItem + visibleItemCount == totalItemCount) {
+                    // we are at the bottom
+                    Log.i(TAG, "Getting more items");
+                    Intent refreshIntent = new Intent(getActivity(), ItemService.class);
+                    refreshIntent.setAction(ItemService.UPDATE_FREE_ITEMS);
+                    refreshIntent.putExtra(ItemService.EXTRA_OFFSET, totalItemCount);
+                    getActivity().startService(refreshIntent);
+                }
+            }
+        });
     }
 
     @Override

@@ -38,7 +38,7 @@ public class OffersFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
-                items = (ArrayList<Item>) intent.getSerializableExtra(ItemService.ITEMS_DATA);
+                items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
                 setListAdapter(new ItemArrayAdapter(context, items));
             }
         }

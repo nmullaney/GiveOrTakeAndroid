@@ -1,11 +1,6 @@
 package com.bitdance.giveortake;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,84 +11,59 @@ import java.util.HashMap;
 public class GiveOrTakeApplication extends Application {
     private static final String TAG = "GiveOrTakeApplication";
 
-    private OrderedMap<Item> freeItemsMap;
-    private OrderedMap<Item> offersMap;
+    private ItemMap freeItemsMap;
+    private ItemMap offersMap;
 
     private HashMap<Long, User> users;
 
-    private BroadcastReceiver freeItemBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
-                ArrayList<Item> freeItems = (ArrayList<Item>)
-                        intent.getSerializableExtra(ItemService.ITEMS_DATA);
-                freeItemsMap.clear();
-                freeItemsMap.addAll(freeItems);
-            }
-        }
-    };
-
-    private BroadcastReceiver offersBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
-                ArrayList<Item> offers = (ArrayList<Item>)
-                        intent.getSerializableExtra(ItemService.ITEMS_DATA);
-                offersMap.clear();
-                offersMap.addAll(offers);
-            }
-        }
-    };
-
-    private BroadcastReceiver userBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(UserService.USER_FETCHED)) {
-                User user = (User)intent.getSerializableExtra(UserService.EXTRA_USER_DATA);
-                if (user != null) {
-                    users.put(user.getUserID(), user);
-                }
-            }
-        }
-    };
-
-    private BroadcastReceiver itemPostedBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ItemService.ITEM_POSTED)) {
-                String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
-                if (error == null) {
-                    Item item = (Item) intent.getSerializableExtra(ItemService.EXTRA_ITEM);
-                    offersMap.remove(item);
-                    offersMap.add(0, item);
-                    if (freeItemsMap.contains(item)) {
-                        freeItemsMap.remove(item);
-                        freeItemsMap.add(0, item);
-                    }
-                }
-            }
-        }
-    };
-
     public void onCreate() {
         super.onCreate();
-        freeItemsMap = new OrderedMap<Item>();
-        offersMap = new OrderedMap<Item>();
+        freeItemsMap = new ItemMap();
+        offersMap = new ItemMap();
         users = new HashMap<Long, User>();
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
-        localBroadcastManager.registerReceiver(freeItemBroadcastReceiver,
-                new IntentFilter(ItemService.FREE_ITEMS_UPDATED));
-        localBroadcastManager.registerReceiver(offersBroadcastReceiver,
-                new IntentFilter(ItemService.MY_ITEMS_UPDATED));
-        localBroadcastManager.registerReceiver(userBroadcastReceiver,
-                new IntentFilter(UserService.USER_FETCHED));
-        localBroadcastManager.registerReceiver(itemPostedBroadcastReceiver,
-                new IntentFilter(ItemService.ITEM_POSTED));
+    }
+
+    public void addUser(User user) {
+        if (user != null) {
+            users.put(user.getUserID(), user);
+        }
+    }
+
+    public void mergeNewFreeItems(ArrayList<Item> newItems) {
+        if (newItems.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+            freeItemsMap.setHasMoreData(false);
+        }
+        // TODO: this should be a merge
+        freeItemsMap.addAll(newItems);
+    }
+
+    public void mergeNewOffers(ArrayList<Item> newOffers) {
+        if (newOffers.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+            offersMap.setHasMoreData(false);
+        }
+        // TODO: this should be a merge
+        offersMap.addAll(newOffers);
+    }
+
+    public void addPostedItem(Item item) {
+        offersMap.remove(item);
+        offersMap.add(0, item);
+        if (freeItemsMap.contains(item)) {
+            freeItemsMap.remove(item);
+            freeItemsMap.add(0, item);
+        }
     }
 
     public ArrayList<Item> getFreeItems() {
         return freeItemsMap.getAll();
+    }
+
+    public boolean haveMoreFreeItems() {
+        return freeItemsMap.hasMoreData();
+    }
+
+    public boolean haveMoreOffers() {
+        return offersMap.hasMoreData();
     }
 
     public Item getItem(Long itemID) {
@@ -125,15 +95,5 @@ public class GiveOrTakeApplication extends Application {
         for (Item item : offersMap.getAll()) {
             item.clearImage();
         }
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
-        localBroadcastManager.unregisterReceiver(freeItemBroadcastReceiver);
-        localBroadcastManager.unregisterReceiver(offersBroadcastReceiver);
-        localBroadcastManager.unregisterReceiver(userBroadcastReceiver);
     }
 }

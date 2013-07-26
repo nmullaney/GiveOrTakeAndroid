@@ -114,6 +114,7 @@ public class UserService extends IntentService {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
         Intent intent = new Intent(USER_FETCHED);
+        ((GiveOrTakeApplication) getApplication()).addUser(user);
         intent.putExtra(EXTRA_USER_DATA, (Parcelable) user);
         localBroadcastManager.sendBroadcast(intent);
     }

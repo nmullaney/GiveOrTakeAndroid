@@ -15,6 +15,7 @@ public class ItemService extends IntentService {
 
     public static final String UPDATE_FREE_ITEMS = "update_free_items";
     public static final String UPDATE_MY_ITEMS = "update_my_items";
+    public static final String EXTRA_OFFSET = "extra_offset";
 
     public static final String FREE_ITEMS_UPDATED = "free_items_updated";
     public static final String MY_ITEMS_UPDATED = "my_items_updated";
@@ -47,9 +48,11 @@ public class ItemService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         if (intent.getAction() == UPDATE_FREE_ITEMS) {
-            fetchFreeItems();
+            Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
+            fetchFreeItems(offset);
         } else if (intent.getAction() == UPDATE_MY_ITEMS) {
-            fetchMyItems();
+            Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
+            fetchMyItems(offset);
         } else if (intent.getAction() == FETCH_ITEM_THUMBNAIL) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             fetchItemThumbnail(item);
@@ -75,16 +78,32 @@ public class ItemService extends IntentService {
         localBroadcastManager.sendBroadcast(intent);
     }
 
-    private void fetchFreeItems() {
-        ItemsFetcher fetcher = new ItemsFetcher(this);
-        ArrayList<Item> items = fetcher.fetchMostRecentItems();
-        broadcastItems(FREE_ITEMS_UPDATED, items);
+    private GiveOrTakeApplication getGOTApplication() {
+        return ((GiveOrTakeApplication) getApplication());
     }
 
-    private void fetchMyItems() {
+    private void fetchFreeItems(Integer offset) {
         ItemsFetcher fetcher = new ItemsFetcher(this);
-        ArrayList<Item> items = fetcher.fetchMyItems();
-        broadcastItems(MY_ITEMS_UPDATED, items);
+        if (offset != 0 && !getGOTApplication().haveMoreFreeItems()) {
+            // don't fetch more old items if we've already got them all
+            return;
+        }
+        ArrayList<Item> items = fetcher.fetchItems(offset);
+        getGOTApplication().mergeNewFreeItems(items);
+        Intent i = new Intent(FREE_ITEMS_UPDATED);
+        broadcastIntent(i);
+    }
+
+    private void fetchMyItems(Integer offset) {
+        ItemsFetcher fetcher = new ItemsFetcher(this);
+        if (offset != 0 && !getGOTApplication().haveMoreOffers()) {
+            // don't fetch more old items if we've already got them all
+            return;
+        }
+        ArrayList<Item> items = fetcher.fetchMyItems(offset);
+        getGOTApplication().mergeNewOffers(items);
+        Intent i = new Intent(MY_ITEMS_UPDATED);
+        broadcastIntent(i);
     }
 
     private void fetchItemThumbnail(Item item) {
@@ -97,12 +116,6 @@ public class ItemService extends IntentService {
         }
         Log.i(TAG, "Broadcasting item thumbnail fetched for " + item.toString());
         broadcastIntent(intent);
-    }
-
-    private void broadcastItems(String resultAction, ArrayList<Item> items) {
-        Intent i = new Intent(resultAction);
-        i.putExtra(ITEMS_DATA, items);
-        broadcastIntent(i);
     }
 
     private void fetchItemImage(Item item) {
@@ -131,12 +144,12 @@ public class ItemService extends IntentService {
         item = fetcher.postItem(item);
         boolean updatedImage = postImage(item);
         Intent intent = new Intent(ITEM_POSTED);
-        intent.putExtra(EXTRA_ITEM, item);
         if (!updatedImage) {
             intent.putExtra(EXTRA_ERROR, getResources().getString(R.string.image_upload_failed));
         } else {
             item.moveTempFile(this);
         }
+        getGOTApplication().addPostedItem(item);
         broadcastIntent(intent);
     }
 

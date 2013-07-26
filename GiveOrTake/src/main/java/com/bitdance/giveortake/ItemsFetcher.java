@@ -42,17 +42,20 @@ public class ItemsFetcher {
         SSLConnectionHelper.trustAllHosts();
     }
 
-    public ArrayList<Item> fetchMyItems() {
+    public ArrayList<Item> fetchMyItems(Integer offset) {
         ItemsFilter filter = new ItemsFilter();
+        filter.setDistance(offset);
         filter.setOwnedBy(ActiveUser.getInstance().getUserID());
         return fetchItemsWithFilter(filter);
     }
 
-    public ArrayList<Item> fetchMostRecentItems() {
-        Log.i(TAG, "Fetching the most recent items");
+    public ArrayList<Item> fetchItems(Integer offset) {
+        Log.i(TAG, "Fetching items");
         ItemsFilter filter = new ItemsFilter();
         filter
-                .setDistance(20)
+                .setDistance(50)
+                .setLimit(Constants.MAX_ITEMS_TO_REQUEST)
+                .setOffset(offset)
                 .setUserID(ActiveUser.getInstance().getUserID())
                 .setShowMyItems(true);
         return fetchItemsWithFilter(filter);
@@ -74,17 +77,6 @@ public class ItemsFetcher {
         }
 
         return items;
-    }
-
-    public Drawable fetchItemThumbnail(Item item) {
-        if (item.getThumbnailURL() == null) return null;
-
-        try {
-            return fetchURLBitmapDrawable(item.getThumbnailURL());
-        } catch (IOException ioe) {
-            Log.e(TAG, "Unable to download thumbnail: ", ioe);
-            return null;
-        }
     }
 
     private ArrayList<Item> parseItems(String result) throws JSONException {
