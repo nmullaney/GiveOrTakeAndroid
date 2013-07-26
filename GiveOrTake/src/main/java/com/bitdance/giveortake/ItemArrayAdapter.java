@@ -1,6 +1,7 @@
 package com.bitdance.giveortake;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,7 +24,6 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         super(context, R.layout.list_item_item, items);
         Log.i(TAG, "The context = " + context);
         Log.i(TAG, "The items = " + items);
-
     }
 
     @Override
@@ -40,7 +41,11 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
             Log.i(TAG, "Setting image drawable for item: " + i);
             thumbnailView.setImageDrawable(thumbnail);
         } else {
-            Log.i(TAG, "Item image is null for item: " + i);
+            Log.i(TAG, "Loading thumbnail for item: " + i);
+            Intent intent = new Intent(getContext(), ItemService.class);
+            intent.setAction(ItemService.FETCH_ITEM_THUMBNAIL);
+            intent.putExtra(ItemService.EXTRA_ITEM, i);
+            getContext().startService(intent);
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.list_item_name);
@@ -51,5 +56,21 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         imageView.setImageDrawable(imageState);
 
         return convertView;
+    }
+
+    // TODO: This is so lame -- I'll fix it when I have a cool abstraction for ItemLists
+    public int getPositionForItemID(Long itemID) {
+        for (int i = 0; i < getCount(); i++) {
+            if (getItem(i).getId().equals(itemID)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void setThumbnailForView(View view, Item item) {
+        ImageView thumbnailView = (ImageView) view.findViewById(R.id.list_item_thumbnail);
+        Drawable thumbnail = item.getThumbnail(getContext());
+        thumbnailView.setImageDrawable(thumbnail);
     }
 }

@@ -44,6 +44,23 @@ public class OffersFragment extends ListFragment {
         }
     };
 
+    private BroadcastReceiver itemThumbnailBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ItemService.ITEM_THUMBNAIL_FETCHED)) {
+                Item item = (Item) intent.getSerializableExtra(ItemService.EXTRA_ITEM);
+                Log.i(TAG, "Updating item with thumbnail: " + item.toString() + ", id: " + item.getId());
+                ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
+                int index = adapter.getPositionForItemID(item.getId());
+                ListView listView = getListView();
+                if (isPositionVisible(index)) {
+                    View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
+                    adapter.setThumbnailForView(view, item);
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +72,8 @@ public class OffersFragment extends ListFragment {
                 .getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.MY_ITEMS_UPDATED);
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
+        localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
+                new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
 
         Intent intent = new Intent(getActivity(), ItemService.class);
         intent.setAction(ItemService.UPDATE_MY_ITEMS);
@@ -92,6 +111,13 @@ public class OffersFragment extends ListFragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
 
+    }
+
+    public boolean isPositionVisible(int index) {
+        int start = getListView().getFirstVisiblePosition();
+        int end = getListView().getLastVisiblePosition();
+        Log.i(TAG, "Start: " + start + ", End: " + end + ", index: " + index);
+        return index >= start && index <= end;
     }
 
     @Override
@@ -135,5 +161,6 @@ public class OffersFragment extends ListFragment {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(newItemsBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(itemThumbnailBroadcastReceiver);
     }
 }

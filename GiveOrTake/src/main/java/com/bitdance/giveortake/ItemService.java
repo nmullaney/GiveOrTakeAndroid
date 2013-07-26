@@ -20,6 +20,9 @@ public class ItemService extends IntentService {
     public static final String MY_ITEMS_UPDATED = "my_items_updated";
     public static final String ITEMS_DATA = "items_data";
 
+    public static final String FETCH_ITEM_THUMBNAIL = "fetch_item_thumbnail";
+    public static final String ITEM_THUMBNAIL_FETCHED = "item_thumbnail_fetched";
+
     public static final String FETCH_ITEM_IMAGE = "fetch_item_image";
     public static final String EXTRA_ITEM = "extra_item";
     public static final String ITEM_IMAGE_FETCHED = "item_image_fetched";
@@ -47,6 +50,9 @@ public class ItemService extends IntentService {
             fetchFreeItems();
         } else if (intent.getAction() == UPDATE_MY_ITEMS) {
             fetchMyItems();
+        } else if (intent.getAction() == FETCH_ITEM_THUMBNAIL) {
+            Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
+            fetchItemThumbnail(item);
         } else if (intent.getAction() == FETCH_ITEM_IMAGE) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             fetchItemImage(item);
@@ -58,64 +64,66 @@ public class ItemService extends IntentService {
         } else if (intent.getAction() == POST_ITEM) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             postItem(item);
+        } else {
+            Log.e(TAG, "Unexpected action: " + intent.getAction());
         }
+    }
+
+    private void broadcastIntent(Intent intent) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        localBroadcastManager.sendBroadcast(intent);
     }
 
     private void fetchFreeItems() {
         ItemsFetcher fetcher = new ItemsFetcher(this);
         ArrayList<Item> items = fetcher.fetchMostRecentItems();
-        fetchThumbnails(items);
         broadcastItems(FREE_ITEMS_UPDATED, items);
     }
 
     private void fetchMyItems() {
         ItemsFetcher fetcher = new ItemsFetcher(this);
         ArrayList<Item> items = fetcher.fetchMyItems();
-        fetchThumbnails(items);
         broadcastItems(MY_ITEMS_UPDATED, items);
     }
 
-    private void fetchThumbnails(ArrayList<Item> items) {
+    private void fetchItemThumbnail(Item item) {
         ImageFetcher fetcher = new ImageFetcher(this);
-        //ItemsFetcher itemFetcher = new ItemsFetcher(this);
-        for (Item item : items) {
-            boolean success = fetcher.fetchThumbnailForItem(item);
-            //ItemsFetcher itemsFetcher = new ItemsFetcher(this);
-            //itemsFetcher.fetchItemThumbnail(item);
+        boolean success = fetcher.fetchThumbnailForItem(item);
+        Intent intent = new Intent(ITEM_THUMBNAIL_FETCHED);
+        intent.putExtra(EXTRA_ITEM, item);
+        if (!success) {
+            intent.putExtra(EXTRA_ERROR, getResources().getString(R.string.error));
         }
+        Log.i(TAG, "Broadcasting item thumbnail fetched for " + item.toString());
+        broadcastIntent(intent);
     }
 
     private void broadcastItems(String resultAction, ArrayList<Item> items) {
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent i = new Intent(resultAction);
         i.putExtra(ITEMS_DATA, items);
-        localBroadcastManager.sendBroadcast(i);
+        broadcastIntent(i);
     }
 
     private void fetchItemImage(Item item) {
         ImageFetcher fetcher = new ImageFetcher(this);
         boolean success = fetcher.fetchImageForItem(item);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent i = new Intent(ITEM_IMAGE_FETCHED);
         if (!success) {
             i.putExtra(EXTRA_IMAGE_FETCH_ERROR, true);
         }
-        localBroadcastManager.sendBroadcast(i);
+        broadcastIntent(i);
     }
 
     private void sendMessage(Long itemID, String message) {
         MessageSender sender = new MessageSender();
         boolean success = sender.sendMessage(itemID, message);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent i = new Intent(MESSAGE_SENT);
         i.putExtra(EXTRA_ITEM_ID, itemID);
         if (!success) {
             i.putExtra(EXTRA_MESSAGE_SENT_ERROR, true);
         }
-        localBroadcastManager.sendBroadcast(i);
+        broadcastIntent(i);
     }
 
     private void postItem(Item item) {
@@ -129,9 +137,7 @@ public class ItemService extends IntentService {
         } else {
             item.moveTempFile(this);
         }
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private boolean postImage(Item item) {
