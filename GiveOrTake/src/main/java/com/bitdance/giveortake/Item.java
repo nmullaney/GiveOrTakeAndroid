@@ -26,7 +26,7 @@ import java.util.Locale;
 /**
  * Model class for an Item.
  */
-public class Item implements Serializable {
+public class Item implements Serializable, Identifiable {
     private static final String TAG = "Item";
 
     private Long id;

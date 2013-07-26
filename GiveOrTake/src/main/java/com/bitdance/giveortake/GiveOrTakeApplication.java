@@ -6,22 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by nora on 6/26/13.
+ * Stores data that's needed long-term and/or cross-thread.
  */
 public class GiveOrTakeApplication extends Application {
     private static final String TAG = "GiveOrTakeApplication";
 
-    private HashMap<Long, Item> items;
-    private HashMap<Long, User> users;
+    private OrderedMap<Item> freeItemsMap;
+    private OrderedMap<Item> offersMap;
 
-    private ArrayList<Long> freeItemIDs;
-    private ArrayList<Long> offerIDs;
+    private HashMap<Long, User> users;
 
     private BroadcastReceiver freeItemBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -29,11 +27,8 @@ public class GiveOrTakeApplication extends Application {
             if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
                 ArrayList<Item> freeItems = (ArrayList<Item>)
                         intent.getSerializableExtra(ItemService.ITEMS_DATA);
-                freeItemIDs.clear();
-                for (Item item : freeItems) {
-                    freeItemIDs.add(item.getId());
-                    items.put(item.getId(), item);
-                }
+                freeItemsMap.clear();
+                freeItemsMap.addAll(freeItems);
             }
         }
     };
@@ -44,11 +39,8 @@ public class GiveOrTakeApplication extends Application {
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
                 ArrayList<Item> offers = (ArrayList<Item>)
                         intent.getSerializableExtra(ItemService.ITEMS_DATA);
-                offerIDs.clear();
-                for (Item item : offers) {
-                    offerIDs.add(item.getId());
-                    items.put(item.getId(), item);
-                }
+                offersMap.clear();
+                offersMap.addAll(offers);
             }
         }
     };
@@ -72,12 +64,12 @@ public class GiveOrTakeApplication extends Application {
                 String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
                 if (error == null) {
                     Item item = (Item) intent.getSerializableExtra(ItemService.EXTRA_ITEM);
-                    int index = offerIDs.indexOf(item.getId());
-                    if (index != -1) {
-                        offerIDs.remove(index);
+                    offersMap.remove(item);
+                    offersMap.add(0, item);
+                    if (freeItemsMap.contains(item)) {
+                        freeItemsMap.remove(item);
+                        freeItemsMap.add(0, item);
                     }
-                    items.put(item.getId(), item);
-                    offerIDs.add(0, item.getId());
                 }
             }
         }
@@ -85,9 +77,8 @@ public class GiveOrTakeApplication extends Application {
 
     public void onCreate() {
         super.onCreate();
-        freeItemIDs = new ArrayList<Long>();
-        offerIDs = new ArrayList<Long>();
-        items = new HashMap<Long, Item>();
+        freeItemsMap = new OrderedMap<Item>();
+        offersMap = new OrderedMap<Item>();
         users = new HashMap<Long, User>();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getApplicationContext());
@@ -102,35 +93,23 @@ public class GiveOrTakeApplication extends Application {
     }
 
     public ArrayList<Item> getFreeItems() {
-        ArrayList<Item> freeItems = new ArrayList<Item>();
-        for (Long itemID : freeItemIDs) {
-            Item item = items.get(itemID);
-            if (item != null) {
-                freeItems.add(item);
-            }
-        }
-        Log.i(TAG, "getFreeItems returns " + freeItems.size() + " items");
-        Log.i(TAG, "freeItemIDs size: " + freeItemIDs.size());
-        return freeItems;
+        return freeItemsMap.getAll();
     }
 
     public Item getItem(Long itemID) {
-        return items.get(itemID);
+        Item item = freeItemsMap.get(itemID);
+        if (item == null) {
+            item = offersMap.get(itemID);
+        }
+        return item;
     }
 
     public int getIndexOfFreeItem(Long itemID) {
-        return freeItemIDs.indexOf(itemID);
+        return freeItemsMap.indexOf(itemID);
     }
 
     public ArrayList<Item> getOffers() {
-        ArrayList<Item> offers = new ArrayList<Item>();
-        for (Long itemID : offerIDs) {
-            Item item = items.get(itemID);
-            if (item != null) {
-                offers.add(item);
-            }
-        }
-        return offers;
+        return offersMap.getAll();
     }
 
     public User getUser(Long userID) {
@@ -140,8 +119,10 @@ public class GiveOrTakeApplication extends Application {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        for (Item item : items.values()) {
-            // Clear all in-memory images
+        for (Item item : freeItemsMap.getAll()) {
+            item.clearImage();
+        }
+        for (Item item : offersMap.getAll()) {
             item.clearImage();
         }
     }
