@@ -50,7 +50,7 @@ public class ItemsFetcher {
     }
 
     public ArrayList<Item> fetchItems(Integer offset) {
-        Log.i(TAG, "Fetching items");
+        Log.i(TAG, "Fetching items with offset: " + offset);
         ItemsFilter filter = new ItemsFilter();
         filter
                 .setDistance(50)

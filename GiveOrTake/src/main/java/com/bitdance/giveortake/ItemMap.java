@@ -1,5 +1,7 @@
 package com.bitdance.giveortake;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +11,7 @@ import java.util.Iterator;
  * An orderedMap of Items, with some extra data to keep track of whether we need more data.
  */
 public class ItemMap extends OrderedMap<Item> {
+    public static final String TAG = "ItemMap";
 
     private boolean hasMoreData = true;
 
@@ -46,15 +49,44 @@ public class ItemMap extends OrderedMap<Item> {
     }
 
     // Add these sorted items to the list.
-    public void mergeNewItems(ArrayList<Item> items) {
-        if (items.isEmpty()) {
+    public void mergeNewItems(ArrayList<Item> newItems) {
+        if (newItems.isEmpty()) {
             return;
         }
+
         ArrayList<Item> currentItems = getAll();
-        currentItems.removeAll(items);
-        currentItems.addAll(items);
-        Collections.sort(currentItems, itemComparator);
+        ArrayList<Item> combinedItems = new ArrayList<Item>();
+        int n = 0; // new
+        int c = 0; // current
+        while (n < newItems.size() && c < currentItems.size()) {
+            Item newItem = newItems.get(n);
+            Item currentItem = currentItems.get(c);
+            // check for duplicate and add newest
+            if (newItem.getId().equals(currentItem.getId())) {
+                combinedItems.add(newItem);
+                n++;
+                c++;
+                continue;
+            }
+            int compareResult = itemComparator.compare(newItem, currentItem);
+            if (compareResult < 0) {
+                combinedItems.add(newItem);
+                n++;
+            } else {
+                combinedItems.add(currentItem);
+                c++;
+            }
+        }
+
+        while (n < newItems.size()) {
+            combinedItems.add(newItems.get(n));
+            n++;
+        }
+        while (c < currentItems.size()) {
+            combinedItems.add(currentItems.get(c));
+            c++;
+        }
         clear();
-        addAll(currentItems);
+        addAll(combinedItems);
     }
 }

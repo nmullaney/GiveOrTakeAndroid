@@ -1,5 +1,7 @@
 package com.bitdance.giveortake;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Map;
  * for easy lookup, but also keeps the ids in an ArrayList, for ordering.
  */
 public class OrderedMap<T extends Identifiable> implements Collection<T> {
+    public static final String TAG = "OrderedMap";
 
     private List<Long> ids;
     private Map<Long, T> map;
@@ -42,6 +45,10 @@ public class OrderedMap<T extends Identifiable> implements Collection<T> {
             all.add(map.get(id));
         }
         return all;
+    }
+
+    public ArrayList<Long> getAllIds() {
+        return (ArrayList<Long>) ids;
     }
 
     public void add(int index, T element) {
@@ -102,10 +109,16 @@ public class OrderedMap<T extends Identifiable> implements Collection<T> {
     @Override
     public boolean remove(Object o) {
         if (!(o instanceof Identifiable)) {
+            Log.i(TAG, "Cannot remove unidentifiable");
             return false;
         }
         Identifiable identifiable = (Identifiable)o;
         boolean changed = ids.remove(identifiable.getId());
+        if (changed) {
+            Log.i(TAG, "Successfully removed " + identifiable.getId());
+        } else {
+            Log.i(TAG, "Failed to remove " + identifiable.getId());
+        }
         if (map.containsKey(identifiable.getId()) && !ids.contains(identifiable.getId())) {
             map.remove(identifiable.getId());
             changed = true;
@@ -115,9 +128,11 @@ public class OrderedMap<T extends Identifiable> implements Collection<T> {
 
     @Override
     public boolean removeAll(Collection<?> objects) {
+        Log.i(TAG, "Attempting to remove all " + objects.size() + " objects");
         boolean changed = false;
-        for (Iterator<?> iterator = objects.iterator(); iterator().hasNext(); ) {
-            changed = changed || remove(iterator.next());
+        for (Iterator<?> objIterator = objects.iterator(); objIterator.hasNext(); ) {
+            boolean success = remove(objIterator.next());
+            changed = changed || success;
         }
         return changed;
     }
@@ -128,7 +143,8 @@ public class OrderedMap<T extends Identifiable> implements Collection<T> {
         for (Iterator<?> iterator = objects.iterator(); iterator().hasNext(); ) {
             Object next = iterator.next();
             if (!contains(next)) {
-                changed = changed || remove(next);
+                boolean success = remove(next);
+                changed = changed || success;
             }
         }
         return changed;

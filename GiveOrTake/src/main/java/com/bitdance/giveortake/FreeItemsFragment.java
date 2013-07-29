@@ -11,6 +11,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -63,6 +66,7 @@ public class FreeItemsFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
@@ -81,6 +85,22 @@ public class FreeItemsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_free_items, container, false);
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.free_items_list_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case R.id.menu_item_refresh:
+                refreshItems(0);
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
     }
 
     @Override
@@ -103,10 +123,7 @@ public class FreeItemsFragment extends ListFragment {
                 if (firstVisibleItem + visibleItemCount == totalItemCount) {
                     // we are at the bottom
                     Log.i(TAG, "Getting more items");
-                    Intent refreshIntent = new Intent(getActivity(), ItemService.class);
-                    refreshIntent.setAction(ItemService.UPDATE_FREE_ITEMS);
-                    refreshIntent.putExtra(ItemService.EXTRA_OFFSET, totalItemCount);
-                    getActivity().startService(refreshIntent);
+                    refreshItems(totalItemCount);
                 }
             }
         });
@@ -125,6 +142,15 @@ public class FreeItemsFragment extends ListFragment {
         Intent i = new Intent(getActivity(), FreeItemPagerActivity.class);
         i.putExtra(FreeItemsFragment.EXTRA_ITEM_ID, item.getId());
         startActivityForResult(i, 0);
+    }
+
+    public void refreshItems(Integer offset) {
+        Intent refreshIntent = new Intent(getActivity(), ItemService.class);
+        refreshIntent.setAction(ItemService.UPDATE_FREE_ITEMS);
+        if (offset != null) {
+            refreshIntent.putExtra(ItemService.EXTRA_OFFSET, offset);
+        }
+        getActivity().startService(refreshIntent);
     }
 
     public boolean isPositionVisible(int index) {
