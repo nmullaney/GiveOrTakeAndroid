@@ -99,6 +99,7 @@ public class FreeItemsFragment extends ListFragment {
         switch(menuItem.getItemId()) {
             case R.id.menu_item_refresh:
                 refreshItems(0);
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }

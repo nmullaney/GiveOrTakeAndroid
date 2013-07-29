@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -64,7 +63,7 @@ public class OffersFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        setRetainInstance(true );
         setHasOptionsMenu(true);
 
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
@@ -76,12 +75,16 @@ public class OffersFragment extends ListFragment {
         localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
 
+        refreshOffers();
+    }
+
+    private void refreshOffers() {
         Intent intent = new Intent(getActivity(), ItemService.class);
         intent.setAction(ItemService.UPDATE_MY_ITEMS);
         getActivity().startService(intent);
     }
 
-    private void refreshItems() {
+    private void reloadItems() {
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
         getView().requestLayout();
     }
@@ -103,6 +106,9 @@ public class OffersFragment extends ListFragment {
         switch(menuItem.getItemId()) {
             case R.id.menu_item_new_item:
                 return createNewItem();
+            case R.id.menu_item_refresh:
+                refreshOffers();
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
@@ -148,7 +154,7 @@ public class OffersFragment extends ListFragment {
         switch (requestCode) {
             case EDIT_OFFER_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    refreshItems();
+                    reloadItems();
                 }
                 break;
             default:

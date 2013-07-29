@@ -3,9 +3,8 @@ package com.bitdance.giveortake;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashSet;
 
 /**
  * An orderedMap of Items, with some extra data to keep track of whether we need more data.
@@ -54,20 +53,22 @@ public class ItemMap extends OrderedMap<Item> {
             return;
         }
 
+        HashSet<Long> newItemIds = new HashSet<Long>();
+        for (Item item : newItems) {
+            newItemIds.add(item.getId());
+        }
+
         ArrayList<Item> currentItems = getAll();
         ArrayList<Item> combinedItems = new ArrayList<Item>();
         int n = 0; // new
         int c = 0; // current
         while (n < newItems.size() && c < currentItems.size()) {
-            Item newItem = newItems.get(n);
             Item currentItem = currentItems.get(c);
-            // check for duplicate and add newest
-            if (newItem.getId().equals(currentItem.getId())) {
-                combinedItems.add(newItem);
-                n++;
+            if (newItemIds.contains(currentItem.getId())) {
                 c++;
                 continue;
             }
+            Item newItem = newItems.get(n);
             int compareResult = itemComparator.compare(newItem, currentItem);
             if (compareResult < 0) {
                 combinedItems.add(newItem);

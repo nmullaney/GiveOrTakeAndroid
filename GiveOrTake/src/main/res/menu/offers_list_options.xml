@@ -5,4 +5,8 @@
           android:title="@string/new_item"
           android:icon="@android:drawable/ic_menu_add"
           android:showAsAction="ifRoom|withText"/>
+    <item android:id="@+id/menu_item_refresh"
+          android:title="@string/refresh"
+          android:icon="@drawable/ic_menu_refresh"
+          android:showAsAction="ifRoom|withText"/>
 </menu>
