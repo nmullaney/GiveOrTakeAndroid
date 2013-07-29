@@ -64,6 +64,7 @@ public class OffersFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();

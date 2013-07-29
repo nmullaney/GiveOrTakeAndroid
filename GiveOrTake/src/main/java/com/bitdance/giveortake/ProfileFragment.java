@@ -44,6 +44,7 @@ public class ProfileFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         ActiveUser activeUser = ActiveUser.getInstance();
         ArrayList<StaticListItem> items = new ArrayList<StaticListItem>();
@@ -260,6 +261,7 @@ public class ProfileFragment extends ListFragment {
             fullView = layoutInflater.inflate(R.layout.list_map, null);
             FragmentManager fm = getActivity().getSupportFragmentManager();
             SupportMapFragment mapFragment = ((SupportMapFragment) fm.findFragmentById(R.id.map));
+            mapFragment.setRetainInstance(true);
 
             map = mapFragment.getMap();
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
