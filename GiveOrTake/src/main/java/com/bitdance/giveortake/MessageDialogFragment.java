@@ -50,7 +50,7 @@ public class MessageDialogFragment extends DialogFragment {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getActivity(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+                // No need to do anything, just close
             }
         });
         builder.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {

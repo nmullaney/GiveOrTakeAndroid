@@ -32,6 +32,7 @@ public class FreeItemDetailFragment extends Fragment {
     private TextView usernameView;
     private TextView karmaView;
     private ImageView imageView;
+    private Button wantButton;
 
     private BroadcastReceiver userBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -162,7 +163,7 @@ public class FreeItemDetailFragment extends Fragment {
         TextView createdView = (TextView)v.findViewById(R.id.free_item_detail_date_created);
         createdView.setText(dateDescription(item.getDateCreated()));
 
-        Button wantButton = (Button)v.findViewById(R.id.free_item_detail_want_button);
+        wantButton = (Button)v.findViewById(R.id.free_item_detail_want_button);
         wantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,6 +171,11 @@ public class FreeItemDetailFragment extends Fragment {
                 messageDialogFragment.show(getActivity().getSupportFragmentManager(), item.getId().toString());
             }
         });
+        if (owner == null) {
+            // This should be disabled until we have the owner, so the user can see who
+            // they are sending a message to.
+            wantButton.setEnabled(false);
+        }
 
         return v;
     }
@@ -178,6 +184,7 @@ public class FreeItemDetailFragment extends Fragment {
         if (owner != null && usernameView != null && karmaView != null) {
             usernameView.setText(owner.getUserName());
             karmaView.setText(owner.getKarma().toString());
+            wantButton.setEnabled(true);
         }
         if (item.getImage(getActivity()) != null && imageView != null) {
             imageView.setImageDrawable(item.getImage(getActivity()));
