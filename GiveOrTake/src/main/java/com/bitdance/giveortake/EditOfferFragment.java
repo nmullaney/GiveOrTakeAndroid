@@ -57,13 +57,31 @@ public class EditOfferFragment extends Fragment {
     private BroadcastReceiver usersWhoWantItemReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "inside usersWhoWantItemReceiver");
+            Log.d(TAG, "inside usersWhoWantItemReceiver");
             if (intent.getAction().equals(UserService.USERS_WHO_WANT_ITEM_FETCHED)) {
                 ArrayList<User> usersWhoWant =
                         intent.getParcelableArrayListExtra(UserService.EXTRA_USERS);
-                Log.i(TAG, "Got usersWhoWant: " + usersWhoWant);
-                stateUser.setAdapter(new ArrayAdapter<User>(getActivity(),
-                        android.R.layout.simple_spinner_dropdown_item, usersWhoWant));
+                Log.d(TAG, "Got usersWhoWant: " + usersWhoWant);
+                ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<User>(getActivity(),
+                        android.R.layout.simple_spinner_dropdown_item, usersWhoWant);
+                stateUser.setAdapter(userArrayAdapter);
+                if (item.getStateUserID() != null) {
+                    User selectedUser = null;
+                    Log.d(TAG, "Looking for user with id " + item.getStateUserID());
+                    for (User user : usersWhoWant) {
+                        if (user.getUserID().equals(item.getStateUserID())) {
+                            selectedUser = user;
+                            Log.d(TAG, "Found user matching: " + user);
+                            break;
+                        }
+                    }
+                    if (selectedUser != null) {
+                        int positionToSelect = userArrayAdapter.getPosition(selectedUser);
+                        Log.d(TAG, "Position to select: " + positionToSelect);
+                        stateUser.setSelection(positionToSelect);
+                    }
+                }
+
                 updateUI();
 
             }
