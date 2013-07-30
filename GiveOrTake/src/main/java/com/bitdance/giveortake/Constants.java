@@ -11,4 +11,12 @@ public class Constants {
     public static final String ABOUT_URL = BASE_WWW_URL + "about.php";
 
     public static final String ERROR_KEY = "error";
+
+    public static final int MIN_DISTANCE = 1;
+    public static final int MAX_DISTANCE = 50;
+    public static final String FILTER_PREFERENCES = "filter_preferences";
+    public static final String DISTANCE_PREFERENCE = "distance";
+    public static final int DEFAULT_DISTANCE = 50;
+    public static final String SHOW_MY_ITEMS_PREFERENCE = "showMyItems";
+    public static final boolean DEFAULT_SHOW_MY_ITEMS = true;
 }

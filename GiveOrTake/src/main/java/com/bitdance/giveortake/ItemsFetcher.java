@@ -1,6 +1,7 @@
 package com.bitdance.giveortake;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -52,12 +53,16 @@ public class ItemsFetcher {
     public ArrayList<Item> fetchItems(Integer offset) {
         Log.i(TAG, "Fetching items with offset: " + offset);
         ItemsFilter filter = new ItemsFilter();
+        SharedPreferences preferences = context
+                .getSharedPreferences(Constants.FILTER_PREFERENCES, Context.MODE_PRIVATE);
         filter
-                .setDistance(50)
+                .setDistance(preferences.getInt(Constants.DISTANCE_PREFERENCE,
+                        Constants.DEFAULT_DISTANCE))
                 .setLimit(Constants.MAX_ITEMS_TO_REQUEST)
                 .setOffset(offset)
                 .setUserID(ActiveUser.getInstance().getUserID())
-                .setShowMyItems(true);
+                .setShowMyItems(preferences.getBoolean(Constants.SHOW_MY_ITEMS_PREFERENCE,
+                        Constants.DEFAULT_SHOW_MY_ITEMS));
         return fetchItemsWithFilter(filter);
     }
 

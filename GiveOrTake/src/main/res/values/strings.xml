@@ -21,7 +21,7 @@
     <!-- Item detail strings -->
     <string name="posted_by">Posted By:</string>
     <string name="status">Status:</string>
-    <string name="distance">Distance:</string>
+    <string name="distance_with_colon">Distance:</string>
     <string name="updated">Updated:</string>
     <string name="posted">Posted:</string>
     <string name="i_want_this">I want this!</string>
@@ -110,6 +110,14 @@
     <string name="error_no_location">Please choose a location by dropping a pin on the map.</string>
     <string name="switch_camera">Switch Camera</string>
     <string name="refresh">Refresh</string>
+
+    <!-- Filter items strings -->
+    <string name="search">Search</string>
+    <string name="distance">Distance</string>
+    <string name="number_of_miles">%1$d Miles</string>
+    <string name="show_my_items">Show My Items</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="filter_items">Filter Items</string>
 
 
 </resources>

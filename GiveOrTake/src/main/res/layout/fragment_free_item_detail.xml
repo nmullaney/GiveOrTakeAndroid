@@ -64,7 +64,7 @@
                 <TableRow>
                     <TextView android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
-                              android:text="@string/distance" />
+                              android:text="@string/distance_with_colon" />
                     <TextView android:id="@+id/free_item_detail_distance"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content" />

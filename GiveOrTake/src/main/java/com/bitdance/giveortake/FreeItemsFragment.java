@@ -33,7 +33,10 @@ public class FreeItemsFragment extends ListFragment {
 
     public static final String EXTRA_ITEM_ID = "item_id";
 
+    public static final int REQUEST_FILTER_RESULT = 1;
+
     private ArrayList<Item> items;
+    private ItemsFilter itemsFilter;
 
     private BroadcastReceiver newItemsBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -100,9 +103,38 @@ public class FreeItemsFragment extends ListFragment {
             case R.id.menu_item_refresh:
                 refreshItems(0);
                 return true;
+            case R.id.menu_item_filter:
+                updateItemFilter();
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_FILTER_RESULT:
+                Log.d(TAG, "Got new filter");
+                GiveOrTakeApplication gotApplication =
+                        ((GiveOrTakeApplication) getActivity().getApplication());
+                Log.d(TAG, "number of items before filter: " + items.size());
+                gotApplication.filterFreeItems();
+                items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+                Log.d(TAG, "number of items after filter: " + items.size());
+                setListAdapter(new ItemArrayAdapter(getActivity(), items));
+                getListView().requestLayout();
+                if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+                    refreshItems(0);
+                }
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void updateItemFilter() {
+        Intent intent = new Intent(getActivity(), FilterItemsActivity.class);
+        startActivityForResult(intent, REQUEST_FILTER_RESULT);
     }
 
     @Override

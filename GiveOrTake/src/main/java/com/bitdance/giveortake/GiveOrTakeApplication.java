@@ -1,9 +1,12 @@
 package com.bitdance.giveortake;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Stores data that's needed long-term and/or cross-thread.
@@ -74,6 +77,24 @@ public class GiveOrTakeApplication extends Application {
 
     public int getIndexOfFreeItem(Long itemID) {
         return freeItemsMap.indexOf(itemID);
+    }
+
+    public void filterFreeItems() {
+        SharedPreferences preferences = this
+                .getSharedPreferences(Constants.FILTER_PREFERENCES, Context.MODE_PRIVATE);
+        int distance = preferences.getInt(Constants.DISTANCE_PREFERENCE, Constants.DEFAULT_DISTANCE);
+        boolean showMyItems = preferences.getBoolean(Constants.SHOW_MY_ITEMS_PREFERENCE,
+                Constants.DEFAULT_SHOW_MY_ITEMS);
+        for (Iterator<Item> itemIterator = freeItemsMap.iterator(); itemIterator.hasNext(); ) {
+            Item next = itemIterator.next();
+            if (!showMyItems && next.getUserID().equals(ActiveUser.getInstance().getUserID())) {
+                itemIterator.remove();
+                continue;
+            }
+            if (next.getDistance() > Integer.valueOf(distance)) {
+                itemIterator.remove();
+            }
+        }
     }
 
     public ArrayList<Item> getOffers() {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              android:text="@string/distance" />
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="10dp"
+                  android:orientation="horizontal">
+        <SeekBar android:id="@+id/seekbar"
+                android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        <TextView android:id="@+id/seekbar_miles"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0" />
+    </LinearLayout>
+
+    <CheckBox android:id="@+id/show_my_items_checkbox"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              android:text="@string/show_my_items" />
+
+    <Button android:id="@+id/apply_filters_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:background="@color/darkPink"
+            android:text="@string/apply_filters" />
+
+
+</LinearLayout>

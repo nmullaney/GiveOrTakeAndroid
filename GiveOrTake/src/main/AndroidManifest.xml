@@ -98,6 +98,9 @@
                   android:parentActivityName="com.bitdance.giveortake.MainActivity">
 
         </activity>
+        <activity android:name="com.bitdance.giveortake.FilterItemsActivity"
+                  android:label="@string/filter_items"
+                  android:parentActivityName="com.bitdance.giveortake.MainActivity" />
         <activity
                 android:name="com.bitdance.giveortake.TestActivity"
                 android:label="@string/title_activity_test" >
