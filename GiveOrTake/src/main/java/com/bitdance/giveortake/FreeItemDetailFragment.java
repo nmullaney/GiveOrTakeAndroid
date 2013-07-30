@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,15 +67,19 @@ public class FreeItemDetailFragment extends Fragment {
                 Long itemID = intent.getLongExtra(ItemService.EXTRA_ITEM_ID, 0);
                 // only handle my item's messages
                 if (!itemID.equals(item.getId())) return;
-                boolean error = intent.getBooleanExtra(ItemService.EXTRA_MESSAGE_SENT_ERROR, false);
+                String error = intent.getStringExtra(ItemService.EXTRA_MESSAGE_SENT_ERROR);
                 Resources resources = getResources();
-                if (error) {
+                if (error != null) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.error)
-                            .setMessage(resources.getString(R.string.message_sent_error))
+                            .setMessage(error)
                             .setPositiveButton(R.string.ok, null)
                             .show();
                 } else {
+                    Item item = ((GiveOrTakeApplication) getActivity().getApplication()).getItem(itemID);
+                    Log.i(TAG, "Number of messages sent (got app) :" + item.getNumMessagesSent() +
+                      ", result: " + intent.getIntExtra(ItemService.EXTRA_NUM_MESSAGES_SENT, 0));
+
                     new AlertDialog.Builder(getActivity())
                             .setMessage(resources.getString(R.string.message_sent))
                             .setPositiveButton(R.string.ok, null)

@@ -10,4 +10,5 @@ public class Constants {
     public static final int MAX_ITEMS_TO_REQUEST = 11;
     public static final String ABOUT_URL = BASE_WWW_URL + "about.php";
 
+    public static final String ERROR_KEY = "error";
 }

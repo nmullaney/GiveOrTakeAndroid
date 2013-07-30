@@ -1,5 +1,6 @@
 package com.bitdance.giveortake;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -22,9 +23,15 @@ import java.util.List;
 public class MessageSender {
     public static final String TAG = "MessageSender";
 
-    public boolean sendMessage(Long itemID, String message) {
+    private Context context;
+
+    public MessageSender (Context context) {
+        this.context = context;
+    }
+
+    public SendMessageResponse sendMessage(Long itemID, String message) {
         Log.i(TAG, "sending message");
-        boolean success = false;
+        SendMessageResponse messageResponse = null;
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         String urlSpec = Constants.BASE_URL + "/item/message.php";
         HttpPost post = new HttpPost(urlSpec);
@@ -42,12 +49,57 @@ public class MessageSender {
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = client.execute(post);
             JSONObject result = JSONUtils.parseResponse(response);
-            success = true;
+            if (result.has(Constants.ERROR_KEY)) {
+                String error = result.getString(Constants.ERROR_KEY);
+                messageResponse = new SendMessageResponse(error);
+            } else {
+                Integer numberOfMessages = result.getInt("numMessagesSent");
+                itemID = result.getLong("itemID");
+                messageResponse = new SendMessageResponse(itemID, numberOfMessages);
+            }
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to send message: ", ioe);
+            messageResponse = new SendMessageResponse(
+                    context.getResources().getString(R.string.error_try_again));
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse response: ", je);
+            messageResponse = new SendMessageResponse(
+                    context.getResources().getString(R.string.error_try_again));
         }
-        return success;
+        return messageResponse;
+    }
+
+    public class SendMessageResponse {
+        private boolean success;
+        private String errorMessage;
+        private Integer numberOfMessagesSent;
+        private Long itemID;
+
+        public SendMessageResponse(Long itemID, int numberOfMessagesSent) {
+            this.itemID = itemID;
+            this.numberOfMessagesSent = numberOfMessagesSent;
+            this.success = true;
+        }
+
+        public SendMessageResponse(String errorMessage) {
+            this.errorMessage = errorMessage;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getErrorMessage() {
+            return errorMessage;
+        }
+
+        public Long getItemID() {
+            return itemID;
+        }
+
+        public Integer getNumberOfMessagesSent() {
+            return numberOfMessagesSent;
+        }
     }
 }

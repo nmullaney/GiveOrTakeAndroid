@@ -42,7 +42,7 @@ public class Item implements Serializable, Identifiable {
     private Date dateUpdated;
 
     private int distance;
-    private int numMessagesSent;
+    private Integer numMessagesSent;
 
     private transient BitmapDrawable image;
     private String tempImageFile;
@@ -329,8 +329,12 @@ public class Item implements Serializable, Identifiable {
         return distance;
     }
 
-    public int getNumMessagesSent() {
+    public Integer getNumMessagesSent() {
         return numMessagesSent;
+    }
+
+    public void setNumMessagesSent(Integer numMessagesSent) {
+        this.numMessagesSent = numMessagesSent;
     }
 
     public String toString() {

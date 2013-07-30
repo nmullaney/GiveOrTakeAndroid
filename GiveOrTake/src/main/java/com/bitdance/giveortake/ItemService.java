@@ -33,6 +33,7 @@ public class ItemService extends IntentService {
     public static final String EXTRA_MESSAGE = "extra_message";
     public static final String MESSAGE_SENT = "message_sent";
     public static final String EXTRA_MESSAGE_SENT_ERROR = "extra_message_sent_error";
+    public static final String EXTRA_NUM_MESSAGES_SENT = "extra_num_messages_sent";
 
     public static final String POST_ITEM = "post_item";
     public static final String ITEM_POSTED = "item_posted";
@@ -128,12 +129,15 @@ public class ItemService extends IntentService {
     }
 
     private void sendMessage(Long itemID, String message) {
-        MessageSender sender = new MessageSender();
-        boolean success = sender.sendMessage(itemID, message);
+        MessageSender sender = new MessageSender(this);
+        MessageSender.SendMessageResponse response = sender.sendMessage(itemID, message);
         Intent i = new Intent(MESSAGE_SENT);
         i.putExtra(EXTRA_ITEM_ID, itemID);
-        if (!success) {
-            i.putExtra(EXTRA_MESSAGE_SENT_ERROR, true);
+        if (!response.isSuccess()) {
+            i.putExtra(EXTRA_MESSAGE_SENT_ERROR, response.getErrorMessage());
+        } else {
+            getGOTApplication().updateMessagesSent(itemID, response.getNumberOfMessagesSent());
+            i.putExtra(EXTRA_NUM_MESSAGES_SENT, response.getNumberOfMessagesSent());
         }
         broadcastIntent(i);
     }

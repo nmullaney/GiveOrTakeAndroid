@@ -80,6 +80,11 @@ public class GiveOrTakeApplication extends Application {
         return offersMap.getAll();
     }
 
+    public void updateMessagesSent(Long itemID, Integer numMessagesSent) {
+        Item item = getItem(itemID);
+        item.setNumMessagesSent(numMessagesSent);
+    }
+
     public User getUser(Long userID) {
         return users.get(userID);
     }
