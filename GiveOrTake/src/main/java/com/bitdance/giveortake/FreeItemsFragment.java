@@ -96,7 +96,15 @@ public class FreeItemsFragment extends ListFragment {
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        Log.i(TAG, "Setting up searchView");
+        if (query == null) {
         searchView.setIconifiedByDefault(true);
+        } else {
+            // if a query already exists, make sure it's displayed
+            searchMenuItem.expandActionView();
+            searchView.setIconifiedByDefault(false);
+            searchView.setQuery(query, false);
+        }
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
