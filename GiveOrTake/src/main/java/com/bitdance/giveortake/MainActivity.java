@@ -38,14 +38,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         if (ActiveUser.getInstance() == null) {
             Intent logoutIntent = new Intent(this, LoginActivity.class);
             logoutIntent.putExtra(LoginFragment.EXTRA_LOGIN_ACTION, LoginFragment.LOGOUT);
             startActivity(logoutIntent);
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
