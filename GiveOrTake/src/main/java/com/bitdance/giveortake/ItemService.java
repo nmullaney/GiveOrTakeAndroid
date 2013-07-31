@@ -16,6 +16,7 @@ public class ItemService extends IntentService {
     public static final String UPDATE_FREE_ITEMS = "update_free_items";
     public static final String UPDATE_MY_ITEMS = "update_my_items";
     public static final String EXTRA_OFFSET = "extra_offset";
+    public static final String EXTRA_QUERY = "extra_query";
 
     public static final String FREE_ITEMS_UPDATED = "free_items_updated";
     public static final String MY_ITEMS_UPDATED = "my_items_updated";
@@ -49,7 +50,8 @@ public class ItemService extends IntentService {
 
         if (intent.getAction() == UPDATE_FREE_ITEMS) {
             Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
-            fetchFreeItems(offset);
+            String query = intent.getStringExtra(EXTRA_QUERY);
+            fetchFreeItems(offset, query);
         } else if (intent.getAction() == UPDATE_MY_ITEMS) {
             Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
             fetchMyItems(offset);
@@ -82,13 +84,13 @@ public class ItemService extends IntentService {
         return ((GiveOrTakeApplication) getApplication());
     }
 
-    private void fetchFreeItems(Integer offset) {
+    private void fetchFreeItems(Integer offset, String query) {
         ItemsFetcher fetcher = new ItemsFetcher(this);
         if (offset != 0 && !getGOTApplication().haveMoreFreeItems()) {
             // don't fetch more old items if we've already got them all
             return;
         }
-        ArrayList<Item> items = fetcher.fetchItems(offset);
+        ArrayList<Item> items = fetcher.fetchItems(offset, query);
         getGOTApplication().mergeNewFreeItems(items);
         Intent i = new Intent(FREE_ITEMS_UPDATED);
         broadcastIntent(i);

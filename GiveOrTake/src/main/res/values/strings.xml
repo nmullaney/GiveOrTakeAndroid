@@ -118,6 +118,7 @@
     <string name="show_my_items">Show My Items</string>
     <string name="apply_filters">Apply Filters</string>
     <string name="filter_items">Filter Items</string>
+    <string name="search_free_items">Search Free Items</string>
 
 
 </resources>

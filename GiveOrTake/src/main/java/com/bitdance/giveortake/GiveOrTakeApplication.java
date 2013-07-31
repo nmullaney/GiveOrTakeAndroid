@@ -97,6 +97,17 @@ public class GiveOrTakeApplication extends Application {
         }
     }
 
+    public void filterFreeItemsForQuery(String query) {
+        String lowerQuery = query.toLowerCase();
+        for (Iterator<Item> itemIterator = freeItemsMap.iterator(); itemIterator.hasNext(); ) {
+            Item next = itemIterator.next();
+            if (!next.getName().toLowerCase().contains(lowerQuery) &&
+                    !next.getDescription().toLowerCase().contains(lowerQuery)) {
+                itemIterator.remove();
+            }
+        }
+    }
+
     public ArrayList<Item> getOffers() {
         return offersMap.getAll();
     }

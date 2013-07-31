@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -84,7 +85,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         actionBar.selectTab(actionBar.getTabAt(DEFAULT_SELECTED_TAB));
     }
-    
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.i(TAG, "Got search query: " + query);
+            ((FreeItemsFragment) mSectionsPagerAdapter.getFreeItemsFragment()).searchQuery(query);
+        }
+    }
+
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in

@@ -1,15 +1,14 @@
 package com.bitdance.giveortake;
 
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TabWidget;
-import android.widget.TextView;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 
@@ -36,7 +32,7 @@ public class FreeItemsFragment extends ListFragment {
     public static final int REQUEST_FILTER_RESULT = 1;
 
     private ArrayList<Item> items;
-    private ItemsFilter itemsFilter;
+    private String query;
 
     private BroadcastReceiver newItemsBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -80,9 +76,7 @@ public class FreeItemsFragment extends ListFragment {
         localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
 
-        Intent intent = new Intent(getActivity(), ItemService.class);
-        intent.setAction(ItemService.UPDATE_FREE_ITEMS);
-        getActivity().startService(intent);
+        refreshItems(0);
     }
 
     @Override
@@ -95,6 +89,37 @@ public class FreeItemsFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.free_items_list_options, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                query = null;
+                return false;
+            }
+        });
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                Log.i(TAG, "Unsetting query");
+                query = null;
+                if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+                    refreshItems(0);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -132,6 +157,19 @@ public class FreeItemsFragment extends ListFragment {
         }
     }
 
+    public void searchQuery(String searchQuery) {
+        Log.i(TAG, "Got search query: " + searchQuery);
+        query = searchQuery;
+        GiveOrTakeApplication application = (GiveOrTakeApplication)getActivity().getApplication();
+        application.filterFreeItemsForQuery(query);
+        items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+        setListAdapter(new ItemArrayAdapter(getActivity(), items));
+        getListView().requestLayout();
+        if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+            refreshItems(0);
+        }
+    }
+
     private void updateItemFilter() {
         Intent intent = new Intent(getActivity(), FilterItemsActivity.class);
         startActivityForResult(intent, REQUEST_FILTER_RESULT);
@@ -156,7 +194,7 @@ public class FreeItemsFragment extends ListFragment {
                     + ", totalCount: " + totalItemCount);
                 if (firstVisibleItem + visibleItemCount == totalItemCount) {
                     // we are at the bottom
-                    Log.i(TAG, "Getting more items");
+                    Log.i(TAG, "Getting more items, query =" + query);
                     refreshItems(totalItemCount);
                 }
             }
@@ -184,6 +222,7 @@ public class FreeItemsFragment extends ListFragment {
         if (offset != null) {
             refreshIntent.putExtra(ItemService.EXTRA_OFFSET, offset);
         }
+        refreshIntent.putExtra(ItemService.EXTRA_QUERY, query);
         getActivity().startService(refreshIntent);
     }
 

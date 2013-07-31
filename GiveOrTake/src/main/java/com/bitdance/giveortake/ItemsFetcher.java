@@ -50,7 +50,7 @@ public class ItemsFetcher {
         return fetchItemsWithFilter(filter);
     }
 
-    public ArrayList<Item> fetchItems(Integer offset) {
+    public ArrayList<Item> fetchItems(Integer offset, String query) {
         Log.i(TAG, "Fetching items with offset: " + offset);
         ItemsFilter filter = new ItemsFilter();
         SharedPreferences preferences = context
@@ -60,6 +60,7 @@ public class ItemsFetcher {
                         Constants.DEFAULT_DISTANCE))
                 .setLimit(Constants.MAX_ITEMS_TO_REQUEST)
                 .setOffset(offset)
+                .setQuery(query)
                 .setUserID(ActiveUser.getInstance().getUserID())
                 .setShowMyItems(preferences.getBoolean(Constants.SHOW_MY_ITEMS_PREFERENCE,
                         Constants.DEFAULT_SHOW_MY_ITEMS));
