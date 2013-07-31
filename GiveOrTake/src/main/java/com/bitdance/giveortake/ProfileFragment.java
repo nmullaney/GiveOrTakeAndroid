@@ -85,6 +85,7 @@ public class ProfileFragment extends ListFragment {
                 Intent logoutIntent = new Intent(getActivity(), LoginActivity.class);
                 logoutIntent.putExtra(LoginFragment.EXTRA_LOGIN_ACTION, LoginFragment.LOGOUT);
                 startActivity(logoutIntent);
+                getActivity().finish();
             }
         });
         items.add(logoutButtonListItem);

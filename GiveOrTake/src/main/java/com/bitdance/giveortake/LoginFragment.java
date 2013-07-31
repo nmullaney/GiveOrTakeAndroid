@@ -5,22 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.NinePatchDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.service.textservice.SpellCheckerService;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.facebook.*;
@@ -81,6 +72,7 @@ public class LoginFragment extends Fragment {
 
         String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
         if (loginAction != null && loginAction.equals(LOGOUT)) {
+            Log.i(TAG, "Logging out");
             ((GiveOrTakeApplication) getActivity().getApplication()).logout();
             Session.getActiveSession().closeAndClearTokenInformation();
             ActiveUser.logout();

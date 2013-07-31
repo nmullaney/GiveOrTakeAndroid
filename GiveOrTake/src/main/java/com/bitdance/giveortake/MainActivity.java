@@ -43,6 +43,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             Intent logoutIntent = new Intent(this, LoginActivity.class);
             logoutIntent.putExtra(LoginFragment.EXTRA_LOGIN_ACTION, LoginFragment.LOGOUT);
             startActivity(logoutIntent);
+            finish();
         }
 
         super.onCreate(savedInstanceState);
