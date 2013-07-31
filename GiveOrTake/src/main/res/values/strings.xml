@@ -18,6 +18,17 @@
     <string name="ok">OK</string>
     <string name="no_item_found">No item was found.</string>
 
+    <!-- Free items Strings -->
+    <string name="no_free_items_found">No Free Items Found</string>
+    <string name="no_free_items_help">Try changing the filter or removing the search term to find
+        more items. You can expand your search by choosing a larger distance.
+    </string>
+    <string name="search_free_items">Search Free Items</string>
+
+    <!-- Offers strings -->
+    <string name="no_offers_yet">You haven\'t created any offers yet</string>
+    <string name="give_away_an_item">Give Something Away</string>
+
     <!-- Item detail strings -->
     <string name="posted_by">Posted By:</string>
     <string name="status">Status:</string>
@@ -118,7 +129,5 @@
     <string name="show_my_items">Show My Items</string>
     <string name="apply_filters">Apply Filters</string>
     <string name="filter_items">Filter Items</string>
-    <string name="search_free_items">Search Free Items</string>
-
 
 </resources>

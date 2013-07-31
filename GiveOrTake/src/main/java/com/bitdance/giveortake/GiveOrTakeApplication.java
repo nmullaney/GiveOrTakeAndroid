@@ -121,6 +121,13 @@ public class GiveOrTakeApplication extends Application {
         return users.get(userID);
     }
 
+    public void logout() {
+        // clear all the data!
+        freeItemsMap.clear();
+        offersMap.clear();
+        users.clear();
+    }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();

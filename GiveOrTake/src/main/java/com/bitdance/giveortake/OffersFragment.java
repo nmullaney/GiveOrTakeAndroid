@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -92,6 +93,13 @@ public class OffersFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_offers, container, false);
+        Button giveAwayButton = (Button)v.findViewById(R.id.new_item_button);
+        giveAwayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewItem();
+            }
+        });
         return v;
     }
 

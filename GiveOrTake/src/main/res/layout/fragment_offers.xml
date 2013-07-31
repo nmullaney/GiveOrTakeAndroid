@@ -9,4 +9,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+    <LinearLayout android:id="@android:id/empty"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center_horizontal"
+                      android:gravity="center"
+                      android:textAppearance="@android:style/TextAppearance.Large"
+                      android:text="@string/no_offers_yet" />
+            <Button android:id="@+id/new_item_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:background="@color/darkPink"
+                    android:text="@string/give_away_an_item" />
+
+        </LinearLayout>
+    </LinearLayout>
+
 </FrameLayout>

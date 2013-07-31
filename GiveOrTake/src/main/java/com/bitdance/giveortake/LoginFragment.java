@@ -81,6 +81,7 @@ public class LoginFragment extends Fragment {
 
         String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
         if (loginAction != null && loginAction.equals(LOGOUT)) {
+            ((GiveOrTakeApplication) getActivity().getApplication()).logout();
             Session.getActiveSession().closeAndClearTokenInformation();
             ActiveUser.logout();
         }
