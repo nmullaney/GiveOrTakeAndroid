@@ -1,6 +1,7 @@
 package com.bitdance.giveortake;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -59,6 +60,14 @@ public class EditOfferFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "inside usersWhoWantItemReceiver");
             if (intent.getAction().equals(UserService.USERS_WHO_WANT_ITEM_FETCHED)) {
+                if (intent.hasExtra(UserService.EXTRA_ERROR)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(intent.getStringExtra(UserService.EXTRA_ERROR))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                    return;
+                }
                 ArrayList<User> usersWhoWant =
                         intent.getParcelableArrayListExtra(UserService.EXTRA_USERS);
                 Log.d(TAG, "Got usersWhoWant: " + usersWhoWant);

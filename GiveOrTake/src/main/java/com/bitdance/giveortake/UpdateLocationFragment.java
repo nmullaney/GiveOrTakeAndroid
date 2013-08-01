@@ -40,7 +40,7 @@ public class UpdateLocationFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UserService.LOCATION_UPDATED)) {
-                String errorMessage = intent.getStringExtra(UserService.EXTRA_UPDATE_ERROR);
+                String errorMessage = intent.getStringExtra(UserService.EXTRA_ERROR);
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {

@@ -102,10 +102,11 @@ public class UserFetcher {
         return null;
     }
 
-    public ArrayList<User> fetchUsersWhoWantItem(Long itemID, int minMessagesSent) {
+    public UsersResponse fetchUsersWhoWantItem(Long itemID, int minMessagesSent) {
         String urlSpec = Constants.BASE_URL + "/users.php?";
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         ArrayList<User> users = new ArrayList<User>();
+        UsersResponse usersResponse;
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("wantItemID", itemID.toString()));
@@ -117,22 +118,61 @@ public class UserFetcher {
             HttpResponse response = client.execute(get);
             Log.e(TAG, response.toString());
             JSONObject fullResult = JSONUtils.parseResponse(response);
-            JSONArray usersJson = fullResult.getJSONArray("users");
-            for (int i = 0; i < usersJson.length(); i++) {
-                JSONObject userJson = (JSONObject) usersJson.get(i);
-                User user = new User();
-                user.updateFromJSON(userJson);
-                users.add(user);
+            if (fullResult.has(Constants.ERROR_KEY)) {
+                usersResponse = new UsersResponse(fullResult.getString(Constants.ERROR_KEY));
+            } else {
+                JSONArray usersJson = fullResult.getJSONArray("users");
+                for (int i = 0; i < usersJson.length(); i++) {
+                    JSONObject userJson = (JSONObject) usersJson.get(i);
+                    User user = new User();
+                    user.updateFromJSON(userJson);
+                    users.add(user);
+                }
+                usersResponse = new UsersResponse(users);
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, "Failed to get user:", e);
+            usersResponse = new UsersResponse(
+                    context.getResources().getString(R.string.error_try_again));
         } catch (IOException e) {
             Log.e(TAG, "Failed to get user:", e);
+            usersResponse = new UsersResponse(
+                    context.getResources().getString(R.string.error_try_again));
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse user:", e);
+            usersResponse = new UsersResponse(
+                    context.getResources().getString(R.string.error_try_again));
         }
 
-        return users;
+        return usersResponse;
+    }
+
+    public class UsersResponse {
+        private boolean success;
+        private ArrayList<User> users;
+        private String error;
+
+        public UsersResponse(ArrayList<User> users) {
+            this.users = users;
+            this.success = true;
+        }
+
+        public UsersResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public ArrayList<User> getUsers() {
+            return users;
+        }
+
+        public String getError() {
+            return error;
+        }
     }
 
     public UpdateResponse updateUsername(String newUsername) {

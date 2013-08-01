@@ -35,7 +35,7 @@ public class UpdateUsernameFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UserService.USERNAME_UPDATED)) {
-                String errorMessage = intent.getStringExtra(UserService.EXTRA_UPDATE_ERROR);
+                String errorMessage = intent.getStringExtra(UserService.EXTRA_ERROR);
                 if (errorMessage != null) {
                     displayError(errorMessage);
                 } else {

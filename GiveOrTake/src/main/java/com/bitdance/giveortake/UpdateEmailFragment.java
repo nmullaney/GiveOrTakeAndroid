@@ -34,7 +34,7 @@ public class UpdateEmailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UserService.PENDING_EMAIL_ADDED)) {
-                String errorMessage = intent.getStringExtra(UserService.EXTRA_UPDATE_ERROR);
+                String errorMessage = intent.getStringExtra(UserService.EXTRA_ERROR);
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {
@@ -48,7 +48,7 @@ public class UpdateEmailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UserService.EMAIL_CODE_SENT)) {
-                String errorMessage = intent.getStringExtra(UserService.EXTRA_UPDATE_ERROR);
+                String errorMessage = intent.getStringExtra(UserService.EXTRA_ERROR);
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {
@@ -63,7 +63,7 @@ public class UpdateEmailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UserService.PENDING_EMAIL_CANCELLED)) {
-                String errorMessage = intent.getStringExtra(UserService.EXTRA_UPDATE_ERROR);
+                String errorMessage = intent.getStringExtra(UserService.EXTRA_ERROR);
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {

@@ -18,9 +18,6 @@ import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created with IntelliJ IDEA.
  * User: nora
@@ -52,10 +49,10 @@ public class LoginFragment extends Fragment {
             Log.i(TAG, "Received login result");
             if (intent.getAction().equals(UserService.LOGIN_RESULT)) {
                 progressBar.setVisibility(View.INVISIBLE);
-                if (intent.hasExtra(UserService.EXTRA_LOGIN_ERROR)) {
+                if (intent.hasExtra(UserService.EXTRA_ERROR)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.error)
-                            .setMessage(intent.getStringExtra(UserService.EXTRA_LOGIN_ERROR))
+                            .setMessage(intent.getStringExtra(UserService.EXTRA_ERROR))
                             .setPositiveButton(R.string.ok, null)
                             .show();
                 } else {

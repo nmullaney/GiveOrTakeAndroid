@@ -18,7 +18,7 @@ public class UserService extends IntentService {
 
     public static final String LOGIN = "login";
     public static final String LOGIN_RESULT = "login_result";
-    public static final String EXTRA_LOGIN_ERROR = "login_error";
+    public static final String EXTRA_ERROR = "extra_error";
 
     public static final String FETCH_USER = "fetch_user";
     public static final String EXTRA_USER_ID = "user_id";
@@ -28,7 +28,6 @@ public class UserService extends IntentService {
     public static final String UPDATE_USERNAME = "update_username";
     public static final String EXTRA_NEW_USERNAME = "extra_new_username";
     public static final String USERNAME_UPDATED = "username_updated";
-    public static final String EXTRA_UPDATE_ERROR = "extra_update_error";
 
     public static final String ADD_PENDING_EMAIL = "add_pending_email";
     public static final String EXTRA_NEW_EMAIL = "extra_new_email";
@@ -83,20 +82,24 @@ public class UserService extends IntentService {
         }
     }
 
+    private void broadcastIntent(Intent intent) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
+                .getInstance(getApplicationContext());
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
     private void login() {
         ActiveUser activeUser = ActiveUser.getInstance();
         assert(activeUser != null);
         UserFetcher fetcher = new UserFetcher(this);
         boolean loginSucceeded = fetcher.loginUser();
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent i = new Intent(LOGIN_RESULT);
         if (!loginSucceeded) {
-            i.putExtra(EXTRA_LOGIN_ERROR,
+            i.putExtra(EXTRA_ERROR,
                     getApplicationContext().getResources().getString(R.string.login_failure));
         }
         Log.i(TAG, "Sending login result broadcast");
-        localBroadcastManager.sendBroadcast(i);
+        broadcastIntent(i);
     }
 
     private void fetchUser(Long userID) {
@@ -111,83 +114,72 @@ public class UserService extends IntentService {
             UserFetcher fetcher = new UserFetcher(this);
             user = fetcher.fetchUser(userID);
         }
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent intent = new Intent(USER_FETCHED);
         ((GiveOrTakeApplication) getApplication()).addUser(user);
         intent.putExtra(EXTRA_USER_DATA, (Parcelable) user);
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private void updateUsername(String newUsername) {
         UserFetcher fetcher = new UserFetcher(this);
         UserFetcher.UpdateResponse response = fetcher.updateUsername(newUsername);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent intent = new Intent(USERNAME_UPDATED);
         if (!response.isSuccess()) {
-            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+            intent.putExtra(EXTRA_ERROR, response.getErrorMessage());
         }
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private void addPendingEmail(String newEmail) {
         UserFetcher fetcher = new UserFetcher(this);
         UserFetcher.UpdateResponse response = fetcher.addPendingEmail(newEmail);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent intent = new Intent(PENDING_EMAIL_ADDED);
         if (!response.isSuccess()) {
-            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+            intent.putExtra(EXTRA_ERROR, response.getErrorMessage());
         }
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private void sendEmailCode(String emailCode) {
         UserFetcher fetcher = new UserFetcher(this);
         UserFetcher.UpdateResponse response = fetcher.sendEmailCode(emailCode);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent intent = new Intent(EMAIL_CODE_SENT);
         if (!response.isSuccess()) {
-            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+            intent.putExtra(EXTRA_ERROR, response.getErrorMessage());
         }
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private void cancelPendingEmail() {
         UserFetcher fetcher = new UserFetcher(this);
         UserFetcher.UpdateResponse response = fetcher.cancelPendingEmail();
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent intent = new Intent(PENDING_EMAIL_CANCELLED);
         if (!response.isSuccess()) {
-            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+            intent.putExtra(EXTRA_ERROR, response.getErrorMessage());
         }
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private void updateLocation(LatLng latLng) {
         UserFetcher fetcher = new UserFetcher(this);
         UserFetcher.UpdateResponse response = fetcher.updateLocation(latLng);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
         Intent intent = new Intent(LOCATION_UPDATED);
         if (!response.isSuccess()) {
-            intent.putExtra(EXTRA_UPDATE_ERROR, response.getErrorMessage());
+            intent.putExtra(EXTRA_ERROR, response.getErrorMessage());
         }
-        localBroadcastManager.sendBroadcast(intent);
+        broadcastIntent(intent);
     }
 
     private void fetchUsersWhoWantItem(Long itemID, int minMessages) {
         Log.i(TAG, "Fetching users who want item");
         UserFetcher fetcher = new UserFetcher(this);
-        ArrayList<User> users = fetcher.fetchUsersWhoWantItem(itemID, minMessages);
-        Log.i(TAG, "Found users who want item: " + users);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
-                .getInstance(getApplicationContext());
+        UserFetcher.UsersResponse response = fetcher.fetchUsersWhoWantItem(itemID, minMessages);
         Intent intent = new Intent(USERS_WHO_WANT_ITEM_FETCHED);
-        intent.putExtra(EXTRA_USERS, users);
-        localBroadcastManager.sendBroadcast(intent);
+        if (response.isSuccess()) {
+            intent.putExtra(EXTRA_USERS, response.getUsers());
+        } else {
+            intent.putExtra(EXTRA_ERROR, response.getError());
+        }
+        broadcastIntent(intent);
     }
 }
