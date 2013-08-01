@@ -25,25 +25,20 @@
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
+                  android:layout_gravity="center_vertical"
                   android:layout_weight="1">
         <Button android:id="@+id/camera_take_picture_button"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical|right"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:padding="5dp"
                 android:layout_margin="5dp"
+                android:textColor="@color/white"
+                android:background="@color/darkPink"
                 android:text="@string/take_photo"
                 android:alpha="1"/>
-        <Button android:id="@+id/switch_camera_button"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical|right"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:layout_margin="5dp"
-                android:text="@string/switch_camera"
-                android:alpha="1"/>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -77,8 +78,8 @@ public class CameraFragment extends Fragment {
                 Camera.Size s = getBestSupportedSize(parameters.getSupportedPreviewSizes(),
                         width, height);
                 int squareSize = Math.min(s.width, s.height);
-                cameraPreview.getLayoutParams().height = squareSize;
-                cameraPreview.getLayoutParams().width = squareSize;
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(squareSize, squareSize);
+                cameraPreview.setLayoutParams(layoutParams);
             }
 
             private void setSurfaceViewLayout(int width, int height) {
@@ -86,7 +87,7 @@ public class CameraFragment extends Fragment {
                 Camera.Size s = getBestSupportedSize(parameters.getSupportedPreviewSizes(),
                         width, height);
                 ViewGroup.LayoutParams surfaceViewLayoutParams = surfaceView.getLayoutParams();
-                if ((getCameraDisplayOrientation() % 180) == 0) {
+                if ((getCameraDisplayOrientation() % 180) != 0) {
                     Log.i(TAG, "Swapping surfaceView width/height");
                     surfaceViewLayoutParams.height = s.width;
                     surfaceViewLayoutParams.width = s.height;
@@ -156,30 +157,6 @@ public class CameraFragment extends Fragment {
             }
         });
 
-        Button switchCameraButton = (Button)view.findViewById(R.id.switch_camera_button);
-        switchCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Camera.getNumberOfCameras() > 1) {
-                    if (cameraId == 0) {
-                        cameraId = 1;
-                    } else {
-                        cameraId = 0;
-                    }
-                    if (camera != null) {
-                        camera.stopPreview();
-                        camera.release();
-                    }
-                    camera = Camera.open(cameraId);
-                    try {
-                        camera.setPreviewDisplay(surfaceView.getHolder());
-                    } catch (IOException ioe) {
-                        Log.e(TAG, "Failed to switch camera: ", ioe);
-                    }
-                }
-            }
-        });
-
         return view;
     }
 
@@ -234,7 +211,7 @@ public class CameraFragment extends Fragment {
     Camera.ShutterCallback shutterCallback = new Camera.ShutterCallback() {
         @Override
         public void onShutter() {
-            Toast.makeText(getActivity(), "Took picture will sleep", Toast.LENGTH_SHORT).show();
+            camera.autoFocus(null);
         }
     };
 
@@ -301,7 +278,10 @@ public class CameraFragment extends Fragment {
         int size = Math.min(fullImage.getWidth(), fullImage.getHeight());
         Matrix matrix = new Matrix();
         matrix.setRotate(getCameraDisplayOrientation());
-        Bitmap squareBitmap = Bitmap.createBitmap(fullImage, 0, 0, size, size, matrix, false);
+        Bitmap rotateBitmap = Bitmap.createBitmap(fullImage, 0, 0, fullImage.getWidth(),
+                fullImage.getHeight(), matrix, false);
+        Bitmap squareBitmap = Bitmap.createBitmap(rotateBitmap, 0, 0, size, size);
+        rotateBitmap.recycle();
         return squareBitmap;
     }
 
