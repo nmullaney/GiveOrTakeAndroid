@@ -64,7 +64,7 @@ public class UserFetcher {
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = client.execute(post);
             JSONObject result = JSONUtils.parseResponse(response);
-            Log.i(TAG, result.toString());
+            Log.d(TAG, result.toString());
             // TODO: handle parsing error json
             activeUser.updateFromJSON(result);
             success = true;
@@ -76,7 +76,8 @@ public class UserFetcher {
         return success;
     }
 
-    public User fetchUser(Long userID) {
+    public UserResponse fetchUser(Long userID) {
+        UserResponse userResponse;
         String urlSpec = Constants.BASE_URL + "/user.php?";
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
 
@@ -87,19 +88,54 @@ public class UserFetcher {
 
         try {
             HttpResponse response = client.execute(get);
-            Log.e(TAG, response.toString());
+            Log.d(TAG, response.toString());
             JSONObject result = JSONUtils.parseResponse(response);
-            User user = new User();
-            user.updateFromJSON(result);
-            return user;
+            if (result.has(Constants.ERROR_KEY)) {
+                userResponse = new UserResponse(result.getString(Constants.ERROR_KEY));
+            } else {
+                User user = new User();
+                user.updateFromJSON(result);
+                userResponse = new UserResponse(user);
+            }
         } catch (ClientProtocolException e) {
             Log.e(TAG, "Failed to get user:", e);
+            userResponse = new UserResponse(context.getString(R.string.error_try_again));
         } catch (IOException e) {
             Log.e(TAG, "Failed to get user:", e);
+            userResponse = new UserResponse(context.getString(R.string.error_try_again));
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse user:", e);
+            userResponse = new UserResponse(context.getString(R.string.error_try_again));
         }
-        return null;
+        return userResponse;
+    }
+
+    public class UserResponse {
+        private boolean success;
+        private User user;
+        private String error;
+
+        public UserResponse(User user) {
+            this.user = user;
+            this.success = true;
+        }
+
+        public UserResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public String getError() {
+            return error;
+        }
     }
 
     public UsersResponse fetchUsersWhoWantItem(Long itemID, int minMessagesSent) {

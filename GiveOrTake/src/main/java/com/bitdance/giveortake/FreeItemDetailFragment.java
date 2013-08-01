@@ -34,16 +34,32 @@ public class FreeItemDetailFragment extends Fragment {
     private ImageView imageView;
     private Button wantButton;
 
+    private boolean userErrorShown = false;
+
     private BroadcastReceiver userBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(UserService.USER_FETCHED)) {
-                User user = (User) intent.getSerializableExtra(UserService.EXTRA_USER_DATA);
-                // we may get messages for other fragments
-                if (user != null && item.getUserID().equals(user.getUserID())) {
-                    owner = user;
-                    updateUI();
+                Long intentUserID = intent.getLongExtra(UserService.EXTRA_USER_ID, 0);
+                if (!item.getUserID().equals(intentUserID)) {
+                    // This is not for us
+                    return;
                 }
+                if (intent.hasExtra(UserService.EXTRA_ERROR)) {
+                    if (!userErrorShown) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.error)
+                                .setMessage(intent.getStringExtra(UserService.EXTRA_ERROR))
+                                .setPositiveButton(R.string.ok, null)
+                                .show();
+                        // only show a user error once, although we may get multiples
+                        userErrorShown = true;
+                    }
+                    return;
+                }
+                User user = (User) intent.getSerializableExtra(UserService.EXTRA_USER_DATA);
+                owner = user;
+                updateUI();
             }
         }
     };
@@ -115,10 +131,16 @@ public class FreeItemDetailFragment extends Fragment {
         localBroadcastManager.registerReceiver(messageSentReceiver,
                 new IntentFilter(ItemService.MESSAGE_SENT));
 
-        Intent userIntent = new Intent(getActivity(), UserService.class);
-        userIntent.setAction(UserService.FETCH_USER);
-        userIntent.putExtra(UserService.EXTRA_USER_ID, item.getUserID());
-        getActivity().startService(userIntent);
+        User user = ((GiveOrTakeApplication)getActivity().getApplication()).getUser(item.getUserID());
+        if (user != null) {
+            owner = user;
+        } else {
+            Log.i(TAG, "Requesting user " + item.getUserID() + ", owner of item " + item.getName());
+            Intent userIntent = new Intent(getActivity(), UserService.class);
+            userIntent.setAction(UserService.FETCH_USER);
+            userIntent.putExtra(UserService.EXTRA_USER_ID, item.getUserID());
+            getActivity().startService(userIntent);
+        }
 
         if (item.getImage(getActivity()) == null) {
             Intent imageIntent = new Intent(getActivity(), ItemService.class);
@@ -139,15 +161,12 @@ public class FreeItemDetailFragment extends Fragment {
         }
 
         imageView = (ImageView)v.findViewById(R.id.free_item_detail_image);
-        updateUI();
 
         TextView descView = (TextView)v.findViewById(R.id.free_item_detail_desc);
         descView.setText(item.getDescription());
 
         usernameView = (TextView)v.findViewById(R.id.free_item_detail_username);
         karmaView = (TextView)v.findViewById(R.id.free_item_detail_karma);
-        // Call this in case owner is returned before this is called
-        updateUI();
 
         ImageView statusIcon = (ImageView)v.findViewById(R.id.free_item_detail_status_icon);
         statusIcon.setImageDrawable(item.getDrawableForState(getActivity()));
@@ -177,11 +196,14 @@ public class FreeItemDetailFragment extends Fragment {
             wantButton.setEnabled(false);
         }
 
+        // Fill in any data we already have
+        updateUI();
+
         return v;
     }
 
     private void updateUI() {
-        if (owner != null && usernameView != null && karmaView != null) {
+        if (owner != null && usernameView != null && karmaView != null && wantButton != null) {
             usernameView.setText(owner.getUserName());
             karmaView.setText(owner.getKarma().toString());
             wantButton.setEnabled(true);

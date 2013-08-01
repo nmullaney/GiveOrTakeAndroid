@@ -107,16 +107,31 @@ public class UserService extends IntentService {
             Log.e(TAG, "Cannot fetch user without userID.");
             return;
         }
+        GiveOrTakeApplication application = (GiveOrTakeApplication) getApplication();
 
         // try to fetch the local value
-        User user = ((GiveOrTakeApplication) getApplication()).getUser(userID);
-        if (user == null) {
-            UserFetcher fetcher = new UserFetcher(this);
-            user = fetcher.fetchUser(userID);
+        User user = application.getUser(userID);
+        if (user != null) {
+            Intent intent = new Intent(USER_FETCHED);
+            intent.putExtra(EXTRA_USER_DATA, (Parcelable) user);
+            Log.i(TAG, "Broadcasting existing user:" + user.getUserName());
+            broadcastIntent(intent);
+            return;
         }
+
         Intent intent = new Intent(USER_FETCHED);
-        ((GiveOrTakeApplication) getApplication()).addUser(user);
-        intent.putExtra(EXTRA_USER_DATA, (Parcelable) user);
+        // This allows us to know what the response is for
+        intent.putExtra(EXTRA_USER_ID, userID);
+        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher.UserResponse userResponse = fetcher.fetchUser(userID);
+        if (userResponse.isSuccess()) {
+            user = userResponse.getUser();
+            application.addUser(user);
+            intent.putExtra(EXTRA_USER_DATA, (Parcelable) user);
+        } else {
+            intent.putExtra(EXTRA_ERROR, userResponse.getError());
+        }
+        Log.i(TAG, "Broadcasting existing user or error for:" + userID);
         broadcastIntent(intent);
     }
 
@@ -171,7 +186,7 @@ public class UserService extends IntentService {
     }
 
     private void fetchUsersWhoWantItem(Long itemID, int minMessages) {
-        Log.i(TAG, "Fetching users who want item");
+        Log.d(TAG, "Fetching users who want item");
         UserFetcher fetcher = new UserFetcher(this);
         UserFetcher.UsersResponse response = fetcher.fetchUsersWhoWantItem(itemID, minMessages);
         Intent intent = new Intent(USERS_WHO_WANT_ITEM_FETCHED);
