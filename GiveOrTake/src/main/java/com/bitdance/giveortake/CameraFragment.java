@@ -9,6 +9,8 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.hardware.Camera;
@@ -297,10 +299,15 @@ public class CameraFragment extends Fragment {
         paint.setShader(shader);
 
         RectF rect = new RectF(0.0f, 0.0f, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-        int radius = 5;
+        int radius = 8;
 
         Bitmap result = Bitmap.createBitmap(THUMBNAIL_SIZE, THUMBNAIL_SIZE, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(result);
+        // Make sure the background is white
+        Paint whitePainter = new Paint();
+        whitePainter.setColor(getResources().getColor(R.color.white));
+        canvas.drawRect(0, 0, THUMBNAIL_SIZE, THUMBNAIL_SIZE, whitePainter);
+
         canvas.drawRoundRect(rect, radius, radius, paint);
 
         return result;

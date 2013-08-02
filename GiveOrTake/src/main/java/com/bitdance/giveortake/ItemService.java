@@ -116,7 +116,7 @@ public class ItemService extends IntentService {
         if (!success) {
             intent.putExtra(EXTRA_ERROR, getResources().getString(R.string.error));
         }
-        Log.i(TAG, "Broadcasting item thumbnail fetched for " + item.toString());
+        Log.d(TAG, "Broadcasting item thumbnail fetched for " + item.toString());
         broadcastIntent(intent);
     }
 

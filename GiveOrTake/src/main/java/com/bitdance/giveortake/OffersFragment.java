@@ -70,14 +70,15 @@ public class OffersFragment extends ListFragment {
 
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
+    }
+
+    private void setupBroadcastReceivers() {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
                 .getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.MY_ITEMS_UPDATED);
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
         localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
-
-        refreshOffers(0);
     }
 
     @Override
@@ -123,6 +124,8 @@ public class OffersFragment extends ListFragment {
                 createNewItem();
             }
         });
+        refreshOffers(0);
+        setupBroadcastReceivers();
         return v;
     }
 

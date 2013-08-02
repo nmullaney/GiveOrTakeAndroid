@@ -187,9 +187,9 @@ public class Item implements Serializable, Identifiable {
 
     public Drawable getThumbnail(Context context) {
         if (thumbnail == null) {
-            Log.i(TAG, "Thumbnail is null, loading from file");
+            Log.d(TAG, "Thumbnail is null, loading from file");
             File file = getLocalThumbnailFile(context);
-            Log.i(TAG, "File to load is " + file.getName());
+            Log.d(TAG, "File to load is " + file.getName());
             if (file != null && file.exists()) {
                 Log.i(TAG, "Pulling thumbnail from file");
                 thumbnail = new BitmapDrawable(context.getResources(), file.getPath());
@@ -198,7 +198,7 @@ public class Item implements Serializable, Identifiable {
             }
         }
         if (thumbnail != null) {
-            Log.i(TAG, "Thumbnail height/width = " + thumbnail.getIntrinsicHeight() + "/" +
+            Log.d(TAG, "Thumbnail height/width = " + thumbnail.getIntrinsicHeight() + "/" +
                     thumbnail.getIntrinsicWidth());
         }
         return thumbnail;
