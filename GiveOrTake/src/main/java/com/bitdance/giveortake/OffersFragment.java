@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -76,12 +77,34 @@ public class OffersFragment extends ListFragment {
         localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
 
-        refreshOffers();
+        refreshOffers(0);
     }
 
-    private void refreshOffers() {
+    @Override
+    public void onStart() {
+        super.onStart();
+        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                if (totalItemCount == 0) {
+                    return;
+                }
+                if (firstVisibleItem + visibleItemCount == totalItemCount) {
+                    refreshOffers(totalItemCount);
+                }
+            }
+        });
+    }
+
+    private void refreshOffers(Integer offset) {
         Intent intent = new Intent(getActivity(), ItemService.class);
         intent.setAction(ItemService.UPDATE_MY_ITEMS);
+        intent.putExtra(ItemService.EXTRA_OFFSET, offset);
         getActivity().startService(intent);
     }
 
@@ -115,7 +138,7 @@ public class OffersFragment extends ListFragment {
             case R.id.menu_item_new_item:
                 return createNewItem();
             case R.id.menu_item_refresh:
-                refreshOffers();
+                refreshOffers(0);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

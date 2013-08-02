@@ -47,6 +47,9 @@ public class ProfileFragment extends ListFragment {
         setRetainInstance(true);
 
         ActiveUser activeUser = ActiveUser.getInstance();
+        if (activeUser == null) {
+            return;
+        }
         ArrayList<StaticListItem> items = new ArrayList<StaticListItem>();
 
         items.add(new HeaderStaticListItem(getString(R.string.account)));

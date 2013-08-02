@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -101,7 +102,9 @@ public class FreeItemsFragment extends ListFragment {
         searchView.setIconifiedByDefault(true);
         } else {
             // if a query already exists, make sure it's displayed
+            if (Build.VERSION.SDK_INT >= 14) {
             searchMenuItem.expandActionView();
+            }
             searchView.setIconifiedByDefault(false);
             searchView.setQuery(query, false);
         }
@@ -112,22 +115,24 @@ public class FreeItemsFragment extends ListFragment {
                 return false;
             }
         });
-        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem menuItem) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-                Log.i(TAG, "Unsetting query");
-                query = null;
-                if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
-                    refreshItems(0);
+        if (Build.VERSION.SDK_INT >= 14) {
+            searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                    return true;
                 }
-                return true;
-            }
-        });
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                    Log.i(TAG, "Unsetting query");
+                    query = null;
+                    if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+                        refreshItems(0);
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     @Override

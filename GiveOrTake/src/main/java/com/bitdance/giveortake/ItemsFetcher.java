@@ -45,7 +45,8 @@ public class ItemsFetcher {
 
     public ArrayList<Item> fetchMyItems(Integer offset) {
         ItemsFilter filter = new ItemsFilter();
-        filter.setDistance(offset);
+        filter.setOffset(offset);
+        filter.setLimit(Constants.MAX_ITEMS_TO_REQUEST);
         filter.setOwnedBy(ActiveUser.getInstance().getUserID());
         return fetchItemsWithFilter(filter);
     }
