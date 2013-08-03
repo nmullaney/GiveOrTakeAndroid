@@ -51,9 +51,12 @@
                   android:lines="5" />
 
         <Button android:id="@+id/edit_offer_photo_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:padding="10dp"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@android:drawable/ic_menu_camera"
                 android:text="@string/add_photo" />
 
         <ImageView android:id="@+id/edit_offer_photo"
@@ -64,9 +67,13 @@
         <!-- TODO share button -->
 
         <Button android:id="@+id/edit_offer_post_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:background="@color/darkPink"
                 android:text="@string/post_offer" />
 
     </LinearLayout>

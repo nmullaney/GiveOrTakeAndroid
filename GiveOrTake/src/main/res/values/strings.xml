@@ -71,10 +71,14 @@
     <string name="describe_item">Describe your item.</string>
     <string name="add_photo">Add Photo</string>
     <string name="post_offer">Post Offer</string>
+    <string name="update_offer">Update Offer</string>
     <string name="edit_offer">Edit Offer</string>
     <string name="new_item">New Item</string>
     <string name="take_photo">Take Photo</string>
     <string name="image_upload_failed">Failed to upload the picture of the item.</string>
+    <string name="item_not_saved">Your item has unsaved changes that will be lost if you continue.</string>
+    <string name="continue_without_posting">Continue without posting</string>
+    <string name="unsaved_changes">Unsaved Changes</string>
 
     <!-- General error strings -->
     <string name="error_try_again">Something went wrong.  Please try again.</string>

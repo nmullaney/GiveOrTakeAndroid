@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -13,7 +14,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -104,6 +104,7 @@ public class EditOfferFragment extends Fragment {
                 String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
                 if (error == null) {
                     getActivity().setResult(Activity.RESULT_OK);
+                    item.setHasUnsavedImage(false);
                     getActivity().finish();
                 }
             }
@@ -190,20 +191,27 @@ public class EditOfferFragment extends Fragment {
         itemImage = (ImageView)view.findViewById(R.id.edit_offer_photo);
         itemImage.setImageDrawable(item.getImage(getActivity()));
         Button postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
+        if (item.getId() != null) {
+            postButton.setText(getString(R.string.update_offer));
+        }
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateItem();
-                Intent intent = new Intent(getActivity(), ItemService.class);
-                intent.setAction(ItemService.POST_ITEM);
-                intent.putExtra(ItemService.EXTRA_ITEM, item);
-                getActivity().startService(intent);
             }
         });
         return view;
     }
 
-    public void updateItem() {
+    private void updateItem() {
+        updateItemData();
+        Intent intent = new Intent(getActivity(), ItemService.class);
+        intent.setAction(ItemService.POST_ITEM);
+        intent.putExtra(ItemService.EXTRA_ITEM, item);
+        getActivity().startService(intent);
+    }
+
+    public void updateItemData() {
         item.setName(nameText.getText().toString());
         item.setDescription(descText.getText().toString());
         item.setState((Item.ItemState) itemStateSpinner.getSelectedItem());
@@ -214,15 +222,60 @@ public class EditOfferFragment extends Fragment {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch(menuItem.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(getActivity());
-                return true;
-            default:
-                return super.onOptionsItemSelected(menuItem);
+    private boolean itemNeedsUpdate() {
+        if (item.getId() == null) {
+            // No ID means this has never been uploaded
+            return true;
         }
+        if (!item.getName().equals(nameText.getText().toString()))
+            return true;
+        if (!item.getDescription().equals(descText.getText().toString()))
+            return true;
+        if (!item.getState().equals(itemStateSpinner.getSelectedItem()))
+            return true;
+        if (stateUser.getSelectedItem() != null) {
+            User selectedStateUser = (User) stateUser.getSelectedItem();
+            if (!item.getStateUserID().equals(selectedStateUser.getUserID())) {
+                return true;
+            }
+        } else {
+            if (item.getStateUserID() != null) {
+                return true;
+            }
+        }
+        if (item.hasUnsavedImage()) {
+            return true;
+        }
+        return false;
+    }
+
+    // Returns false if another code path should handle this event
+    // In this case, that means navigating up the stack normally
+    public boolean onHomePressed() {
+        Log.d(TAG, "OnHomePressed");
+        if (itemNeedsUpdate()) {
+            int postResource = item.getId() != null ? R.string.update_offer : R.string.post_offer;
+            DialogInterface.OnClickListener postOfferListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    updateItem();
+                }
+            };
+            DialogInterface.OnClickListener continueListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getActivity().finish();
+                }
+            };
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.unsaved_changes)
+                    .setMessage(getString(R.string.item_not_saved))
+                    .setPositiveButton(postResource, postOfferListener)
+                    .setNegativeButton(R.string.continue_without_posting, continueListener)
+                    .show();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -237,6 +290,7 @@ public class EditOfferFragment extends Fragment {
                 if (thumbnailFile != null && imageFile != null) {
                     item.loadThumbnailFromFile(getActivity(), thumbnailFile);
                     item.loadImageFromFile(getActivity(), imageFile);
+                    item.setHasUnsavedImage(true);
                     updateUI();
                 }
                 break;

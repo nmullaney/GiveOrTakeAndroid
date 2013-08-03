@@ -46,6 +46,8 @@ public class Item implements Serializable, Identifiable {
 
     private transient BitmapDrawable image;
     private String tempImageFile;
+    private transient boolean hasUnsavedImage = false;
+
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
@@ -226,6 +228,14 @@ public class Item implements Serializable, Identifiable {
 
     public void setThumbnail(BitmapDrawable thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public boolean hasUnsavedImage() {
+        return hasUnsavedImage;
+    }
+
+    public void setHasUnsavedImage(boolean hasUnsavedImage) {
+        this.hasUnsavedImage = hasUnsavedImage;
     }
 
     public Long getUserID() {
