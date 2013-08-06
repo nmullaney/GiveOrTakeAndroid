@@ -1,6 +1,7 @@
 package com.bitdance.giveortake;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,10 +38,18 @@ public class OffersFragment extends ListFragment {
     private BroadcastReceiver newItemsBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Received a new items broadcast");
+            Log.d(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
-                items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
-                setListAdapter(new ItemArrayAdapter(context, items));
+                if (intent.hasExtra(ItemService.EXTRA_ERROR)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(intent.getStringExtra(ItemService.EXTRA_ERROR))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                } else {
+                    items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
+                    setListAdapter(new ItemArrayAdapter(context, items));
+                }
             }
         }
     };
@@ -50,7 +59,7 @@ public class OffersFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ItemService.ITEM_THUMBNAIL_FETCHED)) {
                 Item item = (Item) intent.getSerializableExtra(ItemService.EXTRA_ITEM);
-                Log.i(TAG, "Updating item with thumbnail: " + item.toString() + ", id: " + item.getId());
+                Log.d(TAG, "Updating item with thumbnail: " + item.toString() + ", id: " + item.getId());
                 ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
                 int index = adapter.getPositionForItemID(item.getId());
                 ListView listView = getListView();

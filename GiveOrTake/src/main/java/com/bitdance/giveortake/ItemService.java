@@ -90,9 +90,14 @@ public class ItemService extends IntentService {
             // don't fetch more old items if we've already got them all
             return;
         }
-        ArrayList<Item> items = fetcher.fetchItems(offset, query);
-        getGOTApplication().mergeNewFreeItems(items);
+        ItemsFetcher.ItemsResponse itemsResponse = fetcher.fetchItems(offset, query);
         Intent i = new Intent(FREE_ITEMS_UPDATED);
+        if (itemsResponse.isSuccess()) {
+            getGOTApplication().mergeNewFreeItems(itemsResponse.getItems());
+        } else {
+            i.putExtra(EXTRA_ERROR, itemsResponse.getError());
+        }
+
         broadcastIntent(i);
     }
 
@@ -102,9 +107,14 @@ public class ItemService extends IntentService {
             // don't fetch more old items if we've already got them all
             return;
         }
-        ArrayList<Item> items = fetcher.fetchMyItems(offset);
-        getGOTApplication().mergeNewOffers(items);
+        ItemsFetcher.ItemsResponse itemsResponse = fetcher.fetchMyItems(offset);
         Intent i = new Intent(MY_ITEMS_UPDATED);
+        if (itemsResponse.isSuccess()) {
+            getGOTApplication().mergeNewOffers(itemsResponse.getItems());
+        } else {
+            i.putExtra(EXTRA_ERROR, itemsResponse.getError());
+        }
+
         broadcastIntent(i);
     }
 

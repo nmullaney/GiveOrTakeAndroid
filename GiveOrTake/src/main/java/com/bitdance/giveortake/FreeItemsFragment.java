@@ -1,5 +1,6 @@
 package com.bitdance.giveortake;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,8 +41,16 @@ public class FreeItemsFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
-                items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
-                setListAdapter(new ItemArrayAdapter(getActivity(), items));
+                if (intent.hasExtra(ItemService.EXTRA_ERROR)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(intent.getStringExtra(ItemService.EXTRA_ERROR))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                } else {
+                    items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+                    setListAdapter(new ItemArrayAdapter(getActivity(), items));
+                }
             }
         }
     };

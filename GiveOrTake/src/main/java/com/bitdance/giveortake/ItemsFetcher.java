@@ -2,9 +2,6 @@ package com.bitdance.giveortake;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -21,10 +18,8 @@ import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -43,7 +38,7 @@ public class ItemsFetcher {
         SSLConnectionHelper.trustAllHosts();
     }
 
-    public ArrayList<Item> fetchMyItems(Integer offset) {
+    public ItemsResponse fetchMyItems(Integer offset) {
         ItemsFilter filter = new ItemsFilter();
         filter.setOffset(offset);
         filter.setLimit(Constants.MAX_ITEMS_TO_REQUEST);
@@ -51,8 +46,8 @@ public class ItemsFetcher {
         return fetchItemsWithFilter(filter);
     }
 
-    public ArrayList<Item> fetchItems(Integer offset, String query) {
-        Log.i(TAG, "Fetching items with offset: " + offset);
+    public ItemsResponse fetchItems(Integer offset, String query) {
+        Log.d(TAG, "Fetching items with offset: " + offset);
         ItemsFilter filter = new ItemsFilter();
         SharedPreferences preferences = context
                 .getSharedPreferences(Constants.FILTER_PREFERENCES, Context.MODE_PRIVATE);
@@ -68,34 +63,67 @@ public class ItemsFetcher {
         return fetchItemsWithFilter(filter);
     }
 
-    private ArrayList<Item> fetchItemsWithFilter(ItemsFilter filter) {
+    private ItemsResponse fetchItemsWithFilter(ItemsFilter filter) {
         ArrayList<Item> items = new ArrayList<Item>();
+        ItemsResponse itemsResponse;
         String urlSpec = Constants.BASE_URL + "/items.php?" + filter.buildQueryString();
-        String result;
         try {
-            result = fetchURLStringData(urlSpec);
-            Log.i(TAG, "JSON = \n" + result);
-            items = parseItems(result);
-            Log.i(TAG, "Items = " + items);
+            String result = fetchURLStringData(urlSpec);
+            Log.d(TAG, "JSON = \n" + result);
+            itemsResponse = parseItems(result);
+            Log.d(TAG, "Items = " + items);
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch url data:", ioe);
+            itemsResponse = new ItemsResponse(context.getString(R.string.error_try_again));
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse url data:", je);
+            itemsResponse = new ItemsResponse(context.getString(R.string.error_try_again));
         }
 
-        return items;
+        return itemsResponse;
     }
 
-    private ArrayList<Item> parseItems(String result) throws JSONException {
+    private ItemsResponse parseItems(String result) throws JSONException {
         ArrayList<Item> items = new ArrayList<Item>();
         JSONObject allItems = (JSONObject) new JSONTokener(result).nextValue();
+        if (allItems.has(Constants.ERROR_KEY)) {
+            return new ItemsResponse(allItems.getString(Constants.ERROR_KEY));
+        }
         JSONArray jsonItemArray = allItems.getJSONArray("items");
         for (int i = 0; i < jsonItemArray.length(); i++) {
             JSONObject jsonObject = jsonItemArray.getJSONObject(i);
             Item item = new Item(jsonObject);
             items.add(item);
         }
-        return items;
+        return new ItemsResponse(items);
+    }
+
+    public class ItemsResponse {
+        private boolean success;
+        private ArrayList<Item> items;
+        private String error;
+
+        public ItemsResponse(ArrayList<Item> items) {
+            this.items = items;
+            this.success = true;
+        }
+
+        public ItemsResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public ArrayList<Item> getItems() {
+            return items;
+        }
+
+        public String getError() {
+            return error;
+        }
     }
 
     private String fetchURLStringData(String urlspec) throws IOException {
