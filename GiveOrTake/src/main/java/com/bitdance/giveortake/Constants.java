@@ -19,4 +19,6 @@ public class Constants {
     public static final int DEFAULT_DISTANCE = 50;
     public static final String SHOW_MY_ITEMS_PREFERENCE = "showMyItems";
     public static final boolean DEFAULT_SHOW_MY_ITEMS = true;
+
+    public static final String NEW_USER = "new_user";
 }

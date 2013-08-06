@@ -30,6 +30,8 @@ public class UpdateEmailFragment extends Fragment {
     private Button sendCodeButton;
     private Button updateEmailButton;
 
+    private boolean isNewUserFlow;
+
     BroadcastReceiver pendingEmailAdded = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -52,8 +54,12 @@ public class UpdateEmailFragment extends Fragment {
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
+                    if (isNewUserFlow) {
+                        ((WelcomeActivity) getActivity()).loadNextFragment();
+                    } else {
+                        getActivity().setResult(Activity.RESULT_OK);
+                        getActivity().finish();
+                    }
                 }
             }
         }
@@ -67,8 +73,12 @@ public class UpdateEmailFragment extends Fragment {
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {
-                    getActivity().setResult(Activity.RESULT_CANCELED);
-                    getActivity().finish();
+                    if (!isNewUserFlow) {
+                        getActivity().setResult(Activity.RESULT_CANCELED);
+                        getActivity().finish();
+                    } else {
+                        updateUIForSettingEmail();
+                    }
                 }
             }
         }
@@ -81,8 +91,13 @@ public class UpdateEmailFragment extends Fragment {
             String newEmail = emailText.getText().toString();
             if (newEmail.equals(ActiveUser.getInstance().getEmail())) {
                 // no change
-                getActivity().setResult(Activity.RESULT_OK);
-                getActivity().finish();
+                if (isNewUserFlow) {
+                    ((WelcomeActivity) getActivity()).loadNextFragment();
+                } else {
+                    getActivity().setResult(Activity.RESULT_OK);
+                    getActivity().finish();
+                }
+                return;
             }
             Intent intent = new Intent(getActivity(), UserService.class);
             intent.setAction(UserService.ADD_PENDING_EMAIL);
@@ -105,10 +120,18 @@ public class UpdateEmailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        if (Build.VERSION.SDK_INT >= 14) {
-            getActivity().getActionBar().setIcon(getResources()
-                    .getDrawable(R.drawable.ic_profile_selected_30));
+        if (getArguments() != null && getArguments().getBoolean(Constants.NEW_USER)) {
+            this.isNewUserFlow = true;
+        } else {
+            this.isNewUserFlow = false;
+        }
+
+        if (!isNewUserFlow) {
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            if (Build.VERSION.SDK_INT >= 14) {
+                getActivity().getActionBar().setIcon(getResources()
+                        .getDrawable(R.drawable.ic_profile_selected_30));
+            }
         }
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager
@@ -173,6 +196,14 @@ public class UpdateEmailFragment extends Fragment {
         updateEmailButton.setOnClickListener(cancelPendingEmailListener);
         sendCodeButton.setVisibility(View.VISIBLE);
         emailCodeView.setVisibility(View.VISIBLE);
+    }
+
+    private void updateUIForSettingEmail() {
+        updateEmailTaskDesc.setText(getString(R.string.email_update_hint));
+        updateEmailButton.setText(getString(R.string.update_email));
+        updateEmailButton.setOnClickListener(sendPendingEmailListener);
+        sendCodeButton.setVisibility(View.INVISIBLE);
+        emailCodeView.setVisibility(View.INVISIBLE);
     }
 
     @Override

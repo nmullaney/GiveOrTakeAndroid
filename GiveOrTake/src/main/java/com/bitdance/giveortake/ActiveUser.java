@@ -96,22 +96,32 @@ public class ActiveUser {
     }
 
     public Long getUserID() {
-        return getUser().getUserID();
+        if (getUser() != null)
+            return getUser().getUserID();
+        return null;
     }
 
     public String getUserName() {
-        return getUser().getUserName();
+        if (getUser() != null)
+            return getUser().getUserName();
+        return null;
     }
 
     public Double getLatitude() {
-        return getUser().getLatitude();
+        if (getUser() != null)
+            return getUser().getLatitude();
+        return null;
     }
 
     public Double getLongitude() {
-        return getUser().getLongitude();
+        if (getUser() != null)
+            return getUser().getLongitude();
+        return null;
     }
 
     public Integer getKarma() {
-        return getUser().getKarma();
+        if (getUser() != null)
+            return getUser().getKarma();
+        return null;
     }
 }

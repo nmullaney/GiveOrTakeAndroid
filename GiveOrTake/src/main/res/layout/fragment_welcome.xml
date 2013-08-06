@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="5dp"
+              android:textAppearance="@android:style/TextAppearance.Large"
+              android:text="@string/welcome_to_app" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_margin="5dp"
+              android:textAppearance="@android:style/TextAppearance.Medium"
+              android:text="@string/app_mission" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:textAppearance="@android:style/TextAppearance.Large"
+              android:text="@string/give" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_margin="5dp"
+              android:textAppearance="@android:style/TextAppearance.Medium"
+              android:text="@string/give_details" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:textAppearance="@android:style/TextAppearance.Large"
+              android:text="@string/take" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_margin="5dp"
+              android:textAppearance="@android:style/TextAppearance.Medium"
+              android:text="@string/take_details" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:textAppearance="@android:style/TextAppearance.Large"
+              android:text="@string/lets_get_started" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_margin="5dp"
+              android:textAppearance="@android:style/TextAppearance.Medium"
+              android:text="@string/get_started_details" />
+
+    <Button android:id="@+id/get_started_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:text="@string/get_started"
+            android:textColor="@color/white"
+            android:background="@color/darkPink" />
+
+
+</LinearLayout>

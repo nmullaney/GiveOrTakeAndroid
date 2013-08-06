@@ -30,6 +30,7 @@ public class UpdateUsernameFragment extends Fragment {
 
     private EditText usernameText;
     private TextView errorTextView;
+    private boolean isNewUserFlow;
 
     BroadcastReceiver updateUsernameReceiver = new BroadcastReceiver() {
         @Override
@@ -39,10 +40,14 @@ public class UpdateUsernameFragment extends Fragment {
                 if (errorMessage != null) {
                     displayError(errorMessage);
                 } else {
-                    Intent resultIntent = new Intent();
-                    // no data to pass back -- we can update from the active user
-                    getActivity().setResult(Activity.RESULT_OK, intent);
-                    getActivity().finish();
+                    if (isNewUserFlow) {
+                        ((WelcomeActivity) getActivity()).loadNextFragment();
+                    } else {
+                        Intent resultIntent = new Intent();
+                        // no data to pass back -- we can update from the active user
+                        getActivity().setResult(Activity.RESULT_OK, intent);
+                        getActivity().finish();
+                    }
                 }
             }
         }
@@ -52,10 +57,18 @@ public class UpdateUsernameFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        if (Build.VERSION.SDK_INT >= 14) {
-            getActivity().getActionBar().setIcon(getResources()
-                    .getDrawable(R.drawable.ic_profile_selected_30));
+        if (getArguments() != null && getArguments().getBoolean(Constants.NEW_USER)) {
+            this.isNewUserFlow = true;
+        } else {
+            this.isNewUserFlow = false;
+        }
+
+        if (!isNewUserFlow) {
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            if (Build.VERSION.SDK_INT >= 14) {
+                getActivity().getActionBar().setIcon(getResources()
+                        .getDrawable(R.drawable.ic_profile_selected_30));
+            }
         }
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager

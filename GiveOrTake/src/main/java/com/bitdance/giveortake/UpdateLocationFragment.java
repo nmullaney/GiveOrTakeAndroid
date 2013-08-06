@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -36,6 +37,8 @@ public class UpdateLocationFragment extends Fragment {
     private Marker marker;
     private TextView errorMessageView;
 
+    private boolean isNewUserFlow;
+
     BroadcastReceiver locationUpdated = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -44,8 +47,12 @@ public class UpdateLocationFragment extends Fragment {
                 if (errorMessage != null) {
                     displayErrorMessage(errorMessage);
                 } else {
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
+                    if (isNewUserFlow) {
+                        ((WelcomeActivity)getActivity()).loadNextFragment();
+                    } else {
+                        getActivity().setResult(Activity.RESULT_OK);
+                        getActivity().finish();
+                    }
                 }
             }
         }
@@ -54,6 +61,12 @@ public class UpdateLocationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null && getArguments().getBoolean(Constants.NEW_USER)) {
+            this.isNewUserFlow = true;
+        } else {
+            this.isNewUserFlow = false;
+        }
 
         locationClient = new LocationClient(getActivity(), connectionCallbacks,
                 onConnectionFailedListener);
@@ -101,15 +114,24 @@ public class UpdateLocationFragment extends Fragment {
             }
         });
 
-        ActiveUser activeUser = ActiveUser.getInstance();
-        if (activeUser != null) {
-            LatLng markerPosition = new LatLng(activeUser.getLatitude(), activeUser.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(markerPosition, 14);
-            map.animateCamera(cameraUpdate);
-            marker = createMarker(markerPosition);
-        }
-
         return view;
+    }
+
+    private void updateMapLocation() {
+        ActiveUser activeUser = ActiveUser.getInstance();
+        LatLng centerPosition;
+        if (activeUser != null && activeUser.getLatitude() != null &&
+                activeUser.getLongitude() != null) {
+            LatLng markerPosition = new LatLng(activeUser.getLatitude(), activeUser.getLongitude());
+            centerPosition = markerPosition;
+            marker = createMarker(markerPosition);
+        } else {
+            Location currentLocation = locationClient.getLastLocation();
+            centerPosition = new LatLng(currentLocation.getLatitude(),
+                    currentLocation.getLongitude());
+        }
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(centerPosition, 14);
+        map.animateCamera(cameraUpdate);
     }
 
     private Marker createMarker(LatLng position) {
@@ -154,12 +176,11 @@ public class UpdateLocationFragment extends Fragment {
 
                 @Override
                 public void onConnected(Bundle bundle) {
-
+                    updateMapLocation();
                 }
 
                 @Override
                 public void onDisconnected() {
-
                 }
             };
 

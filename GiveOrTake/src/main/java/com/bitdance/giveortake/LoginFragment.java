@@ -57,7 +57,7 @@ public class LoginFragment extends Fragment {
                             .show();
                     Session.getActiveSession().closeAndClearTokenInformation();
                 } else {
-                    launchMainActivity();
+                    launchMainOrWelcomeActivity();
                 }
             }
         }
@@ -78,7 +78,7 @@ public class LoginFragment extends Fragment {
 
         if (ActiveUser.getInstance() != null) {
             // we are still logged in and can go directly to the main activity
-            launchMainActivity();
+            launchMainOrWelcomeActivity();
             return;
         }
 
@@ -116,10 +116,16 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
-    private void launchMainActivity() {
-        Intent mainIntent = new Intent(getActivity(), MainActivity.class);
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainIntent);
+    private void launchMainOrWelcomeActivity() {
+        if (ActiveUser.getInstance().isNewUser()) {
+            Intent welcomeIntent = new Intent(getActivity(), WelcomeActivity.class);
+            welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(welcomeIntent);
+        } else {
+            Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent);
+        }
         getActivity().finish();
     }
 

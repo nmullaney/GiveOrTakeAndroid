@@ -29,8 +29,20 @@ public class User implements Serializable, Parcelable {
     public void updateFromJSON(JSONObject jsonObject) throws JSONException {
         if (jsonObject.has(JSON_ID)) setUserID(jsonObject.getLong(JSON_ID));
         if (jsonObject.has(JSON_USERNAME)) setUserName(jsonObject.getString(JSON_USERNAME));
-        if (jsonObject.has(JSON_LATITUDE)) setLatitude(jsonObject.getDouble(JSON_LATITUDE));
-        if (jsonObject.has(JSON_LONGITUDE)) setLongitude(jsonObject.getDouble(JSON_LONGITUDE));
+        if (jsonObject.has(JSON_LATITUDE)) {
+            if (jsonObject.isNull(JSON_LATITUDE)) {
+                setLatitude(null);
+            } else {
+                setLatitude(jsonObject.getDouble(JSON_LATITUDE));
+            }
+        }
+        if (jsonObject.has(JSON_LONGITUDE)) {
+            if (jsonObject.isNull(JSON_LONGITUDE)) {
+                setLongitude(null);
+            } else {
+                setLongitude(jsonObject.getDouble(JSON_LONGITUDE));
+            }
+        }
         if (jsonObject.has(JSON_KARMA)) setKarma(jsonObject.getInt(JSON_KARMA));
     }
 

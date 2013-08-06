@@ -134,4 +134,24 @@
     <string name="apply_filters">Apply Filters</string>
     <string name="filter_items">Filter Items</string>
 
+    <!-- welcome strings -->
+    <string name="welcome">Welcome</string>
+    <string name="welcome_to_app">Welcome to Give or Take!</string>
+    <string name="app_mission">We help people give away items they no longer want -- and find free
+        items they need!
+    </string>
+    <string name="give">Give</string>
+    <string name="give_details">Quickly and easily post offers of items you\'d like to give away for
+        free. Interested takers will email you and arrange to take your items.
+    </string>
+    <string name="take">Take</string>
+    <string name="take_details">Find free things you need. Send messages to the giver to find out
+        more details or arrange to pick up the item.
+    </string>
+    <string name="lets_get_started">Let\'s Get Started!</string>
+    <string name="get_started_details">We\'ll need to know just a few things about you before we can
+        start. Thank you for joining Give or Take!
+    </string>
+    <string name="get_started">Get Started</string>
+
 </resources>
