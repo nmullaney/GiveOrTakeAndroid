@@ -146,15 +146,23 @@ public class ItemService extends IntentService {
 
     private void postItem(Item item) {
         ItemsFetcher fetcher = new ItemsFetcher(this);
-        item = fetcher.postItem(item);
-        boolean updatedImage = postImage(item);
         Intent intent = new Intent(ITEM_POSTED);
-        if (!updatedImage) {
-            intent.putExtra(EXTRA_ERROR, getResources().getString(R.string.image_upload_failed));
-        } else {
-            item.moveTempFile(this);
+        ItemsFetcher.ItemResponse itemResponse = fetcher.postItem(item);
+        if (!itemResponse.isSuccess()) {
+            intent.putExtra(EXTRA_ERROR, itemResponse.getError());
+            broadcastIntent(intent);
+            return;
         }
-        getGOTApplication().addPostedItem(item);
+
+        if (item.hasUnsavedImage()) {
+            boolean updatedImage = postImage(item);
+            if (!updatedImage) {
+                intent.putExtra(EXTRA_ERROR, getResources().getString(R.string.image_upload_failed));
+            } else {
+                item.moveTempFile(this);
+            }
+            getGOTApplication().addPostedItem(item);
+        }
         broadcastIntent(intent);
     }
 

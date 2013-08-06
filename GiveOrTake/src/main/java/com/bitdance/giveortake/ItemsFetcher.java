@@ -120,27 +120,12 @@ public class ItemsFetcher {
         }
     }
 
-    private BitmapDrawable fetchURLBitmapDrawable(String urlSpec) throws IOException {
-        URL url = new URL(urlSpec);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        InputStream in = null;
-        try {
-            in = connection.getInputStream();
-            return new BitmapDrawable(context.getResources(),
-                    BitmapFactory.decodeStream(in));
-        } finally {
-            connection.disconnect();
-            if (in != null) {
-                in.close();
-            }
-        }
-    }
-
-    public Item postItem(Item item) {
+    public ItemResponse postItem(Item item) {
         String urlSpec = Constants.BASE_URL + "/item.php";
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         HttpPost post = new HttpPost(urlSpec);
         MultipartEntity multipartEntity = new MultipartEntity();
+        ItemResponse itemResponse;
         try {
             if (item.getId() != null) {
                 multipartEntity.addPart("item_id", new StringBody(String.valueOf(item.getId())));
@@ -157,19 +142,56 @@ public class ItemsFetcher {
                     "thumbnail"));
         } catch (UnsupportedEncodingException uee) {
             Log.e(TAG, "Failed to build request", uee);
+            itemResponse = new ItemResponse(context.getString(R.string.error_try_again));
+            return itemResponse;
         }
 
         try {
             post.setEntity(multipartEntity);
             HttpResponse response = client.execute(post);
             JSONObject result = JSONUtils.parseResponse(response);
-            JSONObject itemJSON = result.getJSONObject("item");
-            item.updateFromJSON(itemJSON);
+            if (result.has(Constants.ERROR_KEY)) {
+                itemResponse = new ItemResponse(result.getString(Constants.ERROR_KEY));
+            } else {
+                JSONObject itemJSON = result.getJSONObject("item");
+                item.updateFromJSON(itemJSON);
+                itemResponse = new ItemResponse(item);
+            }
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to post item", ioe);
+            itemResponse = new ItemResponse(context.getString(R.string.error_try_again));
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse item", je);
+            itemResponse = new ItemResponse(context.getString(R.string.error_try_again));
         }
-        return item;
+        return itemResponse;
+    }
+
+    public class ItemResponse {
+        private boolean success;
+        private Item item;
+        private String error;
+
+        public ItemResponse(Item item) {
+            this.item = item;
+            this.success = true;
+        }
+
+        public ItemResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public Item getItem() {
+            return item;
+        }
+
+        public String getError() {
+            return error;
+        }
     }
 }

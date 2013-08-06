@@ -22,8 +22,8 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
 
     public ItemArrayAdapter(Context context, ArrayList<Item> items) {
         super(context, R.layout.list_item_item, items);
-        Log.i(TAG, "The context = " + context);
-        Log.i(TAG, "The items = " + items);
+        Log.d(TAG, "The context = " + context);
+        Log.d(TAG, "The items = " + items);
     }
 
     @Override
@@ -38,10 +38,10 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
         Drawable thumbnail = i.getThumbnail(getContext());
         if (thumbnail != null) {
-            Log.i(TAG, "Setting image drawable for item: " + i);
+            Log.d(TAG, "Setting image drawable for item: " + i);
             thumbnailView.setImageDrawable(thumbnail);
         } else {
-            Log.i(TAG, "Loading thumbnail for item: " + i);
+            Log.d(TAG, "Loading thumbnail for item: " + i);
             Intent intent = new Intent(getContext(), ItemService.class);
             intent.setAction(ItemService.FETCH_ITEM_THUMBNAIL);
             intent.putExtra(ItemService.EXTRA_ITEM, i);

@@ -100,12 +100,19 @@ public class EditOfferFragment extends Fragment {
     private BroadcastReceiver itemPostedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Received item posted message");
             if (intent.getAction().equals(ItemService.ITEM_POSTED)) {
                 String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
                 if (error == null) {
                     getActivity().setResult(Activity.RESULT_OK);
                     item.setHasUnsavedImage(false);
                     getActivity().finish();
+                } else {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(error)
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
                 }
             }
         }
