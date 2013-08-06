@@ -44,9 +44,8 @@ public class UserFetcher {
         SSLConnectionHelper.trustAllHosts();
     }
 
-    public boolean loginUser() {
+    public LoginUserResponse loginUser() {
         assert(Session.getActiveSession() != null);
-        boolean success = false;
         String fbAccessToken = Session.getActiveSession().getAccessToken();
         ActiveUser activeUser = ActiveUser.getInstance();
         String urlSpec = Constants.BASE_URL + "/user.php";
@@ -60,20 +59,49 @@ public class UserFetcher {
         nameValuePairs.add(new BasicNameValuePair("username", activeUser.getUserName()));
         nameValuePairs.add(new BasicNameValuePair("email", activeUser.getEmail()));
 
+        LoginUserResponse loginUserResponse;
         try {
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = client.execute(post);
             JSONObject result = JSONUtils.parseResponse(response);
             Log.d(TAG, result.toString());
-            // TODO: handle parsing error json
-            activeUser.updateFromJSON(result);
-            success = true;
+            if (result.has(Constants.ERROR_KEY)) {
+                loginUserResponse = new LoginUserResponse(result.getString(Constants.ERROR_KEY));
+            } else {
+                activeUser.updateFromJSON(result);
+                loginUserResponse = new LoginUserResponse();
+            }
         } catch(IOException ioe) {
             Log.e(TAG, "Login failed due to exception:", ioe);
+            loginUserResponse = new LoginUserResponse(context.getString(R.string.error_try_again));
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse json:", je);
+            loginUserResponse = new LoginUserResponse(context.getString(R.string.error_try_again));
         }
-        return success;
+        return loginUserResponse;
+    }
+
+    public class LoginUserResponse {
+        private boolean success;
+        private String error;
+        // The User is always the singleton ActiveUser, so there's no need to store it here
+
+        public LoginUserResponse() {
+            this.success = true;
+        }
+
+        public LoginUserResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getError() {
+            return this.error;
+        }
     }
 
     public UserResponse fetchUser(Long userID) {

@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment {
     private BroadcastReceiver loginBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Received login result");
+            Log.d(TAG, "Received login result");
             if (intent.getAction().equals(UserService.LOGIN_RESULT)) {
                 progressBar.setVisibility(View.INVISIBLE);
                 if (intent.hasExtra(UserService.EXTRA_ERROR)) {
@@ -55,6 +55,7 @@ public class LoginFragment extends Fragment {
                             .setMessage(intent.getStringExtra(UserService.EXTRA_ERROR))
                             .setPositiveButton(R.string.ok, null)
                             .show();
+                    Session.getActiveSession().closeAndClearTokenInformation();
                 } else {
                     launchMainActivity();
                 }
@@ -65,11 +66,11 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "OnCreate");
+        Log.d(TAG, "OnCreate");
 
         String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
         if (loginAction != null && loginAction.equals(LOGOUT)) {
-            Log.i(TAG, "Logging out");
+            Log.d(TAG, "Logging out");
             ((GiveOrTakeApplication) getActivity().getApplication()).logout();
             Session.getActiveSession().closeAndClearTokenInformation();
             ActiveUser.logout();
@@ -94,14 +95,13 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
-        Log.i(TAG, "OnCreateView");
         progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
         loginButton = (LoginButton)v.findViewById(R.id.login_button);
         loginButton.setFragment(this);
         loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
-                Log.i(TAG, "User info fetched: " + user);
+                Log.d(TAG, "User info fetched: " + user);
                 updateUI();
                 if (user != null) {
                     progressBar.setVisibility(View.VISIBLE);

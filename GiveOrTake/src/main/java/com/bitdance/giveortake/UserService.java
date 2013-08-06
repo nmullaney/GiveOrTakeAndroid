@@ -92,13 +92,12 @@ public class UserService extends IntentService {
         ActiveUser activeUser = ActiveUser.getInstance();
         assert(activeUser != null);
         UserFetcher fetcher = new UserFetcher(this);
-        boolean loginSucceeded = fetcher.loginUser();
+        UserFetcher.LoginUserResponse loginUserResponse = fetcher.loginUser();
         Intent i = new Intent(LOGIN_RESULT);
-        if (!loginSucceeded) {
-            i.putExtra(EXTRA_ERROR,
-                    getApplicationContext().getResources().getString(R.string.login_failure));
+        if (!loginUserResponse.isSuccess()) {
+            i.putExtra(EXTRA_ERROR, loginUserResponse.getError());
         }
-        Log.i(TAG, "Sending login result broadcast");
+        Log.d(TAG, "Sending login result broadcast");
         broadcastIntent(i);
     }
 

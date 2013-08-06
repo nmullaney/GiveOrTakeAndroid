@@ -187,10 +187,10 @@ public class ItemsFetcher {
             }
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to post item", ioe);
-            itemResponse = new ItemResponse(context.getString(R.string.error_try_again));
+            itemResponse = new ItemResponse(context.getString(R.string.login_failure));
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse item", je);
-            itemResponse = new ItemResponse(context.getString(R.string.error_try_again));
+            itemResponse = new ItemResponse(context.getString(R.string.login_failure));
         }
         return itemResponse;
     }
