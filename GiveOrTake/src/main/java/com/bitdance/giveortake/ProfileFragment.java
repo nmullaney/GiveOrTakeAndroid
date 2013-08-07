@@ -273,6 +273,9 @@ public class ProfileFragment extends ListFragment {
             mapFragment.setRetainInstance(true);
 
             map = mapFragment.getMap();
+            if (map == null) {
+                return fullView;
+            }
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {

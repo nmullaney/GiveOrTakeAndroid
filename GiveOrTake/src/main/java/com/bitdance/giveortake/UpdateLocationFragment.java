@@ -98,6 +98,9 @@ public class UpdateLocationFragment extends Fragment {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         SupportMapFragment mapFragment = ((SupportMapFragment) fm.findFragmentById(R.id.map));
         map = mapFragment.getMap();
+        if (map == null) {
+            return view;
+        }
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
@@ -123,7 +126,7 @@ public class UpdateLocationFragment extends Fragment {
 
     private void updateMapLocation() {
         ActiveUser activeUser = getGOTApplication().getActiveUser();
-        LatLng centerPosition;
+        LatLng centerPosition = null;
         if (activeUser != null && activeUser.getLatitude() != null &&
                 activeUser.getLongitude() != null) {
             LatLng markerPosition = new LatLng(activeUser.getLatitude(), activeUser.getLongitude());
@@ -131,11 +134,17 @@ public class UpdateLocationFragment extends Fragment {
             marker = createMarker(markerPosition);
         } else {
             Location currentLocation = locationClient.getLastLocation();
-            centerPosition = new LatLng(currentLocation.getLatitude(),
-                    currentLocation.getLongitude());
+            if (currentLocation != null) {
+                centerPosition = new LatLng(currentLocation.getLatitude(),
+                        currentLocation.getLongitude());
+            }
         }
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(centerPosition, 14);
-        map.animateCamera(cameraUpdate);
+        // If there's no reasonable centerPosition, we'll just end up showing a map of the whole
+        // world, which will be easier to navigate than a zoomed in map
+        if (centerPosition != null) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(centerPosition, 14);
+            map.animateCamera(cameraUpdate);
+        }
     }
 
     private Marker createMarker(LatLng position) {

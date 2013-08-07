@@ -106,8 +106,10 @@ public class UpdateUsernameFragment extends Fragment {
                 // hide the keyboard
                 InputMethodManager inputManager = (InputMethodManager)
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                if (inputManager != null && getActivity().getCurrentFocus() != null) {
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 // clear any old errors
                 clearError();
                 String newUsername = usernameText.getText().toString();
