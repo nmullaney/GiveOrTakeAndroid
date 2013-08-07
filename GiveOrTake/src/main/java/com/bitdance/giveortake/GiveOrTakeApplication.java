@@ -18,12 +18,21 @@ public class GiveOrTakeApplication extends Application {
     private ItemMap offersMap;
 
     private HashMap<Long, User> users;
+    private ActiveUser activeUser;
 
     public void onCreate() {
         super.onCreate();
         freeItemsMap = new ItemMap();
         offersMap = new ItemMap();
         users = new HashMap<Long, User>();
+        activeUser = new ActiveUser();
+    }
+
+    public ActiveUser getActiveUser() {
+        if (activeUser == null) {
+            activeUser = new ActiveUser();
+        }
+        return activeUser;
     }
 
     public void addUser(User user) {
@@ -87,7 +96,7 @@ public class GiveOrTakeApplication extends Application {
                 Constants.DEFAULT_SHOW_MY_ITEMS);
         for (Iterator<Item> itemIterator = freeItemsMap.iterator(); itemIterator.hasNext(); ) {
             Item next = itemIterator.next();
-            if (!showMyItems && next.getUserID().equals(ActiveUser.getInstance().getUserID())) {
+            if (!showMyItems && activeUser.isActiveUser(next.getUserID())) {
                 itemIterator.remove();
                 continue;
             }
@@ -126,6 +135,7 @@ public class GiveOrTakeApplication extends Application {
         freeItemsMap.clear();
         offersMap.clear();
         users.clear();
+        activeUser = null;
     }
 
     @Override

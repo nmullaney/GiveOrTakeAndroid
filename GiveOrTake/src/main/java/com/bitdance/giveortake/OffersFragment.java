@@ -170,6 +170,10 @@ public class OffersFragment extends ListFragment {
         return index >= start && index <= end;
     }
 
+    private GiveOrTakeApplication getGOTApplication() {
+        return (GiveOrTakeApplication) getActivity().getApplication();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -179,7 +183,7 @@ public class OffersFragment extends ListFragment {
 
     public boolean createNewItem() {
         Intent i = new Intent(getActivity(), EditOfferActivity.class);
-        i.putExtra(EXTRA_ITEM, new Item());
+        i.putExtra(EXTRA_ITEM, new Item(getGOTApplication().getActiveUser().getUserID()));
         startActivityForResult(i, ADD_OFFER_REQUEST_CODE);
         return true;
     }

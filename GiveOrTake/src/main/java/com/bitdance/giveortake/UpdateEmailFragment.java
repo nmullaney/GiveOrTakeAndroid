@@ -89,7 +89,7 @@ public class UpdateEmailFragment extends Fragment {
         public void onClick(View view) {
             hideErrorMessage();
             String newEmail = emailText.getText().toString();
-            if (newEmail.equals(ActiveUser.getInstance().getEmail())) {
+            if (newEmail.equals(getGOTApplication().getActiveUser().getEmail())) {
                 // no change
                 if (isNewUserFlow) {
                     ((WelcomeActivity) getActivity()).loadNextFragment();
@@ -145,6 +145,10 @@ public class UpdateEmailFragment extends Fragment {
 
     }
 
+    private GiveOrTakeApplication getGOTApplication() {
+        return (GiveOrTakeApplication)getActivity().getApplication();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_email, container, false);
@@ -170,11 +174,11 @@ public class UpdateEmailFragment extends Fragment {
         updateEmailButton = (Button)view.findViewById(R.id.update_email_action_button);
         updateEmailButton.setOnClickListener(sendPendingEmailListener);
 
-        if (ActiveUser.getInstance().getPendingEmail() != null) {
+        if (getGOTApplication().getActiveUser().getPendingEmail() != null) {
             updateUIForSendingCode();
-            emailText.setText(ActiveUser.getInstance().getPendingEmail());
+            emailText.setText(getGOTApplication().getActiveUser().getPendingEmail());
         } else {
-            emailText.setText(ActiveUser.getInstance().getEmail());
+            emailText.setText(getGOTApplication().getActiveUser().getEmail());
         }
 
         return view;

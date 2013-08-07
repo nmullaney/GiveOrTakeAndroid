@@ -32,9 +32,11 @@ public class ItemsFetcher {
     public static final String TAG = "ItemsFetcher";
 
     private Context context;
+    private ActiveUser activeUser;
 
-    public ItemsFetcher(Context context) {
+    public ItemsFetcher(Context context, ActiveUser activeUser) {
         this.context = context;
+        this.activeUser = activeUser;
         SSLConnectionHelper.trustAllHosts();
     }
 
@@ -42,7 +44,7 @@ public class ItemsFetcher {
         ItemsFilter filter = new ItemsFilter();
         filter.setOffset(offset);
         filter.setLimit(Constants.MAX_ITEMS_TO_REQUEST);
-        filter.setOwnedBy(ActiveUser.getInstance().getUserID());
+        filter.setOwnedBy(activeUser.getUserID());
         return fetchItemsWithFilter(filter);
     }
 
@@ -57,7 +59,7 @@ public class ItemsFetcher {
                 .setLimit(Constants.MAX_ITEMS_TO_REQUEST)
                 .setOffset(offset)
                 .setQuery(query)
-                .setUserID(ActiveUser.getInstance().getUserID())
+                .setUserID(activeUser.getUserID())
                 .setShowMyItems(preferences.getBoolean(Constants.SHOW_MY_ITEMS_PREFERENCE,
                         Constants.DEFAULT_SHOW_MY_ITEMS));
         return fetchItemsWithFilter(filter);
@@ -159,7 +161,7 @@ public class ItemsFetcher {
                 multipartEntity.addPart("item_id", new StringBody(String.valueOf(item.getId())));
             }
             multipartEntity.addPart("user_id", new StringBody(String.valueOf(item.getUserID())));
-            multipartEntity.addPart("token", new StringBody(ActiveUser.getInstance().getToken()));
+            multipartEntity.addPart("token", new StringBody(activeUser.getToken()));
             multipartEntity.addPart("name", new StringBody(item.getName()));
             multipartEntity.addPart("desc", new StringBody(item.getDescription()));
             multipartEntity.addPart("state", new StringBody(item.getState().getName()));

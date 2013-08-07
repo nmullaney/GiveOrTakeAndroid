@@ -81,7 +81,8 @@ public class UpdateUsernameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_username, container, false);
         usernameText = (EditText)view.findViewById(R.id.username);
-        usernameText.setText(ActiveUser.getInstance().getUserName());
+        ActiveUser activeUser = ((GiveOrTakeApplication) getActivity().getApplication()).getActiveUser();
+        usernameText.setText(activeUser.getUserName());
         InputFilter noSpaceFilter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end,

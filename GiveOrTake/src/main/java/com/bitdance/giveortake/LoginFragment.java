@@ -71,12 +71,14 @@ public class LoginFragment extends Fragment {
         String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
         if (loginAction != null && loginAction.equals(LOGOUT)) {
             Log.d(TAG, "Logging out");
-            ((GiveOrTakeApplication) getActivity().getApplication()).logout();
-            Session.getActiveSession().closeAndClearTokenInformation();
-            ActiveUser.logout();
+            getGOTApplication().logout();
+            if (Session.getActiveSession() != null) {
+                Session.getActiveSession().closeAndClearTokenInformation();
+            }
         }
 
-        if (ActiveUser.getInstance() != null) {
+        if (getGOTApplication().getActiveUser() != null
+                && getGOTApplication().getActiveUser().getUserID() != null) {
             // we are still logged in and can go directly to the main activity
             launchMainOrWelcomeActivity();
             return;
@@ -92,6 +94,10 @@ public class LoginFragment extends Fragment {
 
     }
 
+    private GiveOrTakeApplication getGOTApplication() {
+        return ((GiveOrTakeApplication) getActivity().getApplication());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
@@ -105,10 +111,12 @@ public class LoginFragment extends Fragment {
                 updateUI();
                 if (user != null) {
                     progressBar.setVisibility(View.VISIBLE);
-                    ActiveUser.loadActiveUser(user);
-                    Intent intent = new Intent(getActivity(), UserService.class);
-                    intent.setAction(UserService.LOGIN);
-                    getActivity().startService(intent);
+                    getGOTApplication().getActiveUser().loadActiveUser(user);
+                    if (getActivity() != null) {
+                        Intent intent = new Intent(getActivity(), UserService.class);
+                        intent.setAction(UserService.LOGIN);
+                        getActivity().startService(intent);
+                    }
                 }
 
             }
@@ -117,7 +125,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void launchMainOrWelcomeActivity() {
-        if (ActiveUser.getInstance().isNewUser()) {
+        if (getGOTApplication().getActiveUser().isNewUser()) {
             Intent welcomeIntent = new Intent(getActivity(), WelcomeActivity.class);
             welcomeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(welcomeIntent);

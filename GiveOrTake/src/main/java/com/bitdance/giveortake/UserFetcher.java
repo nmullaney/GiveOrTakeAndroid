@@ -38,16 +38,17 @@ public class UserFetcher {
     public static final String TAG = "UserFetcher";
 
     private Context context;
+    private ActiveUser activeUser;
 
-    public UserFetcher(Context context) {
+    public UserFetcher(Context context, ActiveUser activeUser) {
         this.context = context;
+        this.activeUser = activeUser;
         SSLConnectionHelper.trustAllHosts();
     }
 
     public LoginUserResponse loginUser() {
         assert(Session.getActiveSession() != null);
         String fbAccessToken = Session.getActiveSession().getAccessToken();
-        ActiveUser activeUser = ActiveUser.getInstance();
         String urlSpec = Constants.BASE_URL + "/user.php";
 
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
@@ -268,7 +269,6 @@ public class UserFetcher {
     }
 
     private UpdateResponse updateUser(List<NameValuePair> data, String urlSpec) {
-        ActiveUser activeUser = ActiveUser.getInstance();
         boolean success = false;
         UpdateResponse updateResponse = new UpdateResponse(success,
                 context.getString(R.string.error_try_again));

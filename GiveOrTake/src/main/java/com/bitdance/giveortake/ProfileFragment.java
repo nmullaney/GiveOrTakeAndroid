@@ -46,7 +46,7 @@ public class ProfileFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        ActiveUser activeUser = ActiveUser.getInstance();
+        ActiveUser activeUser = getActiveUser();
         if (activeUser == null) {
             return;
         }
@@ -112,6 +112,10 @@ public class ProfileFragment extends ListFragment {
         setListAdapter(adapter);
     }
 
+    private ActiveUser getActiveUser() {
+        return ((GiveOrTakeApplication) getActivity().getApplication()).getActiveUser();
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         StaticListItem item = ((StaticListAdapter) getListAdapter()).getItem(position);
@@ -122,11 +126,11 @@ public class ProfileFragment extends ListFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case UPDATE_USERNAME_RESULT:
-                String username = ActiveUser.getInstance().getUserName();
+                String username = getActiveUser().getUserName();
                 usernameItem.getFieldView().setText(username);
                 break;
             case UPDATE_EMAIL_RESULT:
-                String email = ActiveUser.getInstance().getEmail();
+                String email = getActiveUser().getEmail();
                 emailItem.getFieldView().setText(email);
                 break;
             case UPDATE_LOCATION_RESULT:
@@ -228,8 +232,9 @@ public class ProfileFragment extends ListFragment {
         }
 
         public void updateLocation() {
-            ActiveUser activeUser = ActiveUser.getInstance();
-            if (activeUser != null) {
+            ActiveUser activeUser = getActiveUser();
+            if (activeUser != null && activeUser.getLatitude() != null &&
+                    activeUser.getLongitude() != null) {
                 LatLng latLng = new LatLng(activeUser.getLatitude(), activeUser.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
                 map.animateCamera(cameraUpdate);
@@ -298,7 +303,7 @@ public class ProfileFragment extends ListFragment {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.list_karma, null);
             TextView karmaView = (TextView)convertView.findViewById(R.id.karma);
-            ActiveUser activeUser = ActiveUser.getInstance();
+            ActiveUser activeUser = getActiveUser();
             karmaView.setText(String.valueOf(activeUser.getKarma()));
             return convertView;
         }

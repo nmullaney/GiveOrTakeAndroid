@@ -85,7 +85,7 @@ public class ItemService extends IntentService {
     }
 
     private void fetchFreeItems(Integer offset, String query) {
-        ItemsFetcher fetcher = new ItemsFetcher(this);
+        ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
         if (offset != 0 && !getGOTApplication().haveMoreFreeItems()) {
             // don't fetch more old items if we've already got them all
             return;
@@ -102,7 +102,7 @@ public class ItemService extends IntentService {
     }
 
     private void fetchMyItems(Integer offset) {
-        ItemsFetcher fetcher = new ItemsFetcher(this);
+        ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
         if (offset != 0 && !getGOTApplication().haveMoreOffers()) {
             // don't fetch more old items if we've already got them all
             return;
@@ -119,7 +119,8 @@ public class ItemService extends IntentService {
     }
 
     private void fetchItemThumbnail(Item item) {
-        ImageFetcher fetcher = new ImageFetcher(this);
+        String token = getGOTApplication().getActiveUser().getToken();
+        ImageFetcher fetcher = new ImageFetcher(this, token);
         boolean success = fetcher.fetchThumbnailForItem(item);
         Intent intent = new Intent(ITEM_THUMBNAIL_FETCHED);
         intent.putExtra(EXTRA_ITEM, item);
@@ -131,7 +132,8 @@ public class ItemService extends IntentService {
     }
 
     private void fetchItemImage(Item item) {
-        ImageFetcher fetcher = new ImageFetcher(this);
+        String token = getGOTApplication().getActiveUser().getToken();
+        ImageFetcher fetcher = new ImageFetcher(this, token);
         boolean success = fetcher.fetchImageForItem(item);
         Intent i = new Intent(ITEM_IMAGE_FETCHED);
         if (!success) {
@@ -142,7 +144,8 @@ public class ItemService extends IntentService {
 
     private void sendMessage(Long itemID, String message) {
         MessageSender sender = new MessageSender(this);
-        MessageSender.SendMessageResponse response = sender.sendMessage(itemID, message);
+        ActiveUser activeUser = getGOTApplication().getActiveUser();
+        MessageSender.SendMessageResponse response = sender.sendMessage(itemID, message, activeUser);
         Intent i = new Intent(MESSAGE_SENT);
         i.putExtra(EXTRA_ITEM_ID, itemID);
         if (!response.isSuccess()) {
@@ -155,7 +158,7 @@ public class ItemService extends IntentService {
     }
 
     private void postItem(Item item) {
-        ItemsFetcher fetcher = new ItemsFetcher(this);
+        ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
         Intent intent = new Intent(ITEM_POSTED);
         ItemsFetcher.ItemResponse itemResponse = fetcher.postItem(item);
         if (!itemResponse.isSuccess()) {
@@ -177,7 +180,8 @@ public class ItemService extends IntentService {
     }
 
     private boolean postImage(Item item) {
-        ImageFetcher fetcher = new ImageFetcher(this);
+        String token = getGOTApplication().getActiveUser().getToken();
+        ImageFetcher fetcher = new ImageFetcher(this, token);
         return fetcher.postImage(item);
     }
 }

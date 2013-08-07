@@ -117,8 +117,12 @@ public class UpdateLocationFragment extends Fragment {
         return view;
     }
 
+    private GiveOrTakeApplication getGOTApplication() {
+        return (GiveOrTakeApplication)getActivity().getApplication();
+    }
+
     private void updateMapLocation() {
-        ActiveUser activeUser = ActiveUser.getInstance();
+        ActiveUser activeUser = getGOTApplication().getActiveUser();
         LatLng centerPosition;
         if (activeUser != null && activeUser.getLatitude() != null &&
                 activeUser.getLongitude() != null) {

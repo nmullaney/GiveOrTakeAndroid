@@ -29,13 +29,13 @@ public class MessageSender {
         this.context = context;
     }
 
-    public SendMessageResponse sendMessage(Long itemID, String message) {
+    public SendMessageResponse sendMessage(Long itemID, String message, ActiveUser activeUser) {
         Log.i(TAG, "sending message");
         SendMessageResponse messageResponse = null;
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         String urlSpec = Constants.BASE_URL + "/item/message.php";
         HttpPost post = new HttpPost(urlSpec);
-        ActiveUser activeUser = ActiveUser.getInstance();
+
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("user_id",
                 String.valueOf(activeUser.getUserID())));

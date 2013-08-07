@@ -18,8 +18,6 @@ public class ActiveUser {
     private static final String JSON_PENDING_EMAIL = "pending_email";
     private static final String JSON_IS_NEW_USER = "isNewUser";
 
-    private static ActiveUser ourInstance;
-
     private User user;
     private String facebookID;
     private String token;
@@ -27,48 +25,37 @@ public class ActiveUser {
     private String pendingEmail;
     private boolean isNewUser;
 
-    public static ActiveUser getInstance() {
-        return ourInstance;
+    public ActiveUser() {
+        user = new User();
     }
 
-    public static Boolean isActiveUser(long userID) {
-        ActiveUser activeUser = getInstance();
-        if (activeUser != null) {
-            if (activeUser.getUserID() == userID) {
-                return true;
-            }
-        }
-        return false;
+    public Boolean isActiveUser(long userID) {
+        return (getUserID() == userID);
     }
 
-    public static void loadActiveUser(GraphUser graphUser) {
-        ourInstance = new ActiveUser();
-        ourInstance.facebookID = graphUser.getId();
-        ourInstance.getUser().setUserName(graphUser.getUsername());
-        ourInstance.email = (String) graphUser.getProperty("email");
+    public void loadActiveUser(GraphUser graphUser) {
+        facebookID = graphUser.getId();
+        getUser().setUserName(graphUser.getUsername());
+        email = (String) graphUser.getProperty("email");
     }
 
-    public static void updateFromJSON(JSONObject jsonObject) throws JSONException {
-        Log.i(TAG, "updating from json: " + jsonObject.toString());
-        ourInstance.getUser().updateFromJSON(jsonObject);
-        if (jsonObject.has(JSON_TOKEN)) ourInstance.token = jsonObject.getString(JSON_TOKEN);
-        if (jsonObject.has(JSON_EMAIL)) ourInstance.email = jsonObject.getString(JSON_EMAIL);
+    public void updateFromJSON(JSONObject jsonObject) throws JSONException {
+        Log.d(TAG, "updating from json: " + jsonObject.toString());
+        getUser().updateFromJSON(jsonObject);
+        if (jsonObject.has(JSON_TOKEN)) token = jsonObject.getString(JSON_TOKEN);
+        if (jsonObject.has(JSON_EMAIL)) email = jsonObject.getString(JSON_EMAIL);
         if (jsonObject.has(JSON_PENDING_EMAIL))
             if (jsonObject.isNull(JSON_PENDING_EMAIL)) {
-                ourInstance.pendingEmail = null;
+                pendingEmail = null;
             } else {
-              ourInstance.pendingEmail = jsonObject.getString(JSON_PENDING_EMAIL);
+                pendingEmail = jsonObject.getString(JSON_PENDING_EMAIL);
             }
-        if (jsonObject.has(JSON_IS_NEW_USER)) ourInstance.isNewUser =
+        if (jsonObject.has(JSON_IS_NEW_USER)) isNewUser =
                 jsonObject.getBoolean(JSON_IS_NEW_USER);
     }
 
-    public static void logout() {
-        ourInstance = null;
-    }
-
-    private ActiveUser() {
-        user = new User();
+    public void logout() {
+        user = null;
     }
 
     public String getFacebookID() {

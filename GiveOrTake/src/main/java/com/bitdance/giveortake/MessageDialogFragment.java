@@ -37,7 +37,8 @@ public class MessageDialogFragment extends DialogFragment {
         TextView toView = (TextView)dialogLayout.findViewById(R.id.message_dialog_to);
         toView.setText(owner.getUserName());
         TextView replyToView = (TextView)dialogLayout.findViewById(R.id.message_dialog_reply_to);
-        replyToView.setText(ActiveUser.getInstance().getEmail());
+        ActiveUser activeUser = ((GiveOrTakeApplication) getActivity().getApplication()).getActiveUser();
+        replyToView.setText(activeUser.getEmail());
         TextView subjectView = (TextView)dialogLayout.findViewById(R.id.message_dialog_subject);
         subjectView.setText(item.getName());
 

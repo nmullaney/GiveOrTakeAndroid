@@ -39,7 +39,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ActiveUser.getInstance() == null) {
+        ActiveUser activeUser = ((GiveOrTakeApplication) getApplication()).getActiveUser();
+        if (activeUser == null || activeUser.getUserID() == null) {
             Intent logoutIntent = new Intent(this, LoginActivity.class);
             logoutIntent.putExtra(LoginFragment.EXTRA_LOGIN_ACTION, LoginFragment.LOGOUT);
             startActivity(logoutIntent);

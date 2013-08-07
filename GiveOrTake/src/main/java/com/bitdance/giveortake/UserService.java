@@ -88,10 +88,14 @@ public class UserService extends IntentService {
         localBroadcastManager.sendBroadcast(intent);
     }
 
+    private GiveOrTakeApplication getGOTApplication() {
+        return (GiveOrTakeApplication)getApplication();
+    }
+
     private void login() {
-        ActiveUser activeUser = ActiveUser.getInstance();
+        ActiveUser activeUser = getGOTApplication().getActiveUser();
         assert(activeUser != null);
-        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher fetcher = new UserFetcher(this, activeUser);
         UserFetcher.LoginUserResponse loginUserResponse = fetcher.loginUser();
         Intent i = new Intent(LOGIN_RESULT);
         if (!loginUserResponse.isSuccess()) {
@@ -121,7 +125,8 @@ public class UserService extends IntentService {
         Intent intent = new Intent(USER_FETCHED);
         // This allows us to know what the response is for
         intent.putExtra(EXTRA_USER_ID, userID);
-        UserFetcher fetcher = new UserFetcher(this);
+        ActiveUser activeUser = getGOTApplication().getActiveUser();
+        UserFetcher fetcher = new UserFetcher(this, activeUser);
         UserFetcher.UserResponse userResponse = fetcher.fetchUser(userID);
         if (userResponse.isSuccess()) {
             user = userResponse.getUser();
@@ -135,7 +140,7 @@ public class UserService extends IntentService {
     }
 
     private void updateUsername(String newUsername) {
-        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher fetcher = new UserFetcher(this, getGOTApplication().getActiveUser());
         UserFetcher.UpdateResponse response = fetcher.updateUsername(newUsername);
         Intent intent = new Intent(USERNAME_UPDATED);
         if (!response.isSuccess()) {
@@ -145,7 +150,8 @@ public class UserService extends IntentService {
     }
 
     private void addPendingEmail(String newEmail) {
-        UserFetcher fetcher = new UserFetcher(this);
+
+        UserFetcher fetcher = new UserFetcher(this, getGOTApplication().getActiveUser());
         UserFetcher.UpdateResponse response = fetcher.addPendingEmail(newEmail);
         Intent intent = new Intent(PENDING_EMAIL_ADDED);
         if (!response.isSuccess()) {
@@ -155,7 +161,7 @@ public class UserService extends IntentService {
     }
 
     private void sendEmailCode(String emailCode) {
-        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher fetcher = new UserFetcher(this, getGOTApplication().getActiveUser());
         UserFetcher.UpdateResponse response = fetcher.sendEmailCode(emailCode);
         Intent intent = new Intent(EMAIL_CODE_SENT);
         if (!response.isSuccess()) {
@@ -165,7 +171,7 @@ public class UserService extends IntentService {
     }
 
     private void cancelPendingEmail() {
-        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher fetcher = new UserFetcher(this, getGOTApplication().getActiveUser());
         UserFetcher.UpdateResponse response = fetcher.cancelPendingEmail();
         Intent intent = new Intent(PENDING_EMAIL_CANCELLED);
         if (!response.isSuccess()) {
@@ -175,7 +181,7 @@ public class UserService extends IntentService {
     }
 
     private void updateLocation(LatLng latLng) {
-        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher fetcher = new UserFetcher(this, getGOTApplication().getActiveUser());
         UserFetcher.UpdateResponse response = fetcher.updateLocation(latLng);
         Intent intent = new Intent(LOCATION_UPDATED);
         if (!response.isSuccess()) {
@@ -186,7 +192,7 @@ public class UserService extends IntentService {
 
     private void fetchUsersWhoWantItem(Long itemID, int minMessages) {
         Log.d(TAG, "Fetching users who want item");
-        UserFetcher fetcher = new UserFetcher(this);
+        UserFetcher fetcher = new UserFetcher(this, getGOTApplication().getActiveUser());
         UserFetcher.UsersResponse response = fetcher.fetchUsersWhoWantItem(itemID, minMessages);
         Intent intent = new Intent(USERS_WHO_WANT_ITEM_FETCHED);
         if (response.isSuccess()) {

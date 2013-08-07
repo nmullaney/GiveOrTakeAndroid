@@ -62,9 +62,9 @@ public class Item implements Serializable, Identifiable {
     private static final String JSON_DISTANCE = "distance";
     private static final String JSON_NUM_MESSAGES_SENT = "numMessagesSent";
 
-    public Item() {
-        userID = ActiveUser.getInstance().getUserID();
-        state = ItemState.DRAFT;
+    public Item(Long userID) {
+        this.userID = userID;
+        this.state = ItemState.DRAFT;
     }
 
     public Item(JSONObject jsonObject) throws JSONException {
@@ -99,7 +99,7 @@ public class Item implements Serializable, Identifiable {
         dateUpdated = dateFromJSONString(dateUpdatedStr);
         if (jsonObject.has(JSON_DISTANCE)) {
             distance = jsonObject.getInt(JSON_DISTANCE);
-        } else if (ActiveUser.isActiveUser(userID)) {
+        } else {
             distance = 0;
         }
         if (jsonObject.has(JSON_NUM_MESSAGES_SENT)) {

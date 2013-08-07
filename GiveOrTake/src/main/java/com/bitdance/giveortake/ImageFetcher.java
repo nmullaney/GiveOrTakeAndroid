@@ -30,9 +30,11 @@ public class ImageFetcher {
     private static final int BYTE_BUFFER_SIZE = 1024;
 
     private Context context;
+    private String token;
 
-    public ImageFetcher(Context context) {
+    public ImageFetcher(Context context, String token) {
         this.context = context;
+        this.token = token;
     }
 
     public boolean fetchImageForItem(Item item) {
@@ -95,7 +97,7 @@ public class ImageFetcher {
         try {
         multipartEntity.addPart("item_id", new StringBody(String.valueOf(item.getId())));
         multipartEntity.addPart("user_id", new StringBody(String.valueOf(item.getUserID())));
-        multipartEntity.addPart("token", new StringBody(ActiveUser.getInstance().getToken()));
+        multipartEntity.addPart("token", new StringBody(token));
         multipartEntity.addPart("image", new ByteArrayBody(item.getImageData(context),
                 "image"));
         } catch (UnsupportedEncodingException uee) {
