@@ -6,13 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -142,7 +146,7 @@ public class FreeItemDetailFragment extends Fragment {
             getActivity().startService(userIntent);
         }
 
-        if (item.getImage(getActivity()) == null) {
+        if (item.getImage(getActivity(), null) == null) {
             Intent imageIntent = new Intent(getActivity(), ItemService.class);
             imageIntent.setAction(ItemService.FETCH_ITEM_IMAGE);
             imageIntent.putExtra(ItemService.EXTRA_ITEM, item);
@@ -190,6 +194,13 @@ public class FreeItemDetailFragment extends Fragment {
                 messageDialogFragment.show(getActivity().getSupportFragmentManager(), item.getId().toString());
             }
         });
+        wantButton.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.i(TAG, "Layout changed for want button");
+                updateUI();
+            }
+        });
         if (owner == null) {
             // This should be disabled until we have the owner, so the user can see who
             // they are sending a message to.
@@ -208,9 +219,48 @@ public class FreeItemDetailFragment extends Fragment {
             karmaView.setText(owner.getKarma().toString());
             wantButton.setEnabled(true);
         }
-        if (item.getImage(getActivity()) != null && imageView != null) {
-            imageView.setImageDrawable(item.getImage(getActivity()));
+        int maxImageDimension = getMaxImageDimension();
+        if (maxImageDimension > 0 && item.getImage(getActivity(), maxImageDimension) != null &&
+                imageView != null) {
+            Log.i(TAG, "Setting height for " + item.getName() + " to " + maxImageDimension);
+            imageView.setImageDrawable(item.getImage(getActivity(), maxImageDimension));
+            imageView.getParent().requestLayout();
         }
+    }
+
+    private int getMaxImageDimension() {
+        Display display = ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE))
+                .getDefaultDisplay();
+        int width;
+        int height;
+        if (Build.VERSION.SDK_INT >= 13) {
+            Rect size = new Rect();
+            display.getRectSize(size);
+            width = size.width();
+            height = size.height();
+        } else {
+            width = display.getWidth();
+            height = display.getHeight();
+        }
+        int maxDimen = Math.min(width, height);
+        if (maxDimen == height) {
+            Log.i(TAG, "Height is the lesser, removing want button height: " + wantButton.getHeight());
+            Log.i(TAG, "Action bar height = " + getActivity().getActionBar().getHeight());
+
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            int statusBarHeight = 0;
+            if (resourceId > 0) {
+                statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            }
+            Log.i(TAG, "Status bat height = " + statusBarHeight);
+            if (wantButton.getHeight() <= 0 || getActivity().getActionBar().getHeight() <= 0) {
+                return 0;
+            }
+            maxDimen = height - wantButton.getHeight() - getActivity().getActionBar().getHeight() - statusBarHeight;
+        } else {
+            Log.i(TAG, "Width is the lesser");
+        }
+        return maxDimen;
     }
 
     private String distanceDescription() {

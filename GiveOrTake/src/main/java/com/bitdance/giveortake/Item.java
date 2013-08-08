@@ -72,7 +72,7 @@ public class Item implements Serializable, Identifiable {
     }
 
     public void updateFromJSON(JSONObject jsonObject) throws JSONException {
-        Log.i(TAG, "jsonObject to parse: " + jsonObject);
+        Log.d(TAG, "jsonObject to parse: " + jsonObject);
         id = jsonObject.getLong(JSON_ID);
         name = jsonObject.getString(JSON_NAME);
         if (jsonObject.isNull(JSON_DESC)) {
@@ -124,7 +124,7 @@ public class Item implements Serializable, Identifiable {
         }
         // reload the image from the file
         image = null;
-        getImage(context);
+        getImage(context, null);
     }
 
     private Date dateFromJSONString(String jsonString) {
@@ -193,7 +193,7 @@ public class Item implements Serializable, Identifiable {
             File file = getLocalThumbnailFile(context);
             Log.d(TAG, "File to load is " + file.getName());
             if (file != null && file.exists()) {
-                Log.i(TAG, "Pulling thumbnail from file");
+                Log.d(TAG, "Pulling thumbnail from file");
                 thumbnail = new BitmapDrawable(context.getResources(), file.getPath());
                 DisplayMetrics dm = context.getResources().getDisplayMetrics();
                 thumbnail.setTargetDensity(dm);
@@ -217,7 +217,7 @@ public class Item implements Serializable, Identifiable {
     }
 
     public byte[] getImageData(Context context) {
-        Drawable image = getImage(context);
+        Drawable image = getImage(context, null);
         return getDataFromDrawable(image, Bitmap.CompressFormat.JPEG);
     }
 
@@ -281,7 +281,7 @@ public class Item implements Serializable, Identifiable {
         }
         File newFile = getLocalImageFile(context);
         File tempFile = context.getFileStreamPath(tempImageFile);
-        Log.i(TAG, "Moving " + tempFile.getName() + " to " + newFile.getName());
+        Log.d(TAG, "Moving " + tempFile.getName() + " to " + newFile.getName());
         return tempFile.renameTo(newFile);
     }
 
@@ -290,8 +290,10 @@ public class Item implements Serializable, Identifiable {
         return context.getFileStreamPath(filename);
     }
 
-    public Drawable getImage(Context context) {
-        if (image != null) {
+    // If maxDimen is null, we'll return any image we have, or the fullsize image
+    public Drawable getImage(Context context, Integer maxDimen) {
+        if (image != null && (maxDimen == null || image.getIntrinsicHeight() == maxDimen)) {
+            Log.i(TAG, "Returning loading image for dimension: " + maxDimen + " for " + getName());
             return image;
         }
         File file = getLocalImageFile(context);
@@ -302,21 +304,20 @@ public class Item implements Serializable, Identifiable {
             BitmapDrawable fullImage = new BitmapDrawable(context.getResources(), file.getPath());
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             fullImage.setTargetDensity(dm);
-            Display display = ((WindowManager) context.getSystemService(context.WINDOW_SERVICE))
-                    .getDefaultDisplay();
-            Rect size = new Rect();
-            display.getRectSize(size);
-            int maxDimen = Math.min(size.width(), size.height());
-            if (fullImage.getIntrinsicHeight() > maxDimen ||
-                    fullImage.getIntrinsicWidth() > maxDimen) {
+
+            if (maxDimen != null && (fullImage.getIntrinsicHeight() > maxDimen ||
+                    fullImage.getIntrinsicWidth() > maxDimen)) {
+                Log.i(TAG, "Loading bitmap scaled to " + maxDimen + " for " + getName());
                 image = new BitmapDrawable(context.getResources(),
                         Bitmap.createScaledBitmap(fullImage.getBitmap(), maxDimen, maxDimen, false));
             } else {
+                Log.i(TAG, "Loading full image for " + getName());
                 image = fullImage;
             }
 
             return image;
         }
+        Log.i(TAG, "Returning null image for " + getName());
         return null;
     }
 

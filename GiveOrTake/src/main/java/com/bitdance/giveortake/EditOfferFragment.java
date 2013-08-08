@@ -129,7 +129,7 @@ public class EditOfferFragment extends Fragment {
         }
 
         item = (Item) getActivity().getIntent().getSerializableExtra(OffersFragment.EXTRA_ITEM);
-        if (item.getId() != null && item.getImage(getActivity()) == null) {
+        if (item.getId() != null && item.getImage(getActivity(), null) == null) {
             Intent intent = new Intent(getActivity(), ItemService.class);
             intent.setAction(ItemService.FETCH_ITEM_IMAGE);
             intent.putExtra(ItemService.EXTRA_ITEM, item);
@@ -196,7 +196,7 @@ public class EditOfferFragment extends Fragment {
             }
         });
         itemImage = (ImageView)view.findViewById(R.id.edit_offer_photo);
-        itemImage.setImageDrawable(item.getImage(getActivity()));
+        itemImage.setImageDrawable(item.getImage(getActivity(), null));
         Button postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
         if (item.getId() != null) {
             postButton.setText(getString(R.string.update_offer));
@@ -307,8 +307,8 @@ public class EditOfferFragment extends Fragment {
     }
 
     public void updateUI() {
-        if (item.getImage(getActivity()) != null && itemImage != null) {
-            itemImage.setImageDrawable(item.getImage(getActivity()));
+        if (item.getImage(getActivity(), null) != null && itemImage != null) {
+            itemImage.setImageDrawable(item.getImage(getActivity(), null));
         }
         if (itemStateSpinner.getSelectedItem().equals(Item.ItemState.PROMISED) ||
                 itemStateSpinner.getSelectedItem().equals(Item.ItemState.TAKEN)) {
