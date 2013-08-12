@@ -79,6 +79,9 @@
     <string name="item_not_saved">Your item has unsaved changes that will be lost if you continue.</string>
     <string name="continue_without_posting">Continue without posting</string>
     <string name="unsaved_changes">Unsaved Changes</string>
+    <string name="cannot_post_item">Cannot Post Item</string>
+    <string name="item_requires_name">You must choose a name for this item.</string>
+    <string name="item_requires_image">You must add a photo for this item.</string>
 
     <!-- General error strings -->
     <string name="error_try_again">Something went wrong.  Please try again.</string>

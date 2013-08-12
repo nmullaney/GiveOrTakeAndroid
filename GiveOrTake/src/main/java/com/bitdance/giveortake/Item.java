@@ -2,13 +2,10 @@ package com.bitdance.giveortake;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +62,7 @@ public class Item implements Serializable, Identifiable {
     public Item(Long userID) {
         this.userID = userID;
         this.state = ItemState.DRAFT;
+        this.image = null;
     }
 
     public Item(JSONObject jsonObject) throws JSONException {
@@ -262,7 +260,7 @@ public class Item implements Serializable, Identifiable {
             return context.getFileStreamPath(filename);
         else
             try {
-                File tempFile = File.createTempFile("image", "jpg", context.getFilesDir());
+                File tempFile = File.createTempFile("image", ".jpg", context.getFilesDir());
                 tempImageFile = tempFile.getName();
                 return tempFile;
             } catch (IOException ioe) {
@@ -297,10 +295,11 @@ public class Item implements Serializable, Identifiable {
             return image;
         }
         File file = getLocalImageFile(context);
+        Log.i(TAG, "Local image file: " + file.getName());
         if (file != null && !file.exists() && tempImageFile != null) {
             file = context.getFileStreamPath(tempImageFile);
         }
-        if (file != null && file.exists()) {
+        if (file != null && file.exists() && file.length() > 0) {
             BitmapDrawable fullImage = new BitmapDrawable(context.getResources(), file.getPath());
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             fullImage.setTargetDensity(dm);

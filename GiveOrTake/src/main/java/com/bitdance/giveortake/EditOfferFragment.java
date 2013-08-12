@@ -212,10 +212,32 @@ public class EditOfferFragment extends Fragment {
 
     private void updateItem() {
         updateItemData();
-        Intent intent = new Intent(getActivity(), ItemService.class);
-        intent.setAction(ItemService.POST_ITEM);
-        intent.putExtra(ItemService.EXTRA_ITEM, item);
-        getActivity().startService(intent);
+        String reason = itemCanBePosted();
+        if (reason == null) {
+            Intent intent = new Intent(getActivity(), ItemService.class);
+            intent.setAction(ItemService.POST_ITEM);
+            intent.putExtra(ItemService.EXTRA_ITEM, item);
+            getActivity().startService(intent);
+        } else {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.cannot_post_item)
+                    .setMessage(reason)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        }
+    }
+
+    // Returns either an reason string if the item cannot be posted
+    // or null if it can.
+    private String itemCanBePosted() {
+        if (item.getName() == null || item.getName().length() == 0) {
+            return getString(R.string.item_requires_name);
+        }
+        if (item.getImage(getActivity(), null) == null) {
+            return getString(R.string.item_requires_image);
+        }
+        // item can be posted
+        return null;
     }
 
     public void updateItemData() {
