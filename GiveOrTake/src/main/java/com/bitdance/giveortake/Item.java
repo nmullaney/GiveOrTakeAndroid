@@ -43,7 +43,7 @@ public class Item implements Serializable, Identifiable {
 
     private transient BitmapDrawable image;
     private String tempImageFile;
-    private transient boolean hasUnsavedImage = false;
+    private boolean hasUnsavedImage = false;
 
 
     private static final String JSON_ID = "id";
