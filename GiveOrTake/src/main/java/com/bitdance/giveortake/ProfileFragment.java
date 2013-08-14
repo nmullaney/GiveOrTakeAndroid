@@ -283,10 +283,10 @@ public class ProfileFragment extends ListFragment {
                 }
             });
 
-            map.getUiSettings().setMyLocationButtonEnabled(false);
             map.setMyLocationEnabled(true);
+            map.getUiSettings().setMyLocationButtonEnabled(false);
             map.getUiSettings().setZoomControlsEnabled(false);
-            map.getUiSettings().setZoomGesturesEnabled(false);
+            map.getUiSettings().setAllGesturesEnabled(false);
 
             updateLocation();
 
