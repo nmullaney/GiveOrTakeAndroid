@@ -2,6 +2,7 @@ package com.bitdance.giveortake;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -106,7 +107,24 @@ public class EditOfferFragment extends Fragment {
                 if (error == null) {
                     getActivity().setResult(Activity.RESULT_OK);
                     item.setHasUnsavedImage(false);
-                    getActivity().finish();
+                    if (intent.hasExtra(ItemService.EXTRA_KARMA_CHANGE)) {
+                        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                getActivity().finish();
+                            }
+                        };
+                        Integer karmaChange = intent.getIntExtra(ItemService.EXTRA_KARMA_CHANGE, 0);
+                        String message = getString(R.string.earned_more_karma, karmaChange);
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.karma_increase)
+                                .setMessage(message)
+                                .setPositiveButton(R.string.ok, onClickListener)
+                                .show();
+                    } else {
+                        // if we have a karma change, this will happen on "ok" click
+                        getActivity().finish();
+                    }
                 } else {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.error)

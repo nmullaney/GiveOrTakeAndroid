@@ -84,6 +84,8 @@
     <string name="cannot_post_item">Cannot Post Item</string>
     <string name="item_requires_name">You must choose a name for this item.</string>
     <string name="item_requires_image">You must add a photo for this item.</string>
+    <string name="karma_increase">Karma Increase!</string>
+    <string name="earned_more_karma">You\'ve earned %1$d points of karma!</string>
 
     <!-- General error strings -->
     <string name="error_try_again">Something went wrong.  Please try again.</string>

@@ -39,6 +39,7 @@ public class ItemService extends IntentService {
     public static final String POST_ITEM = "post_item";
     public static final String ITEM_POSTED = "item_posted";
     public static final String EXTRA_ERROR = "extra_error";
+    public static final String EXTRA_KARMA_CHANGE = "extra_karma_change";
 
     public static final String DELETE_ITEMS = "delete_items";
     public static final String EXTRA_ITEM_IDS = "extra_item_ids";
@@ -172,6 +173,10 @@ public class ItemService extends IntentService {
             intent.putExtra(EXTRA_ERROR, itemResponse.getError());
             broadcastIntent(intent);
             return;
+        }
+
+        if (itemResponse.getKarmaChange() > 0) {
+            intent.putExtra(EXTRA_KARMA_CHANGE, itemResponse.getKarmaChange());
         }
 
         if (item.hasUnsavedImage()) {

@@ -187,6 +187,12 @@ public class ItemsFetcher {
                 item.updateFromJSON(itemJSON);
                 itemResponse = new ItemResponse(item);
             }
+            if (result.has("karma")) {
+                JSONObject karmaData = result.getJSONObject("karma");
+                Integer newKarmaValue = karmaData.getInt("updatedKarma");
+                activeUser.getUser().setKarma(newKarmaValue);
+                itemResponse.setKarmaChange(karmaData.getInt("karmaChange"));
+            }
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to post item", ioe);
             itemResponse = new ItemResponse(context.getString(R.string.login_failure));
@@ -201,6 +207,7 @@ public class ItemsFetcher {
         private boolean success;
         private Item item;
         private String error;
+        private Integer karmaChange = 0;
 
         public ItemResponse(Item item) {
             this.item = item;
@@ -222,6 +229,14 @@ public class ItemsFetcher {
 
         public String getError() {
             return error;
+        }
+
+        public Integer getKarmaChange() {
+            return karmaChange;
+        }
+
+        public void setKarmaChange(Integer karmaChange) {
+            this.karmaChange = karmaChange;
         }
     }
 
@@ -274,8 +289,12 @@ public class ItemsFetcher {
                     error = context.getString(R.string.items_some_delete_failed);
                 }
                 deleteItemsResponse = new DeleteItemsResponse(successfulIDs, failedIDs, error);
-
-                // TODO: handle karma change
+                if (result.has("karma")) {
+                    JSONObject karmaData = result.getJSONObject("karma");
+                    Integer newKarmaValue = karmaData.getInt("updatedKarma");
+                    activeUser.getUser().setKarma(newKarmaValue);
+                    // change will always be negative, so no need to note it
+                }
             }
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to delete item", ioe);
