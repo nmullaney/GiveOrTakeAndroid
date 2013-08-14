@@ -224,4 +224,102 @@ public class ItemsFetcher {
             return error;
         }
     }
+
+    public DeleteItemsResponse deleteItems(ArrayList<Long> itemIDs) {
+        String urlSpec = Constants.BASE_URL + "/items/delete.php";
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+        HttpPost post = new HttpPost(urlSpec);
+        MultipartEntity multipartEntity = new MultipartEntity();
+        DeleteItemsResponse deleteItemsResponse = null;
+        try {
+            multipartEntity.addPart("user_id", new StringBody(String.valueOf(activeUser.getUserID())));
+            multipartEntity.addPart("token", new StringBody(activeUser.getToken()));
+            for (Long itemID : itemIDs) {
+                multipartEntity.addPart("item_ids[]", new StringBody(String.valueOf(itemID)));
+            }
+        } catch (UnsupportedEncodingException uee) {
+            Log.e(TAG, "Failed to build request", uee);
+            deleteItemsResponse = new DeleteItemsResponse(context.getString(R.string.error));
+            return deleteItemsResponse;
+        }
+
+        try {
+            post.setEntity(multipartEntity);
+            HttpResponse response = client.execute(post);
+            JSONObject result = JSONUtils.parseResponse(response);
+            Log.i(TAG, result.toString());
+            if (result.has(Constants.ERROR_KEY)) {
+                deleteItemsResponse = new DeleteItemsResponse(result.getString(Constants.ERROR_KEY));
+            } else {
+                ArrayList<Long> failedIDs = new ArrayList<Long>();
+                if (result.has("failed")) {
+                    JSONArray failedIDsJSON = result.getJSONArray("failed");
+
+                    for (int i = 0; i < failedIDsJSON.length(); i++) {
+                        failedIDs.add(failedIDsJSON.getLong(i));
+                    }
+                }
+                ArrayList<Long> successfulIDs = new ArrayList<Long>();
+                if (result.has("deleted")) {
+                    JSONArray successfulIDsJSON = result.getJSONArray("deleted");
+
+                    for (int i = 0; i < successfulIDsJSON.length(); i++) {
+                        successfulIDs.add(successfulIDsJSON.getLong(i));
+                    }
+                }
+                String error = null;
+                if (successfulIDs.isEmpty()) {
+                    error = context.getString(R.string.items_delete_failed);
+                } else if (failedIDs.isEmpty()) {
+                    error = context.getString(R.string.items_some_delete_failed);
+                }
+                deleteItemsResponse = new DeleteItemsResponse(successfulIDs, failedIDs, error);
+
+                // TODO: handle karma change
+            }
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to delete item", ioe);
+            deleteItemsResponse = new DeleteItemsResponse(context.getString(R.string.error_try_again));
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse delete item response", je);
+            deleteItemsResponse = new DeleteItemsResponse(context.getString(R.string.error_try_again));
+        }
+
+        return deleteItemsResponse;
+    }
+
+    public class DeleteItemsResponse {
+        private boolean success;
+        private ArrayList<Long> successfulIDs;
+        private ArrayList<Long> failedIDs;
+        private String error;
+
+        public DeleteItemsResponse(ArrayList<Long> successfulIDs, ArrayList<Long> failedIDs, String error) {
+            this.successfulIDs = successfulIDs;
+            this.failedIDs = failedIDs;
+            this.error = error;
+            this.success = (this.failedIDs == null) || (this.failedIDs.isEmpty());
+        }
+
+        public DeleteItemsResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public ArrayList<Long> getSuccessfulIDs() {
+            return successfulIDs;
+        }
+
+        public ArrayList<Long> getFailedIDs() {
+            return failedIDs;
+        }
+
+        public String getError() {
+            return error;
+        }
+    }
 }

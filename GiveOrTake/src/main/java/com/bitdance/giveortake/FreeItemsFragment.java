@@ -72,6 +72,15 @@ public class FreeItemsFragment extends ListFragment {
         }
     };
 
+    private BroadcastReceiver itemsDeletedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Errors will be handled by the offers fragment
+            items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+            setListAdapter(new ItemArrayAdapter(context, items));
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +94,8 @@ public class FreeItemsFragment extends ListFragment {
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
         localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
+        localBroadcastManager.registerReceiver(itemsDeletedBroadcastReceiver,
+                new IntentFilter(ItemService.ITEMS_DELETED));
 
         refreshItems(0);
     }
@@ -261,5 +272,6 @@ public class FreeItemsFragment extends ListFragment {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(newItemsBroadcastReceiver);
         localBroadcastManager.unregisterReceiver(itemThumbnailBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(itemsDeletedBroadcastReceiver);
     }
 }

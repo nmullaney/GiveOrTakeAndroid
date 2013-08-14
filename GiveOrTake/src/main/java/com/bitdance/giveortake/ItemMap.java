@@ -90,4 +90,12 @@ public class ItemMap extends OrderedMap<Item> {
         clear();
         addAll(combinedItems);
     }
+
+    public void removeAllByIDs(ArrayList<Long> itemIDs) {
+        for(Long itemID : itemIDs) {
+            Item removedItem = get(itemID);
+            if (removedItem != null)
+                remove(removedItem);
+        }
+    }
 }

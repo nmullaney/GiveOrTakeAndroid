@@ -40,6 +40,10 @@ public class ItemService extends IntentService {
     public static final String ITEM_POSTED = "item_posted";
     public static final String EXTRA_ERROR = "extra_error";
 
+    public static final String DELETE_ITEMS = "delete_items";
+    public static final String EXTRA_ITEM_IDS = "extra_item_ids";
+    public static final String ITEMS_DELETED = "items_deleted";
+
     public ItemService() {
         super(TAG);
         Log.i(TAG, "Created a new item service");
@@ -69,6 +73,9 @@ public class ItemService extends IntentService {
         } else if (intent.getAction() == POST_ITEM) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             postItem(item);
+        } else if (intent.getAction() == DELETE_ITEMS) {
+            ArrayList<Long> itemIDs = (ArrayList<Long>) intent.getSerializableExtra(EXTRA_ITEM_IDS);
+            deleteItems(itemIDs);
         } else {
             Log.e(TAG, "Unexpected action: " + intent.getAction());
         }
@@ -183,5 +190,20 @@ public class ItemService extends IntentService {
         String token = getGOTApplication().getActiveUser().getToken();
         ImageFetcher fetcher = new ImageFetcher(this, token);
         return fetcher.postImage(item);
+    }
+
+    private void deleteItems(ArrayList<Long> itemIDs) {
+        ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
+        ItemsFetcher.DeleteItemsResponse deleteItemsResponse = fetcher.deleteItems(itemIDs);
+        if (deleteItemsResponse.getSuccessfulIDs() != null) {
+            getGOTApplication().removeOffersByID(deleteItemsResponse.getSuccessfulIDs());
+            // remove any that are also free items
+            getGOTApplication().removeFreeItemsByID(deleteItemsResponse.getSuccessfulIDs());
+        }
+        Intent intent = new Intent(ITEMS_DELETED);
+        if (!deleteItemsResponse.isSuccess()) {
+            intent.putExtra(EXTRA_ERROR, deleteItemsResponse.getError());
+        }
+        broadcastIntent(intent);
     }
 }

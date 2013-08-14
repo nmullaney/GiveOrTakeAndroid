@@ -28,6 +28,8 @@
     <!-- Offers strings -->
     <string name="no_offers_yet">You haven\'t created any offers yet</string>
     <string name="give_away_an_item">Give Something Away</string>
+    <string name="items_delete_failed">Failed to delete any items.  Try again later.</string>
+    <string name="items_some_delete_failed">Failed to delete some of the selected items.</string>
 
     <!-- Item detail strings -->
     <string name="posted_by">Posted By:</string>
@@ -156,5 +158,6 @@
         start. Thank you for joining Give or Take!
     </string>
     <string name="get_started">Get Started</string>
+    <string name="delete">Delete Item</string>
 
 </resources>

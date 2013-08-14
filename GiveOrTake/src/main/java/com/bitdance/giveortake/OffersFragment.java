@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by nora on 6/19/13.
@@ -71,6 +74,27 @@ public class OffersFragment extends ListFragment {
         }
     };
 
+    private BroadcastReceiver itemsDeletedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Received a new items broadcast");
+            if (intent.getAction().equals(ItemService.ITEMS_DELETED)) {
+                if (intent.hasExtra(ItemService.EXTRA_ERROR)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(intent.getStringExtra(ItemService.EXTRA_ERROR))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                }
+
+                // We can have partial failure errors, so we should always reload the items
+                items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
+                setListAdapter(new ItemArrayAdapter(context, items));
+
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,12 +112,16 @@ public class OffersFragment extends ListFragment {
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
         localBroadcastManager.registerReceiver(itemThumbnailBroadcastReceiver,
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
+        localBroadcastManager.registerReceiver(itemsDeletedBroadcastReceiver,
+                new IntentFilter(ItemService.ITEMS_DELETED));
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        ListView listView = getListView();
+
+        // Load more items when the user scrolls to the end of the existing list
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
             }
@@ -109,6 +137,67 @@ public class OffersFragment extends ListFragment {
                 }
             }
         });
+
+        // Display a contextual menu on long click
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+            private HashSet<Integer> selectedPositions;
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
+                if (checked) {
+                    selectedPositions.add(position);
+                } else {
+                    selectedPositions.remove(position);
+                }
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                MenuInflater inflater = actionMode.getMenuInflater();
+                inflater.inflate(R.menu.offers_list_context, menu);
+                selectedPositions = new HashSet<Integer>();
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch(menuItem.getItemId()) {
+                    case R.id.menu_delete:
+                        deleteSelectedItems(selectedPositions);
+                        actionMode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+
+            }
+        });
+    }
+
+    private void deleteSelectedItems(HashSet<Integer> positions) {
+        Log.i(TAG, "Delete items for positions: " + positions);
+        if (!positions.isEmpty()) {
+            ArrayList<Long> itemIDs = new ArrayList<Long>();
+            for (Integer index : positions) {
+                Item item = (Item) getListAdapter().getItem(index);
+                itemIDs.add(item.getId());
+            }
+            Intent intent = new Intent(getActivity(), ItemService.class);
+            intent.setAction(ItemService.DELETE_ITEMS);
+            intent.putExtra(ItemService.EXTRA_ITEM_IDS, itemIDs);
+            getActivity().startService(intent);
+        }
     }
 
     private void refreshOffers(Integer offset) {
@@ -216,5 +305,6 @@ public class OffersFragment extends ListFragment {
                 .getInstance(getActivity().getApplicationContext());
         localBroadcastManager.unregisterReceiver(newItemsBroadcastReceiver);
         localBroadcastManager.unregisterReceiver(itemThumbnailBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(itemsDeletedBroadcastReceiver);
     }
 }

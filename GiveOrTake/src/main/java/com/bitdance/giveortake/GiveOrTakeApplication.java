@@ -55,6 +55,14 @@ public class GiveOrTakeApplication extends Application {
         offersMap.mergeNewItems(newOffers);
     }
 
+    public void removeOffersByID(ArrayList<Long> offerIDs) {
+        offersMap.removeAllByIDs(offerIDs);
+    }
+
+    public void removeFreeItemsByID(ArrayList<Long> offerIDs) {
+        freeItemsMap.removeAllByIDs(offerIDs);
+    }
+
     public void addPostedItem(Item item) {
         offersMap.remove(item);
         offersMap.add(0, item);
