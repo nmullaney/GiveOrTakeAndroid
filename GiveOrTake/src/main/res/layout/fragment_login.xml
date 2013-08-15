@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/login_background">
+              android:background="@color/greenBackground">
 
-    <com.facebook.widget.LoginButton android:id="@+id/login_button"
-                                     android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content"
-                                     android:layout_alignParentTop="true"
-                                     android:layout_marginTop="20dp"
-                                     android:layout_centerHorizontal="true" />
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="5dp"
+               android:layout_gravity="center_horizontal"
+               android:layout_weight="1"
+               android:src="@drawable/give_or_take_logo" />
 
-    <ProgressBar android:id="@+id/progressBar"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:visibility="invisible"
-                 android:layout_alignTop="@id/login_button"
-                 android:layout_centerHorizontal="true" />
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1">
+        <com.facebook.widget.LoginButton android:id="@+id/login_button"
+                                         android:layout_width="wrap_content"
+                                         android:layout_height="wrap_content"
+                                         android:layout_alignParentTop="true"
+                                         android:layout_marginTop="20dp"
+                                         android:layout_centerHorizontal="true" />
+
+        <ProgressBar android:id="@+id/progressBar"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:visibility="invisible"
+                     android:layout_alignTop="@id/login_button"
+                     android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_weight="0"
+               android:layout_gravity="center_horizontal|bottom"
+               android:src="@drawable/bit_dance_llc" />
 
 
-</RelativeLayout>
+</LinearLayout>

@@ -4,6 +4,7 @@
     <color name="darkPink">#B6279D</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="greenBackground">#7DDCAA</color>
     <color name="holo_blue_light">#ff33b5e5</color>
     <color name="holo_blue_bright">#ff00ddff</color>
 </resources>
