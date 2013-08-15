@@ -2,7 +2,6 @@ package com.bitdance.giveortake;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,10 +10,12 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -139,6 +140,8 @@ public class EditOfferFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
 
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= 14) {
@@ -226,6 +229,26 @@ public class EditOfferFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.edit_offers_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_item_share:
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, item.getName());
+                intent.putExtra(Intent.EXTRA_TEXT, item.getUri().toString());
+                startActivity(Intent.createChooser(intent, getString(R.string.how_share)));
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
     }
 
     private void updateItem() {

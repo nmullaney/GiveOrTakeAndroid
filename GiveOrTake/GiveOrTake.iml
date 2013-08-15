@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.system.id="GRADLE" type="JAVA_MODULE" version="4">
+<module external.linked.project.path="$MODULE_DIR$" external.system.id="GRADLE" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
@@ -71,27 +71,9 @@
     <orderEntry type="library" exported="" name="google-play-services" level="project" />
     <orderEntry type="module" module-name="Facebook" exported="" />
     <orderEntry type="module" module-name="google-play-services_lib" exported="" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/httpmime-4.2.5.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" exported="" name="httpclient-4.2.5" level="project" />
     <orderEntry type="library" exported="" name="httpcore-4.2.4" level="project" />
     <orderEntry type="library" exported="" name="httpmime-4.2.5" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/annotations.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>
 

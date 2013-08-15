@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -14,6 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -179,6 +182,13 @@ public class Item implements Serializable, Identifiable {
         } else {
             return null;
         }
+    }
+
+    public Uri getUri() {
+        Uri.Builder builder = Uri.parse(Constants.BASE_WWW_URL).buildUpon();
+        builder.path("/item.php");
+        builder.appendQueryParameter("itemID", String.valueOf(getId()));
+        return builder.build();
     }
 
     public String getThumbnailURL() {

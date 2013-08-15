@@ -14,6 +14,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -113,6 +116,8 @@ public class FreeItemDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
         Long itemID = null;
 
         if (getArguments() != null) {
@@ -211,6 +216,26 @@ public class FreeItemDetailFragment extends Fragment {
         updateUI();
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.free_item_detail_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_item_share:
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, item.getName());
+                intent.putExtra(Intent.EXTRA_TEXT, item.getUri().toString());
+                startActivity(Intent.createChooser(intent, getString(R.string.how_share)));
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
     }
 
     private void updateUI() {
