@@ -61,6 +61,7 @@ public class UpdateLocationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         if (getArguments() != null && getArguments().getBoolean(Constants.NEW_USER)) {
             this.isNewUserFlow = true;

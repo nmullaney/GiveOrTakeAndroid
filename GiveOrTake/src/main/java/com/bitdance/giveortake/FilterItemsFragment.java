@@ -32,6 +32,7 @@ public class FilterItemsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         SharedPreferences preferences = getActivity()
                 .getSharedPreferences(Constants.FILTER_PREFERENCES, Context.MODE_PRIVATE);
         distance = preferences.getInt(Constants.DISTANCE_PREFERENCE, Constants.DEFAULT_DISTANCE);
