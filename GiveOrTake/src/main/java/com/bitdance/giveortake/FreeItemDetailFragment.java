@@ -115,6 +115,31 @@ public class FreeItemDetailFragment extends Fragment {
         }
     };
 
+    private BroadcastReceiver userWantReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ItemService.USER_WANT_HANDLED)) {
+                Long itemID = intent.getLongExtra(ItemService.EXTRA_ITEM_ID, 0);
+                // only handle my item's messages
+                if (!itemID.equals(item.getId())) return;
+                if (intent.hasExtra(Constants.ERROR_KEY)) {
+                    String error = intent.getStringExtra(Constants.ERROR_KEY);
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(error)
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                }  else {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.success)
+                            .setMessage(getString(R.string.will_be_notified))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +166,8 @@ public class FreeItemDetailFragment extends Fragment {
                 new IntentFilter(ItemService.ITEM_IMAGE_FETCHED));
         localBroadcastManager.registerReceiver(messageSentReceiver,
                 new IntentFilter(ItemService.MESSAGE_SENT));
+        localBroadcastManager.registerReceiver(userWantReceiver,
+                new IntentFilter(ItemService.USER_WANT_HANDLED));
 
         User user = ((GiveOrTakeApplication)getActivity().getApplication()).getUser(item.getUserID());
         if (user != null) {
@@ -197,11 +224,35 @@ public class FreeItemDetailFragment extends Fragment {
         wantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MessageActivity.class);
-                intent.putExtra(MessageFragment.EXTRA_ITEM_ID, item.getId());
-                Log.i(TAG, "Setting owner to " + owner.getUserName());
-                intent.putExtra(MessageFragment.EXTRA_OWNER_ID, owner.getUserID());
-                getActivity().startActivity(intent);
+
+                ActiveUser activeUser = ((GiveOrTakeApplication) getActivity().getApplication()).getActiveUser();
+                String error = null;
+                if (activeUser.getUserID() == owner.getUserID()) {
+                    error = getString(R.string.you_own_item);
+                } else if (item.getState().equals(Item.ItemState.PROMISED) && item.getNumMessagesSent() != null) {
+                    error = getString(R.string.already_signed_up);
+                }
+                if (error != null) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.cannot_send_message)
+                            .setMessage(error)
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                    return;
+                }
+
+                if (item.getState().equals(Item.ItemState.AVAILABLE)) {
+                    Intent intent = new Intent(getActivity(), MessageActivity.class);
+                    intent.putExtra(MessageFragment.EXTRA_ITEM_ID, item.getId());
+                    Log.i(TAG, "Setting owner to " + owner.getUserName());
+                    intent.putExtra(MessageFragment.EXTRA_OWNER_ID, owner.getUserID());
+                    getActivity().startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getActivity(), ItemService.class);
+                    intent.setAction(ItemService.USER_WANTS_ITEM);
+                    intent.putExtra(ItemService.EXTRA_ITEM_ID, item.getId());
+                    getActivity().startService(intent);
+                }
             }
         });
         wantButton.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {

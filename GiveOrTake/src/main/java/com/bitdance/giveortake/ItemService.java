@@ -45,6 +45,9 @@ public class ItemService extends IntentService {
     public static final String EXTRA_ITEM_IDS = "extra_item_ids";
     public static final String ITEMS_DELETED = "items_deleted";
 
+    public static final String USER_WANTS_ITEM = "user_wants_item";
+    public static final String USER_WANT_HANDLED = "user_want_saved";
+
     public ItemService() {
         super(TAG);
         Log.i(TAG, "Created a new item service");
@@ -77,6 +80,9 @@ public class ItemService extends IntentService {
         } else if (intent.getAction() == DELETE_ITEMS) {
             ArrayList<Long> itemIDs = (ArrayList<Long>) intent.getSerializableExtra(EXTRA_ITEM_IDS);
             deleteItems(itemIDs);
+        } else if (intent.getAction() == USER_WANTS_ITEM) {
+            Long itemID = intent.getLongExtra(ItemService.EXTRA_ITEM_ID, 0);
+            userWantsItem(itemID);
         } else {
             Log.e(TAG, "Unexpected action: " + intent.getAction());
         }
@@ -208,6 +214,21 @@ public class ItemService extends IntentService {
         Intent intent = new Intent(ITEMS_DELETED);
         if (!deleteItemsResponse.isSuccess()) {
             intent.putExtra(EXTRA_ERROR, deleteItemsResponse.getError());
+        }
+        broadcastIntent(intent);
+    }
+
+    private void userWantsItem(Long itemID) {
+        ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
+        ItemsFetcher.UserWantsItemResponse userWantsItemResponse = fetcher.userWantsItem(itemID);
+
+        getGOTApplication().updateMessagesSent(userWantsItemResponse.getItemID(),
+                userWantsItemResponse.getNumMessagesSent());
+
+        Intent intent = new Intent(USER_WANT_HANDLED);
+        intent.putExtra(EXTRA_ITEM_ID, itemID);
+        if (!userWantsItemResponse.isSuccess()) {
+            intent.putExtra(EXTRA_ERROR, userWantsItemResponse.getError());
         }
         broadcastIntent(intent);
     }

@@ -341,4 +341,76 @@ public class ItemsFetcher {
             return error;
         }
     }
+
+    public UserWantsItemResponse userWantsItem(Long itemID) {
+
+        String urlSpec = Constants.BASE_URL + "/item/want.php";
+        HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
+        HttpPost post = new HttpPost(urlSpec);
+        MultipartEntity multipartEntity = new MultipartEntity();
+        UserWantsItemResponse userWantsItemResponse = null;
+        try {
+            multipartEntity.addPart("user_id", new StringBody(String.valueOf(activeUser.getUserID())));
+            multipartEntity.addPart("token", new StringBody(activeUser.getToken()));
+            multipartEntity.addPart("item_id", new StringBody(String.valueOf(itemID)));
+        } catch (UnsupportedEncodingException uee) {
+            Log.e(TAG, "Failed to build request", uee);
+            userWantsItemResponse = new UserWantsItemResponse(context.getString(R.string.error_try_again));
+        }
+
+        try {
+            post.setEntity(multipartEntity);
+            HttpResponse response = client.execute(post);
+            JSONObject result = JSONUtils.parseResponse(response);
+            Log.i(TAG, result.toString());
+            if (result.has(Constants.ERROR_KEY)) {
+                userWantsItemResponse = new UserWantsItemResponse(result.getString(Constants.ERROR_KEY));
+            } else {
+                Integer messagesSent = result.getInt("numMessagesSent");
+                userWantsItemResponse = new UserWantsItemResponse(itemID, messagesSent);
+            }
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to delete item", ioe);
+            userWantsItemResponse = new UserWantsItemResponse(context.getString(R.string.error_try_again));
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse delete item response", je);
+            userWantsItemResponse = new UserWantsItemResponse(context.getString(R.string.error_try_again));
+        }
+
+        return userWantsItemResponse;
+    }
+
+    public class UserWantsItemResponse {
+        private boolean success;
+        private String error;
+        private Long itemID;
+        private Integer numMessagesSent;
+
+        public UserWantsItemResponse(String error) {
+            this.error = error;
+            this.success = false;
+        }
+
+        public UserWantsItemResponse(Long itemID, Integer numMessagesSent) {
+            this.itemID = itemID;
+            this.numMessagesSent = numMessagesSent;
+            this.success = true;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public Long getItemID() {
+            return itemID;
+        }
+
+        public Integer getNumMessagesSent() {
+            return numMessagesSent;
+        }
+    }
 }

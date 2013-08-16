@@ -164,5 +164,11 @@
     <string name="share">Share</string>
     <string name="how_share">How do you want to share?</string>
     <string name="giving_away_on_got">I\'m giving this item away on Give or Take!</string>
+    <string name="you_own_item">You are the owner of this item!</string>
+    <string name="already_signed_up">You\'ve already requested to be notified about this item.
+    </string>
+    <string name="cannot_send_message">Cannot Send Message</string>
+    <string name="success">Success</string>
+    <string name="will_be_notified">We will email you when this item becomes available.</string>
 
 </resources>
