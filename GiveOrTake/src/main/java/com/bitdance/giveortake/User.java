@@ -117,5 +117,16 @@ public class User implements Serializable, Parcelable {
         return 0;
     }
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
 
+        @Override
+        public User createFromParcel(Parcel parcel) {
+            return new User(parcel);
+        }
+
+        @Override
+        public User[] newArray(int i) {
+            return new User[i];
+        }
+    };
 }

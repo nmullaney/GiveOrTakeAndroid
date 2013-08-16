@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -195,8 +197,11 @@ public class FreeItemDetailFragment extends Fragment {
         wantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialogFragment messageDialogFragment = new MessageDialogFragment(item, owner);
-                messageDialogFragment.show(getActivity().getSupportFragmentManager(), item.getId().toString());
+                Intent intent = new Intent(getActivity(), MessageActivity.class);
+                intent.putExtra(MessageFragment.EXTRA_ITEM_ID, item.getId());
+                Log.i(TAG, "Setting owner to " + owner.getUserName());
+                intent.putExtra(MessageFragment.EXTRA_OWNER_ID, owner.getUserID());
+                getActivity().startActivity(intent);
             }
         });
         wantButton.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {

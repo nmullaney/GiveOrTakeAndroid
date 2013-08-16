@@ -110,6 +110,9 @@
         <activity android:name="com.bitdance.giveortake.FilterItemsActivity"
                   android:label="@string/filter_items"
                   android:parentActivityName="com.bitdance.giveortake.MainActivity" />
+        <activity android:name="com.bitdance.giveortake.MessageActivity"
+                  android:label="@string/send_a_message"
+                  android:parentActivityName="com.bitdance.giveortake.FreeItemPagerActivity" />
         <activity
                 android:name="com.bitdance.giveortake.TestActivity"
                 android:label="@string/title_activity_test" >
