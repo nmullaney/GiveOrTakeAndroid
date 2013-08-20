@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
@@ -43,7 +44,8 @@ public class EditOfferFragment extends Fragment {
     private ImageView itemImage;
     private Spinner itemStateSpinner;
     private Spinner stateUser;
-
+    private Button postButton;
+    private ProgressBar postProgressBar;
 
     private BroadcastReceiver imageBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -104,6 +106,8 @@ public class EditOfferFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received item posted message");
             if (intent.getAction().equals(ItemService.ITEM_POSTED)) {
+                postButton.setEnabled(true);
+                postProgressBar.setVisibility(View.INVISIBLE);
                 String error = intent.getStringExtra(ItemService.EXTRA_ERROR);
                 if (error == null) {
                     getActivity().setResult(Activity.RESULT_OK);
@@ -218,7 +222,7 @@ public class EditOfferFragment extends Fragment {
         });
         itemImage = (ImageView)view.findViewById(R.id.edit_offer_photo);
         itemImage.setImageDrawable(item.getImage(getActivity(), null));
-        Button postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
+        postButton = (Button)view.findViewById(R.id.edit_offer_post_button);
         if (item.getId() != null) {
             postButton.setText(getString(R.string.update_offer));
         }
@@ -228,6 +232,7 @@ public class EditOfferFragment extends Fragment {
                 updateItem();
             }
         });
+        postProgressBar = (ProgressBar) view.findViewById(R.id.post_progress_bar);
         return view;
     }
 
@@ -255,6 +260,8 @@ public class EditOfferFragment extends Fragment {
         updateItemData();
         String reason = itemCanBePosted();
         if (reason == null) {
+            postButton.setEnabled(false);
+            postProgressBar.setVisibility(View.VISIBLE);
             Intent intent = new Intent(getActivity(), ItemService.class);
             intent.setAction(ItemService.POST_ITEM);
             intent.putExtra(ItemService.EXTRA_ITEM, item);

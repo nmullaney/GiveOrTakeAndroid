@@ -64,17 +64,25 @@
                    android:layout_height="wrap_content"
                    android:layout_gravity="center" />
 
-        <!-- TODO share button -->
-
-        <Button android:id="@+id/edit_offer_post_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:background="@color/darkPink"
-                android:text="@string/post_offer" />
+        <RelativeLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+            <Button android:id="@+id/edit_offer_post_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:background="@color/darkPink"
+                    android:text="@string/post_offer" />
+            <ProgressBar android:id="@+id/post_progress_bar"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignTop="@id/edit_offer_post_button"
+                         android:layout_centerInParent="true"
+                         android:visibility="invisible"/>
+        </RelativeLayout>
 
     </LinearLayout>
 </ScrollView>
