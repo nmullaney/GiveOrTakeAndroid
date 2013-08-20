@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
@@ -36,11 +37,15 @@ public class FreeItemsFragment extends ListFragment {
     private ArrayList<Item> items;
     private String query;
 
+    private MenuItem refreshMenuItem;
+    private boolean isRefreshing = false;
+
     private BroadcastReceiver newItemsBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.FREE_ITEMS_UPDATED)) {
+                setRefreshing(false);
                 if (intent.hasExtra(ItemService.EXTRA_ERROR)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.error)
@@ -48,8 +53,28 @@ public class FreeItemsFragment extends ListFragment {
                             .setPositiveButton(R.string.ok, null)
                             .show();
                 } else {
-                    items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
-                    setListAdapter(new ItemArrayAdapter(getActivity(), items));
+                    items = getApplication().getFreeItems();
+                    int positionToScrollTo = 0;
+                    int offset = intent.getIntExtra(ItemService.EXTRA_OFFSET, 0);
+                    if (offset > 0) {
+                        positionToScrollTo = items.size() - offset + 1;
+                    }
+                    // This is a little jumpy, since the current position may be a half position
+                    // but it's pretty close
+                    final int position = positionToScrollTo;
+                    Log.d(TAG, "Position to scroll to: " + position);
+
+                    ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
+                    adapter.clear();
+                    adapter.addAll(items);
+                    adapter.notifyDataSetChanged();
+
+                    getListView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getListView().setSelection(position);
+                        }
+                    });
                 }
             }
         }
@@ -76,7 +101,7 @@ public class FreeItemsFragment extends ListFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Errors will be handled by the offers fragment
-            items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+            items = getApplication().getFreeItems();
             setListAdapter(new ItemArrayAdapter(context, items));
         }
     };
@@ -87,7 +112,7 @@ public class FreeItemsFragment extends ListFragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+        items = getApplication().getFreeItems();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.FREE_ITEMS_UPDATED);
@@ -153,6 +178,11 @@ public class FreeItemsFragment extends ListFragment {
                 }
             });
         }
+
+        // Store the refresh icon so that we can change it's state
+        refreshMenuItem = menu.findItem(R.id.menu_item_refresh);
+        // ensures that the state shows up as soon as we have a handle on the menu item
+        setRefreshing(isRefreshing);
     }
 
     @Override
@@ -174,11 +204,9 @@ public class FreeItemsFragment extends ListFragment {
         switch (requestCode) {
             case REQUEST_FILTER_RESULT:
                 Log.d(TAG, "Got new filter");
-                GiveOrTakeApplication gotApplication =
-                        ((GiveOrTakeApplication) getActivity().getApplication());
                 Log.d(TAG, "number of items before filter: " + items.size());
-                gotApplication.filterFreeItems();
-                items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+                getApplication().filterFreeItems();
+                items = getApplication().getFreeItems();
                 Log.d(TAG, "number of items after filter: " + items.size());
                 setListAdapter(new ItemArrayAdapter(getActivity(), items));
                 getListView().requestLayout();
@@ -193,9 +221,8 @@ public class FreeItemsFragment extends ListFragment {
     public void searchQuery(String searchQuery) {
         Log.i(TAG, "Got search query: " + searchQuery);
         query = searchQuery;
-        GiveOrTakeApplication application = (GiveOrTakeApplication)getActivity().getApplication();
-        application.filterFreeItemsForQuery(query);
-        items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+        getApplication().filterFreeItemsForQuery(query);
+        items = getApplication().getFreeItems();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
         getListView().requestLayout();
         if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
@@ -227,7 +254,7 @@ public class FreeItemsFragment extends ListFragment {
                     + ", totalCount: " + totalItemCount);
                 if (firstVisibleItem + visibleItemCount == totalItemCount) {
                     // we are at the bottom
-                    Log.i(TAG, "Getting more items, query =" + query);
+                    Log.d(TAG, "Getting more items, query =" + query);
                     refreshItems(totalItemCount);
                 }
             }
@@ -237,7 +264,7 @@ public class FreeItemsFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        items = ((GiveOrTakeApplication) getActivity().getApplication()).getFreeItems();
+        items = getApplication().getFreeItems();
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
     }
 
@@ -249,7 +276,23 @@ public class FreeItemsFragment extends ListFragment {
         startActivityForResult(i, 0);
     }
 
+    public void setRefreshing(boolean isRefreshing) {
+        this.isRefreshing = isRefreshing;
+        if (refreshMenuItem == null) {
+            return;
+        }
+        if (isRefreshing) {
+            refreshMenuItem.setActionView(R.layout.actionbar_refresh_progress);
+        } else {
+            refreshMenuItem.setActionView(null);
+        }
+    }
+
     public void refreshItems(Integer offset) {
+        if (offset > 0 && !getApplication().haveMoreFreeItems()) {
+            return;
+        }
+        setRefreshing(true);
         Intent refreshIntent = new Intent(getActivity(), ItemService.class);
         refreshIntent.setAction(ItemService.UPDATE_FREE_ITEMS);
         if (offset != null) {
@@ -257,6 +300,10 @@ public class FreeItemsFragment extends ListFragment {
         }
         refreshIntent.putExtra(ItemService.EXTRA_QUERY, query);
         getActivity().startService(refreshIntent);
+    }
+
+    private GiveOrTakeApplication getApplication() {
+        return (GiveOrTakeApplication)getActivity().getApplication();
     }
 
     public boolean isPositionVisible(int index) {
