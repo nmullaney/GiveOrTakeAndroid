@@ -145,6 +145,8 @@ public class OffersFragment extends ListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ListView listView = getListView();
 
+        refreshOffers(0);
+
         // Load more items when the user scrolls to the end of the existing list
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -264,7 +266,6 @@ public class OffersFragment extends ListFragment {
                 createNewItem();
             }
         });
-        refreshOffers(0);
         setupBroadcastReceivers();
         return v;
     }

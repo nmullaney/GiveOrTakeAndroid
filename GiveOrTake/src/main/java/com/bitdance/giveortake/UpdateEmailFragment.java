@@ -29,6 +29,7 @@ public class UpdateEmailFragment extends Fragment {
     private EditText emailCodeView;
     private Button sendCodeButton;
     private Button updateEmailButton;
+    private Button cancelEmailButton;
 
     private boolean isNewUserFlow;
 
@@ -175,6 +176,9 @@ public class UpdateEmailFragment extends Fragment {
         updateEmailButton = (Button)view.findViewById(R.id.update_email_action_button);
         updateEmailButton.setOnClickListener(sendPendingEmailListener);
 
+        cancelEmailButton = (Button)view.findViewById(R.id.cancel_email_change);
+        cancelEmailButton.setOnClickListener(cancelPendingEmailListener);
+
         if (getGOTApplication().getActiveUser().getPendingEmail() != null) {
             updateUIForSendingCode();
             emailText.setText(getGOTApplication().getActiveUser().getPendingEmail());
@@ -192,23 +196,23 @@ public class UpdateEmailFragment extends Fragment {
 
     private void hideErrorMessage() {
         errorMessageView.setText(null);
-        errorMessageView.setVisibility(View.INVISIBLE);
+        errorMessageView.setVisibility(View.GONE);
     }
 
     private void updateUIForSendingCode() {
         updateEmailTaskDesc.setText(getString(R.string.code_send_hint));
-        updateEmailButton.setText(getString(R.string.cancel_email_update));
-        updateEmailButton.setOnClickListener(cancelPendingEmailListener);
+        updateEmailButton.setVisibility(View.GONE);
+        cancelEmailButton.setVisibility(View.VISIBLE);
         sendCodeButton.setVisibility(View.VISIBLE);
         emailCodeView.setVisibility(View.VISIBLE);
     }
 
     private void updateUIForSettingEmail() {
         updateEmailTaskDesc.setText(getString(R.string.email_update_hint));
-        updateEmailButton.setText(getString(R.string.update_email));
-        updateEmailButton.setOnClickListener(sendPendingEmailListener);
-        sendCodeButton.setVisibility(View.INVISIBLE);
-        emailCodeView.setVisibility(View.INVISIBLE);
+        updateEmailButton.setVisibility(View.VISIBLE);
+        cancelEmailButton.setVisibility(View.GONE);
+        sendCodeButton.setVisibility(View.GONE);
+        emailCodeView.setVisibility(View.GONE);
     }
 
     @Override
