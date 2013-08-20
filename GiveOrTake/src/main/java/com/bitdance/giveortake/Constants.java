@@ -21,4 +21,6 @@ public class Constants {
     public static final boolean DEFAULT_SHOW_MY_ITEMS = true;
 
     public static final String NEW_USER = "new_user";
+
+    public static final String ADMOB_PUBLISHER_ID = "a1519a5dc401ede";
 }
