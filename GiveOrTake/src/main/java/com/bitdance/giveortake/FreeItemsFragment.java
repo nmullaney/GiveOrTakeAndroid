@@ -276,7 +276,7 @@ public class FreeItemsFragment extends ListFragment {
         startActivityForResult(i, 0);
     }
 
-    public void setRefreshing(boolean isRefreshing) {
+    private void setRefreshing(boolean isRefreshing) {
         this.isRefreshing = isRefreshing;
         if (refreshMenuItem == null) {
             return;

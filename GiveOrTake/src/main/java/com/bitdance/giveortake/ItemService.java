@@ -127,12 +127,20 @@ public class ItemService extends IntentService {
         ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
         if (offset != 0 && !getGOTApplication().haveMoreOffers()) {
             // don't fetch more old items if we've already got them all
+            Intent i = new Intent(MY_ITEMS_UPDATED);
+            i.putExtra(EXTRA_OFFSET, offset);
+            broadcastIntent(i);
             return;
         }
         ItemsFetcher.ItemsResponse itemsResponse = fetcher.fetchMyItems(offset);
         Intent i = new Intent(MY_ITEMS_UPDATED);
         if (itemsResponse.isSuccess()) {
-            getGOTApplication().mergeNewOffers(itemsResponse.getItems());
+            if (offset == 0) {
+                getGOTApplication().replaceOffers(itemsResponse.getItems());
+            } else {
+                getGOTApplication().mergeNewOffers(itemsResponse.getItems());
+            }
+            i.putExtra(EXTRA_OFFSET, offset);
         } else {
             i.putExtra(EXTRA_ERROR, itemsResponse.getError());
         }

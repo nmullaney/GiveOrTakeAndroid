@@ -38,11 +38,15 @@ public class OffersFragment extends ListFragment {
 
     private ArrayList<Item> items;
 
+    private MenuItem refreshMenuItem;
+    private boolean isRefreshing = false;
+
     private BroadcastReceiver newItemsBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Received a new items broadcast");
             if (intent.getAction().equals(ItemService.MY_ITEMS_UPDATED)) {
+                setRefreshing(false);
                 if (intent.hasExtra(ItemService.EXTRA_ERROR)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.error)
@@ -51,7 +55,28 @@ public class OffersFragment extends ListFragment {
                             .show();
                 } else {
                     items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
-                    setListAdapter(new ItemArrayAdapter(context, items));
+
+                    int positionToScrollTo = 0;
+                    int offset = intent.getIntExtra(ItemService.EXTRA_OFFSET, 0);
+                    if (offset > 0) {
+                        positionToScrollTo = items.size() - offset + 1;
+                    }
+                    // This is a little jumpy, since the current position may be a half position
+                    // but it's pretty close
+                    final int position = positionToScrollTo;
+                    Log.d(TAG, "Position to scroll to: " + position);
+
+                    ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
+                    adapter.clear();
+                    adapter.addAll(items);
+                    adapter.notifyDataSetChanged();
+
+                    getListView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getListView().setSelection(position);
+                        }
+                    });
                 }
             }
         }
@@ -200,7 +225,24 @@ public class OffersFragment extends ListFragment {
         }
     }
 
+    private void setRefreshing(boolean isRefreshing) {
+        this.isRefreshing = isRefreshing;
+        if (refreshMenuItem == null) {
+            return;
+        }
+
+        if (isRefreshing) {
+            refreshMenuItem.setActionView(R.layout.actionbar_refresh_progress);
+        } else {
+            refreshMenuItem.setActionView(null);
+        }
+    }
+
     private void refreshOffers(Integer offset) {
+        if (offset > 0 && !getGOTApplication().haveMoreOffers()) {
+            return;
+        }
+        setRefreshing(true);
         Intent intent = new Intent(getActivity(), ItemService.class);
         intent.setAction(ItemService.UPDATE_MY_ITEMS);
         intent.putExtra(ItemService.EXTRA_OFFSET, offset);
@@ -231,6 +273,9 @@ public class OffersFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.offers_list_options, menu);
+        refreshMenuItem = menu.findItem(R.id.menu_item_refresh);
+        // ensures the refresh state appears correctly
+        setRefreshing(isRefreshing);
     }
 
     @Override
