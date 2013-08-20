@@ -273,6 +273,7 @@ public class FreeItemsFragment extends ListFragment {
         Item item = ((ItemArrayAdapter) getListAdapter()).getItem(position);
         Intent i = new Intent(getActivity(), FreeItemPagerActivity.class);
         i.putExtra(FreeItemsFragment.EXTRA_ITEM_ID, item.getId());
+        i.putExtra(FreeItemPagerActivity.EXTRA_QUERY, query);
         startActivityForResult(i, 0);
     }
 
