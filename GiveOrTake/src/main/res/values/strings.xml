@@ -30,6 +30,7 @@
     <string name="give_away_an_item">Give Something Away</string>
     <string name="items_delete_failed">Failed to delete any items.  Try again later.</string>
     <string name="items_some_delete_failed">Failed to delete some of the selected items.</string>
+    <string name="delete">Delete Item</string>
 
     <!-- Item detail strings -->
     <string name="posted_by">Posted By:</string>
@@ -38,6 +39,12 @@
     <string name="updated">Updated:</string>
     <string name="posted">Posted:</string>
     <string name="i_want_this">I want this!</string>
+    <string name="cannot_send_message">Cannot Send Message</string>
+    <string name="success">Success</string>
+    <string name="will_be_notified">We will email you when this item becomes available.</string>
+    <string name="you_own_item">You are the owner of this item!</string>
+    <string name="already_signed_up">You\'ve already requested to be notified about this item.
+    </string>
 
     <!-- Message sending strings -->
     <string name="cancel">Cancel</string>
@@ -102,6 +109,7 @@
     <string name="my_location">My Location</string>
     <string name="maps_api_key">AIzaSyCubyA4jGRyFP_-BUCTY0QCdwz60yw2GLk</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="legal_notices">Legal Notices</string>
 
     <!-- Update username strings -->
     <string name="update_username">Update Username</string>
@@ -160,15 +168,10 @@
         start. Thank you for joining Give or Take!
     </string>
     <string name="get_started">Get Started</string>
-    <string name="delete">Delete Item</string>
+
+    <!-- Strings for sharing -->
     <string name="share">Share</string>
     <string name="how_share">How do you want to share?</string>
     <string name="giving_away_on_got">I\'m giving this item away on Give or Take!</string>
-    <string name="you_own_item">You are the owner of this item!</string>
-    <string name="already_signed_up">You\'ve already requested to be notified about this item.
-    </string>
-    <string name="cannot_send_message">Cannot Send Message</string>
-    <string name="success">Success</string>
-    <string name="will_be_notified">We will email you when this item becomes available.</string>
-
+    
 </resources>

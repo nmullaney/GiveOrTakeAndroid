@@ -1,6 +1,7 @@
 package com.bitdance.giveortake;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -107,6 +110,23 @@ public class ProfileFragment extends ListFragment {
             }
         });
         items.add(aboutButtonListItem);
+
+        ButtonListItem legalNoticesButtonListItem = new ButtonListItem();
+        legalNoticesButtonListItem.setText(getString(R.string.legal_notices));
+        legalNoticesButtonListItem.setTextColor(Color.BLUE);
+        legalNoticesButtonListItem.setBackgroundColor(Color.LTGRAY);
+        legalNoticesButtonListItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Showing legal notices");
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.legal_notices))
+                        .setMessage(GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getActivity()))
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+            }
+        });
+        items.add(legalNoticesButtonListItem);
 
         StaticListAdapter adapter = new StaticListAdapter(getActivity(), items);
         setListAdapter(adapter);
