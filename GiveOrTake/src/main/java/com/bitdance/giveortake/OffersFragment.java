@@ -90,8 +90,8 @@ public class OffersFragment extends ListFragment {
                 Log.d(TAG, "Updating item with thumbnail: " + item.toString() + ", id: " + item.getId());
                 ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
                 int index = adapter.getPositionForItemID(item.getId());
-                ListView listView = getListView();
                 if (isPositionVisible(index)) {
+                    ListView listView = getListView();
                     View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
                     adapter.setThumbnailForView(view, item);
                 }

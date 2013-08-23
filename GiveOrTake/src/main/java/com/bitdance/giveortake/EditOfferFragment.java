@@ -302,25 +302,39 @@ public class EditOfferFragment extends Fragment {
     private boolean itemNeedsUpdate() {
         if (item.getId() == null) {
             // No ID means this has never been uploaded
+            Log.d(TAG, "Needs update because no ID");
             return true;
         }
-        if (!item.getName().equals(nameText.getText().toString()))
+        if (!item.getName().equals(nameText.getText().toString())) {
+            Log.d(TAG, "Needs update for name");
             return true;
-        if (!item.getDescription().equals(descText.getText().toString()))
+        }
+        if (!item.getDescription().equals(descText.getText().toString())) {
+            Log.d(TAG, "Needs update for desc");
             return true;
-        if (!item.getState().equals(itemStateSpinner.getSelectedItem()))
+        }
+        if (!item.getState().equals(itemStateSpinner.getSelectedItem())) {
+            Log.d(TAG, "Needs update for state");
             return true;
-        if (stateUser.getSelectedItem() != null) {
+        }
+        // It only makes sense to check this if the state is not available .. the stateUser may
+        // be artificially set to a user who wanted the item, but it's not actually visible/meaningful
+        if (!item.getState().equals(Item.ItemState.AVAILABLE) && stateUser.getSelectedItem() != null) {
             User selectedStateUser = (User) stateUser.getSelectedItem();
-            if (!item.getStateUserID().equals(selectedStateUser.getUserID())) {
+            if ((selectedStateUser == null && item.getStateUserID() != null) ||
+                    (selectedStateUser != null && item.getStateUserID() == null) ||
+                    (!item.getStateUserID().equals(selectedStateUser.getUserID()))) {
+                Log.d(TAG, "needs update for state user");
                 return true;
             }
         } else {
             if (item.getStateUserID() != null) {
+                Log.d(TAG, "Needs update for state user id");
                 return true;
             }
         }
         if (item.hasUnsavedImage()) {
+            Log.d(TAG, "Has unsaved image");
             return true;
         }
         return false;
