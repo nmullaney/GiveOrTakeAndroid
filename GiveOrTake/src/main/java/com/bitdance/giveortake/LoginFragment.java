@@ -5,9 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +21,9 @@ import android.widget.ProgressBar;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -68,6 +75,7 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         Log.d(TAG, "OnCreate");
+        printKeyHash();
 
         String loginAction = getActivity().getIntent().getStringExtra(EXTRA_LOGIN_ACTION);
         if (loginAction != null && loginAction.equals(LOGOUT)) {
@@ -93,6 +101,25 @@ public class LoginFragment extends Fragment {
         IntentFilter loginIntentFilter = new IntentFilter(UserService.LOGIN_RESULT);
         localBroadcastManager.registerReceiver(loginBroadcastReceiver, loginIntentFilter);
 
+    }
+
+    // This is a handy way to get the correct keyhash for Facebook
+    private void printKeyHash() {
+        try {
+            PackageInfo info = getActivity().getPackageManager().getPackageInfo("com.bitdance.giveortake",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("YOURHASH KEY:",
+                        Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, "Name not found");
+
+        } catch (NoSuchAlgorithmException e) {
+            Log.d(TAG, "No such algo");
+        }
     }
 
     private GiveOrTakeApplication getGOTApplication() {

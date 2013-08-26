@@ -11,7 +11,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -144,7 +143,7 @@ public class OffersFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ListView listView = getListView();
-
+        setupBroadcastReceivers();
         refreshOffers(0);
 
         // Load more items when the user scrolls to the end of the existing list
@@ -212,6 +211,8 @@ public class OffersFragment extends ListFragment {
         });
     }
 
+
+
     private void deleteSelectedItems(HashSet<Integer> positions) {
         Log.i(TAG, "Delete items for positions: " + positions);
         if (!positions.isEmpty()) {
@@ -266,9 +267,10 @@ public class OffersFragment extends ListFragment {
                 createNewItem();
             }
         });
-        setupBroadcastReceivers();
         return v;
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
