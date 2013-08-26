@@ -70,6 +70,10 @@ public class OffersFragment extends ListFragment {
                     adapter.addAll(items);
                     adapter.notifyDataSetChanged();
 
+                    if (!isFragmentVisible()) {
+                        return;
+                    }
+
                     getListView().post(new Runnable() {
                         @Override
                         public void run() {
@@ -89,6 +93,10 @@ public class OffersFragment extends ListFragment {
                 Log.d(TAG, "Updating item with thumbnail: " + item.toString() + ", id: " + item.getId());
                 ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
                 int index = adapter.getPositionForItemID(item.getId());
+                Log.d(TAG, "Index of item for thumbnail: " + index);
+                if (index < 0 || !isFragmentVisible()) {
+                    return;
+                }
                 if (isPositionVisible(index)) {
                     ListView listView = getListView();
                     View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
@@ -140,10 +148,16 @@ public class OffersFragment extends ListFragment {
                 new IntentFilter(ItemService.ITEMS_DELETED));
     }
 
+    private boolean isFragmentVisible() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        return mainActivity.isSelectedFragment(this);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ListView listView = getListView();
         setupBroadcastReceivers();
+        Log.d(TAG, "Refresh offers onViewCreated");
         refreshOffers(0);
 
         // Load more items when the user scrolls to the end of the existing list
@@ -159,6 +173,7 @@ public class OffersFragment extends ListFragment {
                     return;
                 }
                 if (firstVisibleItem + visibleItemCount == totalItemCount) {
+                    Log.d(TAG, "Refresh offers for scroll");
                     refreshOffers(totalItemCount);
                 }
             }
@@ -287,6 +302,7 @@ public class OffersFragment extends ListFragment {
             case R.id.menu_item_new_item:
                 return createNewItem();
             case R.id.menu_item_refresh:
+                Log.i(TAG, "Refresh offers for option menu");
                 refreshOffers(0);
                 return true;
             default:
@@ -301,6 +317,9 @@ public class OffersFragment extends ListFragment {
     }
 
     public boolean isPositionVisible(int index) {
+        if (!isFragmentVisible()) {
+            return false;
+        }
         int start = getListView().getFirstVisiblePosition();
         int end = getListView().getLastVisiblePosition();
         Log.i(TAG, "Start: " + start + ", End: " + end + ", index: " + index);
