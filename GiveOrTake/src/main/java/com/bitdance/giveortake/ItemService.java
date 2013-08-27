@@ -208,8 +208,8 @@ public class ItemService extends IntentService {
             } else {
                 item.moveTempFile(this);
             }
-            getGOTApplication().addPostedItem(item);
         }
+        getGOTApplication().addPostedItem(item);
         broadcastIntent(intent);
     }
 

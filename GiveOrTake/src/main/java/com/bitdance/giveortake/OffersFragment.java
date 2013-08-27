@@ -264,6 +264,7 @@ public class OffersFragment extends ListFragment {
     }
 
     private void reloadItems() {
+        Log.d(TAG, "Realoading items");
         items = ((GiveOrTakeApplication) getActivity().getApplication()).getOffers();
         getView().requestLayout();
     }

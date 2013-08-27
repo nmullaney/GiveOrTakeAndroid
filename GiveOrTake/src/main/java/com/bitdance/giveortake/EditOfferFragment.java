@@ -297,6 +297,10 @@ public class EditOfferFragment extends Fragment {
         } else {
             item.setStateUser(null);
         }
+        if (item.getState().equals(Item.ItemState.AVAILABLE)) {
+            // Available should always be paired with a null user
+            item.setStateUser(null);
+        }
     }
 
     private boolean itemNeedsUpdate() {
