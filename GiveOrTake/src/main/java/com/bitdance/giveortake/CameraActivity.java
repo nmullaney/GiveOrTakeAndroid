@@ -6,7 +6,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 /**
- * Created by nora on 7/1/13.
+ * Wrapper Activity for the CameraFragment.
  */
 public class CameraActivity extends SingleFragmentActivity {
 

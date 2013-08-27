@@ -3,7 +3,6 @@ package com.bitdance.giveortake;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -14,7 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Created by nora on 6/28/13.
+ * JSONUtils is a utility class for handling a few general JSON methods.
  */
 public class JSONUtils {
     public static final String TAG = "JSONUtils";
@@ -32,7 +31,7 @@ public class JSONUtils {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(in));
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
                 sb.append("\n");

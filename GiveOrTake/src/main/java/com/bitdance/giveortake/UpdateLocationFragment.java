@@ -28,7 +28,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
- * Created by nora on 7/11/13.
+ * UpdateLocationFragment allows the ActiveUser to change or set their physical location.
  */
 public class UpdateLocationFragment extends Fragment {
 
@@ -63,11 +63,7 @@ public class UpdateLocationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        if (getArguments() != null && getArguments().getBoolean(Constants.NEW_USER)) {
-            this.isNewUserFlow = true;
-        } else {
-            this.isNewUserFlow = false;
-        }
+        this.isNewUserFlow = getArguments() != null && getArguments().getBoolean(Constants.NEW_USER);
 
         locationClient = new LocationClient(getActivity(), connectionCallbacks,
                 onConnectionFailedListener);

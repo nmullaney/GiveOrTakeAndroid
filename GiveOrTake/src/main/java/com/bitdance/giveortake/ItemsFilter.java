@@ -3,7 +3,7 @@ package com.bitdance.giveortake;
 import java.util.ArrayList;
 
 /**
- * Created by nora on 6/20/13.
+ * An ItemsFilter stores the details of how to query for a set of Items.
  */
 public class ItemsFilter {
     private Long ownedBy;
@@ -17,29 +17,29 @@ public class ItemsFilter {
 
     public String buildQueryString() {
         ArrayList<String> args = new ArrayList<String>();
-        if (ownedBy != null) {
-            args.add("ownedBy=" + ownedBy);
+        if (getOwnedBy() != null) {
+            args.add("ownedBy=" + getOwnedBy());
         }
-        if (userID != null) {
-            args.add("userID=" + userID);
+        if (getUserID() != null) {
+            args.add("userID=" + getUserID());
         }
-        if (distance != null) {
-            args.add("distance=" + distance);
+        if (getDistance() != null) {
+            args.add("distance=" + getDistance());
         }
-        if (showMyItems != null && showMyItems) {
+        if (getShowMyItems() != null && getShowMyItems()) {
             args.add("showMyItems=1");
         }
-        if (query != null) {
-            args.add("q=" + query);
+        if (getQuery() != null) {
+            args.add("q=" + getQuery());
         }
-        if (limit != null) {
-            args.add("limit=" + limit);
+        if (getLimit() != null) {
+            args.add("limit=" + getLimit());
         }
-        if (offset != null) {
-            args.add("offset=" + offset);
+        if (getOffset() != null) {
+            args.add("offset=" + getOffset());
         }
-        if (itemID != null) {
-            args.add("itemID=" + itemID);
+        if (getItemID() != null) {
+            args.add("itemID=" + getItemID());
         }
         return join(args, "&");
     }

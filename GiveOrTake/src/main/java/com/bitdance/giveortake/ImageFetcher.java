@@ -22,7 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by nora on 6/27/13.
+ * ImageFetcher encapsulates calls the fetch and post Item images from the backend server.
  */
 public class ImageFetcher {
     public static final String TAG = "ImageFetcher";
@@ -70,15 +70,14 @@ public class ImageFetcher {
             out = new FileOutputStream(tempFile);
             InputStream in = connection.getInputStream();
 
-            int bytesRead = 0;
+            int bytesRead;
             byte[] buffer = new byte[BYTE_BUFFER_SIZE];
             while ((bytesRead = in.read(buffer)) > 0) {
                 out.write(buffer, 0, bytesRead);
             }
             out.close();
             out = null;
-            tempFile.renameTo(file);
-            success = true;
+            success = tempFile.renameTo(file);
         } finally {
             connection.disconnect();
             if (out != null) {
@@ -109,7 +108,9 @@ public class ImageFetcher {
             post.setEntity(multipartEntity);
             HttpResponse response = client.execute(post);
             JSONObject result = JSONUtils.parseResponse(response);
-            // check for error?
+            if (result.has(Constants.ERROR_KEY)) {
+                return false;
+            }
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to post item", ioe);
             return false;

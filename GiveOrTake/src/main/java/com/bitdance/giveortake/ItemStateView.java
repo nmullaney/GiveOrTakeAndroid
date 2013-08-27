@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.internal.s;
 
 /**
- * Created by nora on 7/12/13.
+ * ItemStateView is for showing an Item's state, complete with the representative icon.
  */
 public class ItemStateView extends LinearLayout {
     public static final String TAG = "ItemStateView";

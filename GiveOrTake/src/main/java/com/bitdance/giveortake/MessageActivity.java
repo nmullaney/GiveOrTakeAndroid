@@ -3,7 +3,7 @@ package com.bitdance.giveortake;
 import android.support.v4.app.Fragment;
 
 /**
- * Created by nora on 8/16/13.
+ * Wrapper Activity for the MessageFragment.
  */
 public class MessageActivity extends SingleFragmentActivity {
 

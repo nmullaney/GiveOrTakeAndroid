@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 /**
- * Created by nora on 6/18/13.
+ * ItemService handles all Item queries and updates to/from the backend server.
  */
 public class ItemService extends IntentService {
     public static final String TAG = "ItemService";
@@ -56,31 +56,31 @@ public class ItemService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        if (intent.getAction() == UPDATE_FREE_ITEMS) {
+        if (intent.getAction().equals(UPDATE_FREE_ITEMS)) {
             Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
             String query = intent.getStringExtra(EXTRA_QUERY);
             fetchFreeItems(offset, query);
-        } else if (intent.getAction() == UPDATE_MY_ITEMS) {
+        } else if (intent.getAction().equals(UPDATE_MY_ITEMS)) {
             Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
             fetchMyItems(offset);
-        } else if (intent.getAction() == FETCH_ITEM_THUMBNAIL) {
+        } else if (intent.getAction().equals(FETCH_ITEM_THUMBNAIL)) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             fetchItemThumbnail(item);
-        } else if (intent.getAction() == FETCH_ITEM_IMAGE) {
+        } else if (intent.getAction().equals(FETCH_ITEM_IMAGE)) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             fetchItemImage(item);
-        } else if (intent.getAction() == SEND_MESSAGE) {
+        } else if (intent.getAction().equals(SEND_MESSAGE)) {
             Log.i(TAG, "Service sending message");
             Long itemID = intent.getLongExtra(EXTRA_ITEM_ID, 0);
             String message = intent.getStringExtra(EXTRA_MESSAGE);
             sendMessage(itemID, message);
-        } else if (intent.getAction() == POST_ITEM) {
+        } else if (intent.getAction().equals(POST_ITEM)) {
             Item item = (Item) intent.getSerializableExtra(EXTRA_ITEM);
             postItem(item);
-        } else if (intent.getAction() == DELETE_ITEMS) {
+        } else if (intent.getAction().equals(DELETE_ITEMS)) {
             ArrayList<Long> itemIDs = (ArrayList<Long>) intent.getSerializableExtra(EXTRA_ITEM_IDS);
             deleteItems(itemIDs);
-        } else if (intent.getAction() == USER_WANTS_ITEM) {
+        } else if (intent.getAction().equals(USER_WANTS_ITEM)) {
             Long itemID = intent.getLongExtra(ItemService.EXTRA_ITEM_ID, 0);
             userWantsItem(itemID);
         } else {

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * Created by nora on 6/19/13.
+ * OffersFragment displays all the Items that the ActiveUser has offered to give away.
  */
 public class OffersFragment extends ListFragment {
     private static final String TAG = "OffersFragment";

@@ -31,7 +31,8 @@ import java.util.ArrayList;
 
 
 /**
- * Created by nora on 6/19/13.
+ * The ProfileFragment displays information about the ActiveUser, as
+ * well as general data about the app.
  */
 public class ProfileFragment extends ListFragment {
     public static final String TAG = "ProfileFragment";

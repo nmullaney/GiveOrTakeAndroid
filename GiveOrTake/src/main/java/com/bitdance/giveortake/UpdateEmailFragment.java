@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * Created by nora on 7/11/13.
+ * UpdateEmailFragment handles updates to the ActiveUser's email address.
  */
 public class UpdateEmailFragment extends Fragment {
     public static final String TAG = "UpdateEmailFragment";

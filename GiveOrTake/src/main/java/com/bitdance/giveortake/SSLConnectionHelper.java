@@ -12,9 +12,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.KeyManagementException;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
@@ -31,7 +29,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Created by nora on 6/23/13.
+ * The backend server's API requires SSL, but the certificate is self-signed.
+ * This code ensures that Android doesn't choke on the self-signed cert.
  */
 public class SSLConnectionHelper {
     private static final String TAG = "SSLConnectionHelper";
@@ -137,20 +136,13 @@ public class SSLConnectionHelper {
     public static class MySSLSocketFactory extends SSLSocketFactory {
         SSLContext sslContext = SSLContext.getInstance("TLS");
 
-        public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
-            super(truststore);
-
-            TrustManager tm = getTrustManager();
-            sslContext.init(null, new TrustManager[] { tm }, null);
-        }
-
         public MySSLSocketFactory(SSLContext context) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException {
             super(null);
             sslContext = context;
         }
 
         @Override
-        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException {
             return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
         }
 

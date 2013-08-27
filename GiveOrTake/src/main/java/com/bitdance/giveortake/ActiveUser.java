@@ -8,7 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by nora on 6/23/13.
+ * This class represents the logged-in user.  It contains a regular User
+ * object, but also has information about email, facebookID, a login token,
+ * and whether the user is brand new.
  */
 public class ActiveUser {
     public static final String TAG = "ActiveUser";

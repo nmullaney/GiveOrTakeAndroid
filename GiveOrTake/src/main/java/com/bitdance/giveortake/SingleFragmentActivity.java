@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 /**
- * Created by nora on 6/30/13.
+ * SingleFragmentActivity is an abstract class for handling an Activity that
+ * contains only a single Fragment.
  */
 abstract public class SingleFragmentActivity extends FragmentActivity {
 
@@ -18,7 +19,7 @@ abstract public class SingleFragmentActivity extends FragmentActivity {
         setContentView(R.layout.activity_single_fragment);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = (Fragment) fm.findFragmentById(R.id.fragmentContainer);
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
             fragment = createFragment();
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();

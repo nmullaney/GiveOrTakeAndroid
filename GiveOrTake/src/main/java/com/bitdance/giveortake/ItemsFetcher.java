@@ -66,14 +66,12 @@ public class ItemsFetcher {
     }
 
     private ItemsResponse fetchItemsWithFilter(ItemsFilter filter) {
-        ArrayList<Item> items = new ArrayList<Item>();
         ItemsResponse itemsResponse;
         String urlSpec = Constants.BASE_URL + "/items.php?" + filter.buildQueryString();
         try {
             String result = fetchURLStringData(urlSpec);
             Log.d(TAG, "JSON = \n" + result);
             itemsResponse = parseItems(result);
-            Log.d(TAG, "Items = " + items);
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch url data:", ioe);
             itemsResponse = new ItemsResponse(context.getString(R.string.error_try_again));
@@ -245,7 +243,7 @@ public class ItemsFetcher {
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         HttpPost post = new HttpPost(urlSpec);
         MultipartEntity multipartEntity = new MultipartEntity();
-        DeleteItemsResponse deleteItemsResponse = null;
+        DeleteItemsResponse deleteItemsResponse;
         try {
             multipartEntity.addPart("user_id", new StringBody(String.valueOf(activeUser.getUserID())));
             multipartEntity.addPart("token", new StringBody(activeUser.getToken()));
@@ -333,10 +331,6 @@ public class ItemsFetcher {
             return successfulIDs;
         }
 
-        public ArrayList<Long> getFailedIDs() {
-            return failedIDs;
-        }
-
         public String getError() {
             return error;
         }
@@ -348,7 +342,7 @@ public class ItemsFetcher {
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         HttpPost post = new HttpPost(urlSpec);
         MultipartEntity multipartEntity = new MultipartEntity();
-        UserWantsItemResponse userWantsItemResponse = null;
+        UserWantsItemResponse userWantsItemResponse;
         try {
             multipartEntity.addPart("user_id", new StringBody(String.valueOf(activeUser.getUserID())));
             multipartEntity.addPart("token", new StringBody(activeUser.getToken()));
@@ -356,6 +350,7 @@ public class ItemsFetcher {
         } catch (UnsupportedEncodingException uee) {
             Log.e(TAG, "Failed to build request", uee);
             userWantsItemResponse = new UserWantsItemResponse(context.getString(R.string.error_try_again));
+            return userWantsItemResponse;
         }
 
         try {

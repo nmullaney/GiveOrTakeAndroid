@@ -3,7 +3,7 @@ package com.bitdance.giveortake;
 import android.support.v4.app.Fragment;
 
 /**
- * Created by nora on 7/10/13.
+ * Wrapper Activity for UpdateUsernameFragment.
  */
 public class UpdateUsernameActivity extends SingleFragmentActivity {
 

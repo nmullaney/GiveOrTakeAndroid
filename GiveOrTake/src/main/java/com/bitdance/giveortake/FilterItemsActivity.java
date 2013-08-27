@@ -3,7 +3,7 @@ package com.bitdance.giveortake;
 import android.support.v4.app.Fragment;
 
 /**
- * Created by nora on 7/30/13.
+ * Wrapper Activity for the FilterItemsFragment.
  */
 public class FilterItemsActivity extends SingleFragmentActivity {
 

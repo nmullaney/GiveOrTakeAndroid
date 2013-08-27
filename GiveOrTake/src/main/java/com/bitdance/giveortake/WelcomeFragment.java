@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 /**
- * Created by nora on 8/6/13.
+ * WelcomeFragment is the first Fragment shown by the WelcomeActivity.
+ * It gives basic information about the Give or Take app.
  */
 public class WelcomeFragment extends Fragment {
 

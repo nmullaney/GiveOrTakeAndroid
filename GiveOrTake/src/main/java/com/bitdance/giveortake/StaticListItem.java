@@ -4,7 +4,8 @@ import android.content.Context;
 import android.view.View;
 
 /**
- * Created by nora on 7/3/13.
+ * StaticListItem is used by the StaticListAdapter.  Anything that should appear in
+ * a static list view should subclass this.
  */
 abstract public class StaticListItem {
 

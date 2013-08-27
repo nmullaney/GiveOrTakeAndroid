@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by nora on 7/1/13.
+ * CameraFragment handles taking a picture of the item.
  */
 public class CameraFragment extends Fragment {
     public static final String TAG = "CameraFragment";

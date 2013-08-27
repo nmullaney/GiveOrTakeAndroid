@@ -19,13 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
 
 /**
- * Created by nora on 6/17/13.
+ * FreeItemsFragment lists all the Freely available items.
  */
 public class FreeItemsFragment extends ListFragment {
     public static final String TAG = "FreeItemsFragment";
@@ -127,8 +126,7 @@ public class FreeItemsFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_free_items, container, false);
-        return v;
+        return inflater.inflate(R.layout.fragment_free_items, container, false);
     }
 
     @Override
@@ -296,9 +294,7 @@ public class FreeItemsFragment extends ListFragment {
         setRefreshing(true);
         Intent refreshIntent = new Intent(getActivity(), ItemService.class);
         refreshIntent.setAction(ItemService.UPDATE_FREE_ITEMS);
-        if (offset != null) {
-            refreshIntent.putExtra(ItemService.EXTRA_OFFSET, offset);
-        }
+        refreshIntent.putExtra(ItemService.EXTRA_OFFSET, offset);
         refreshIntent.putExtra(ItemService.EXTRA_QUERY, query);
         getActivity().startService(refreshIntent);
     }

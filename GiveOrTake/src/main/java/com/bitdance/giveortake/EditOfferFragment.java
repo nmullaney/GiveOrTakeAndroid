@@ -30,7 +30,8 @@ import android.widget.SpinnerAdapter;
 import java.util.ArrayList;
 
 /**
- * Created by nora on 6/30/13.
+ * EditOfferFragment is the view where the ActiveUser may create or edit
+ * a posted item.
  */
 public class EditOfferFragment extends Fragment {
     public static final String TAG = "EditOfferFragment";

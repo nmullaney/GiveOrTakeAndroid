@@ -26,11 +26,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: nora
- * Date: 6/21/13
- * Time: 12:17 PM
- * To change this template use File | Settings | File Templates.
+ * The LoginFragment lets the ActiveUser login through first Facebook and then
+ * the backend server.
  */
 public class LoginFragment extends Fragment {
     public static final String TAG = "LoginFragment";
@@ -38,8 +35,8 @@ public class LoginFragment extends Fragment {
     public static final String EXTRA_LOGIN_ACTION = "login_action";
     public static final String LOGOUT = "logout";
 
+    LoginButton loginButton;
     private ProgressBar progressBar;
-    private LoginButton loginButton;
 
     private UiLifecycleHelper uiHelper;
 
@@ -130,13 +127,12 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
         progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
-        loginButton = (LoginButton)v.findViewById(R.id.login_button);
+        loginButton = (LoginButton) v.findViewById(R.id.login_button);
         loginButton.setFragment(this);
         loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
                 Log.d(TAG, "User info fetched: " + user);
-                updateUI();
                 if (user != null) {
                     progressBar.setVisibility(View.VISIBLE);
                     getGOTApplication().getActiveUser().loadActiveUser(user);
@@ -169,8 +165,6 @@ public class LoginFragment extends Fragment {
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
-
-        updateUI();
     }
 
     @Override
@@ -214,13 +208,5 @@ public class LoginFragment extends Fragment {
         } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
             Log.i(TAG, "opened token updated");
         }
-        updateUI();
     }
-
-    private void updateUI() {
-        Session session = Session.getActiveSession();
-        boolean enableButtons = (session != null && session.isOpened());
-    }
-
-
 }

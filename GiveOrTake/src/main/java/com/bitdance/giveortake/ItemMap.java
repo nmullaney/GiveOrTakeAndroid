@@ -1,7 +1,5 @@
 package com.bitdance.giveortake;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;

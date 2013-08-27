@@ -1,6 +1,5 @@
 package com.bitdance.giveortake;
 
-import android.R;
 import android.content.Context;
 
 import android.util.Log;
@@ -11,13 +10,14 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
 /**
- * Created by nora on 7/3/13.
+ * StaticListAdapter allows the ProfileFragment to use a ListView, while containing
+ * various different forms of data.
  */
 public class StaticListAdapter extends ArrayAdapter<StaticListItem> {
     public static final String TAG = "StaticListAdapter";
 
     public StaticListAdapter(Context context, ArrayList<StaticListItem> items) {
-        super(context, R.layout.simple_list_item_1, items);
+        super(context, android.R.layout.simple_list_item_1, items);
         Log.i(TAG, "Created with items: " + items.size());
     }
 

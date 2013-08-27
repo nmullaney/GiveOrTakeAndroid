@@ -1,7 +1,7 @@
 package com.bitdance.giveortake;
 
 /**
- * Created by nora on 7/25/13.
+ * An interface that is characterized by having a Long ID field.
  */
 public interface Identifiable {
     public Long getId();

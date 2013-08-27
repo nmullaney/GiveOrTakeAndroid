@@ -25,12 +25,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by nora on 6/26/13.
+ * FreeItemDetailFragment is used to show a single Item in detail.
  */
 public class FreeItemDetailFragment extends Fragment {
     public static final String TAG = "FreeItemDetailFragment";
@@ -66,8 +65,7 @@ public class FreeItemDetailFragment extends Fragment {
                     }
                     return;
                 }
-                User user = (User) intent.getSerializableExtra(UserService.EXTRA_USER_DATA);
-                owner = user;
+                owner = (User) intent.getSerializableExtra(UserService.EXTRA_USER_DATA);
                 updateUI();
             }
         }
@@ -154,7 +152,7 @@ public class FreeItemDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        Long itemID = null;
+        Long itemID;
 
         if (getArguments() != null) {
             itemID = (Long)getArguments().getSerializable(FreeItemsFragment.EXTRA_ITEM_ID);
@@ -236,7 +234,7 @@ public class FreeItemDetailFragment extends Fragment {
 
                 ActiveUser activeUser = ((GiveOrTakeApplication) getActivity().getApplication()).getActiveUser();
                 String error = null;
-                if (activeUser.getUserID() == owner.getUserID()) {
+                if (activeUser.getUserID().equals(owner.getUserID())) {
                     error = getString(R.string.you_own_item);
                 } else if (item.getState().equals(Item.ItemState.PROMISED) && item.getNumMessagesSent() != null) {
                     error = getString(R.string.already_signed_up);
@@ -319,7 +317,7 @@ public class FreeItemDetailFragment extends Fragment {
     }
 
     private int getMaxImageDimension() {
-        Display display = ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE))
+        Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
         int width;
         int height;

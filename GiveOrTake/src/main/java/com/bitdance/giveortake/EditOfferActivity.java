@@ -1,12 +1,10 @@
 package com.bitdance.giveortake;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
 /**
- * Created by nora on 6/30/13.
+ * Wrapper Activity for the EditOfferFragment.
  */
 public class EditOfferActivity extends SingleFragmentActivity {
     public static final String TAG = "EditOfferActivity";

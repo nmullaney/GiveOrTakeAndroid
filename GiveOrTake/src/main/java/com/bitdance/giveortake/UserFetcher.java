@@ -16,23 +16,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Created by nora on 6/23/13.
+ * UserFetcher fetches and posts any data about Users to the backend.  It also handles login.
  */
 public class UserFetcher {
     public static final String TAG = "UserFetcher";
@@ -268,8 +262,7 @@ public class UserFetcher {
     }
 
     private UpdateResponse updateUser(List<NameValuePair> data, String urlSpec) {
-        boolean success = false;
-        UpdateResponse updateResponse = new UpdateResponse(success,
+        UpdateResponse updateResponse = new UpdateResponse(false,
                 context.getString(R.string.error_try_again));
 
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
@@ -284,11 +277,10 @@ public class UserFetcher {
             Log.i(TAG, result.toString());
 
             if (result.has("error")) {
-                updateResponse = new UpdateResponse(success, result.getString("error"));
+                updateResponse = new UpdateResponse(false, result.getString("error"));
             } else {
                 activeUser.updateFromJSON(result);
-                success = true;
-                updateResponse = new UpdateResponse(success, null);
+                updateResponse = new UpdateResponse(true, null);
             }
         } catch(IOException ioe) {
             Log.e(TAG, "Login failed due to exception:", ioe);

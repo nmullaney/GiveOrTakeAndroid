@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * Created by nora on 8/16/13.
+ * MessageFragment is where the ActiveUser can write a message to the owner of an Item.
  */
 public class MessageFragment extends Fragment {
     public static final String TAG = "MessageFragment";

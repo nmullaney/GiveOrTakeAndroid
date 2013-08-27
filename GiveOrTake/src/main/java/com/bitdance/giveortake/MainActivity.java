@@ -15,8 +15,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
 
+/**
+ * MainActivity is the central Activity of the app.  It's a TabListener that switches
+ * between the OffersFragment, the FreeItemsFragment, and the ProfileFragment.
+ */
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     public static final String TAG = "MainActivity";
 

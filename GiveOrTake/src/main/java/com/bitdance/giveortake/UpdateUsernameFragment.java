@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * Created by nora on 7/10/13.
+ * UpdateUsernameFragment is where the ActiveUser can change their username.
  */
 public class UpdateUsernameFragment extends Fragment {
     public static final String TAG = "UpdateUsernameFragment";
@@ -43,7 +43,6 @@ public class UpdateUsernameFragment extends Fragment {
                     if (isNewUserFlow) {
                         ((WelcomeActivity) getActivity()).loadNextFragment();
                     } else {
-                        Intent resultIntent = new Intent();
                         // no data to pass back -- we can update from the active user
                         getActivity().setResult(Activity.RESULT_OK, intent);
                         getActivity().finish();
@@ -58,11 +57,7 @@ public class UpdateUsernameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        if (getArguments() != null && getArguments().getBoolean(Constants.NEW_USER)) {
-            this.isNewUserFlow = true;
-        } else {
-            this.isNewUserFlow = false;
-        }
+        this.isNewUserFlow = getArguments() != null && getArguments().getBoolean(Constants.NEW_USER);
 
         if (!isNewUserFlow) {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);

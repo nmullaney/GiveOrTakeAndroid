@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by nora on 6/28/13.
+ * MessageSender handles sending messages from the app.
  */
 public class MessageSender {
     public static final String TAG = "MessageSender";
@@ -31,7 +31,7 @@ public class MessageSender {
 
     public SendMessageResponse sendMessage(Long itemID, String message, ActiveUser activeUser) {
         Log.i(TAG, "sending message");
-        SendMessageResponse messageResponse = null;
+        SendMessageResponse messageResponse;
         HttpClient client = SSLConnectionHelper.sslClient(new DefaultHttpClient());
         String urlSpec = Constants.BASE_URL + "/item/message.php";
         HttpPost post = new HttpPost(urlSpec);

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 /**
- * Created by nora on 6/23/13.
+ * User is the data object for any User in the system.
  */
 public class User implements Serializable, Parcelable {
     private Long userID;

@@ -15,8 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -165,10 +163,6 @@ public class Item implements Serializable, Identifiable {
         this.state = state;
     }
 
-    public void setState(String state) {
-        this.state = ItemState.valueOf(state);
-    }
-
     public void setStateUser(User stateUser) {
         if (stateUser != null)
             this.stateUserID = stateUser.getUserID();
@@ -200,7 +194,7 @@ public class Item implements Serializable, Identifiable {
             Log.d(TAG, "Thumbnail is null, loading from file");
             File file = getLocalThumbnailFile(context);
             Log.d(TAG, "File to load is " + file.getName());
-            if (file != null && file.exists()) {
+            if (file.exists()) {
                 Log.d(TAG, "Pulling thumbnail from file");
                 thumbnail = new BitmapDrawable(context.getResources(), file.getPath());
                 DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -232,10 +226,6 @@ public class Item implements Serializable, Identifiable {
     public byte[] getThumbnailData(Context context) {
         Drawable thumbnailDrawable = getThumbnail(context);
         return getDataFromDrawable(thumbnailDrawable, Bitmap.CompressFormat.PNG);
-    }
-
-    public void setThumbnail(BitmapDrawable thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public boolean hasUnsavedImage() {
@@ -306,7 +296,7 @@ public class Item implements Serializable, Identifiable {
         }
         File file = getLocalImageFile(context);
         Log.i(TAG, "Local image file: " + file.getName());
-        if (file != null && !file.exists() && tempImageFile != null) {
+        if (!file.exists() && tempImageFile != null) {
             file = context.getFileStreamPath(tempImageFile);
         }
         if (file != null && file.exists() && file.length() > 0) {

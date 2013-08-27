@@ -9,7 +9,9 @@ import android.support.v4.app.FragmentManager;
 import java.util.ArrayList;
 
 /**
- * Created by nora on 8/6/13.
+ * WelcomeActivity is the first thing shown to a new user, after login.
+ * It takes the user through the WelcomeFragment, the UpdateUsernameFragment,
+ * the UpdateEmailFragment, and the UpdateLocationFragment.
  */
 public class WelcomeActivity extends FragmentActivity {
 
@@ -26,7 +28,7 @@ public class WelcomeActivity extends FragmentActivity {
 
     public void loadNextFragment() {
         FragmentManager fm = getSupportFragmentManager();
-        Fragment currentFragment = (Fragment) fm.findFragmentById(R.id.fragmentContainer);
+        Fragment currentFragment = fm.findFragmentById(R.id.fragmentContainer);
         Fragment nextFragment = getFragment(currentIndex + 1);
         if (currentFragment == null) {
             fm.beginTransaction().add(R.id.fragmentContainer, nextFragment).commit();

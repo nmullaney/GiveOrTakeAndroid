@@ -47,10 +47,6 @@ public class OrderedMap<T extends Identifiable> implements Collection<T> {
         return all;
     }
 
-    public ArrayList<Long> getAllIds() {
-        return (ArrayList<Long>) ids;
-    }
-
     public void add(int index, T element) {
         ids.add(index, element.getId());
         map.put(element.getId(), element);

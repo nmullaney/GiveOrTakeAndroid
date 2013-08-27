@@ -14,15 +14,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
- * Created by nora on 7/30/13.
+ * The FilterItemsFragment is a view where the ActiveUser can limit which
+ * items they'd like to see.
  */
 public class FilterItemsFragment extends Fragment {
     public static final String TAG = "FilterItemsFragment";
 
-    private SeekBar seekBar;
     private TextView seekBarMiles;
     private CheckBox showMyItemsCheckbox;
-    private Button applyFiltersButton;
 
     private Integer distance;
     private boolean showMyItems;
@@ -43,7 +42,7 @@ public class FilterItemsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filter_items, container, false);
-        seekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekbar);
         // The min is always "0", so to have a larger min, we have to do some math
         seekBar.setMax(Constants.MAX_DISTANCE - Constants.MIN_DISTANCE);
         seekBar.setProgress(distance - Constants.MIN_DISTANCE);
@@ -68,7 +67,7 @@ public class FilterItemsFragment extends Fragment {
         setSeekBarMilesLabel();
         showMyItemsCheckbox = (CheckBox) view.findViewById(R.id.show_my_items_checkbox);
         showMyItemsCheckbox.setChecked(showMyItems);
-        applyFiltersButton = (Button) view.findViewById(R.id.apply_filters_button);
+        Button applyFiltersButton = (Button) view.findViewById(R.id.apply_filters_button);
         applyFiltersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

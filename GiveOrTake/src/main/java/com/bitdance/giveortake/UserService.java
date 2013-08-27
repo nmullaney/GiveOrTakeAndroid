@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 /**
- * Created by nora on 6/23/13.
+ * The UserService handles all Intents that login or update a User.
  */
 public class UserService extends IntentService {
     public static final String TAG = "UserService";
