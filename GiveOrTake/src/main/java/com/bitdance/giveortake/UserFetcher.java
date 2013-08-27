@@ -56,7 +56,6 @@ public class UserFetcher {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("facebook_id", activeUser.getFacebookID()));
         nameValuePairs.add(new BasicNameValuePair("fb_access_token", fbAccessToken));
-        // TODO: don't add empty values
         nameValuePairs.add(new BasicNameValuePair("username", activeUser.getUserName()));
         nameValuePairs.add(new BasicNameValuePair("email", activeUser.getEmail()));
 

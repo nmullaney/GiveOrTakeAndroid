@@ -166,6 +166,7 @@ public class ItemService extends IntentService {
         ImageFetcher fetcher = new ImageFetcher(this, token);
         boolean success = fetcher.fetchImageForItem(item);
         Intent i = new Intent(ITEM_IMAGE_FETCHED);
+        i.putExtra(EXTRA_ITEM_ID, item.getId());
         if (!success) {
             i.putExtra(EXTRA_IMAGE_FETCH_ERROR, true);
         }

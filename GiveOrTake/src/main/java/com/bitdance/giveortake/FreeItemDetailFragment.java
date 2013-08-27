@@ -77,11 +77,20 @@ public class FreeItemDetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().endsWith(ItemService.ITEM_IMAGE_FETCHED)) {
+                Long itemID = intent.getLongExtra(ItemService.EXTRA_ITEM_ID, 0);
+                if (!item.getId().equals(itemID)) {
+                    return;
+                }
                 boolean failure = intent.getBooleanExtra(ItemService.EXTRA_IMAGE_FETCH_ERROR, false);
                 if (!failure) {
                     updateUI();
+                } else {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.error)
+                            .setMessage(getString(R.string.fetch_image_error))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
                 }
-                // TODO: alert on failure
             }
         }
     };

@@ -58,7 +58,7 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         return convertView;
     }
 
-    // TODO: This is so lame -- I'll fix it when I have a cool abstraction for ItemLists
+    // This is a bit lame, but probably good enough
     public int getPositionForItemID(Long itemID) {
         for (int i = 0; i < getCount(); i++) {
             if (getItem(i).getId().equals(itemID)) {

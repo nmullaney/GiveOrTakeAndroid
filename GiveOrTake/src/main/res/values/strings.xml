@@ -45,6 +45,7 @@
     <string name="you_own_item">You are the owner of this item!</string>
     <string name="already_signed_up">You\'ve already requested to be notified about this item.
     </string>
+    <string name="fetch_image_error">There was an error fetching this image.</string>
 
     <!-- Message sending strings -->
     <string name="cancel">Cancel</string>
