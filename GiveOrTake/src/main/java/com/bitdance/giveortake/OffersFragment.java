@@ -70,14 +70,15 @@ public class OffersFragment extends ListFragment {
                     adapter.addAll(items);
                     adapter.notifyDataSetChanged();
 
-                    if (!isFragmentVisible()) {
+                    final ListView listView = getSafeListView();
+                    if (listView == null) {
                         return;
                     }
 
-                    getListView().post(new Runnable() {
+                    listView.post(new Runnable() {
                         @Override
                         public void run() {
-                            getListView().setSelection(position);
+                            listView.setSelection(position);
                         }
                     });
                 }
@@ -94,11 +95,11 @@ public class OffersFragment extends ListFragment {
                 ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
                 int index = adapter.getPositionForItemID(item.getId());
                 Log.d(TAG, "Index of item for thumbnail: " + index);
-                if (index < 0 || !isFragmentVisible()) {
+                ListView listView = getSafeListView();
+                if (index < 0 || listView == null) {
                     return;
                 }
                 if (isPositionVisible(index)) {
-                    ListView listView = getListView();
                     View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
                     adapter.setThumbnailForView(view, item);
                 }
@@ -146,11 +147,6 @@ public class OffersFragment extends ListFragment {
                 new IntentFilter(ItemService.ITEM_THUMBNAIL_FETCHED));
         localBroadcastManager.registerReceiver(itemsDeletedBroadcastReceiver,
                 new IntentFilter(ItemService.ITEMS_DELETED));
-    }
-
-    private boolean isFragmentVisible() {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        return mainActivity.isSelectedFragment(this);
     }
 
     @Override
@@ -316,12 +312,26 @@ public class OffersFragment extends ListFragment {
 
     }
 
+    // This fetches a list view while handling any possible IllegalStateExceptions that might
+    // be thrown if the view isn't ready yet.
+    // The return value must be checked for nullity.
+    private ListView getSafeListView() {
+        ListView listView = null;
+        try {
+            listView = getListView();
+        } catch (IllegalStateException ise) {
+            Log.d(TAG, "Content view not yet created");
+        }
+        return listView;
+    }
+
     public boolean isPositionVisible(int index) {
-        if (!isFragmentVisible()) {
+        ListView listView = getSafeListView();
+        if (listView == null) {
             return false;
         }
-        int start = getListView().getFirstVisiblePosition();
-        int end = getListView().getLastVisiblePosition();
+        int start = listView.getFirstVisiblePosition();
+        int end = listView.getLastVisiblePosition();
         Log.i(TAG, "Start: " + start + ", End: " + end + ", index: " + index);
         return index >= start && index <= end;
     }

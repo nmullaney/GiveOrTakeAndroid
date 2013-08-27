@@ -88,15 +88,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.selectTab(actionBar.getTabAt(DEFAULT_SELECTED_TAB));
     }
 
-    public boolean isSelectedFragment(Fragment fragment) {
-        return fragment != null && fragment.equals(getSelectedFragment());
-    }
-
-    public Fragment getSelectedFragment() {
-        int selectedIndex = mViewPager.getCurrentItem();
-        return mSectionsPagerAdapter.getItem(selectedIndex);
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
