@@ -14,10 +14,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <ImageView android:id="@+id/free_item_detail_image"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:adjustViewBounds="true"/>
+            <RelativeLayout android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                <ImageView android:id="@+id/free_item_detail_image"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:background="@color/lightGray"
+                           android:adjustViewBounds="true"/>
+                <ProgressBar android:id="@+id/image_progress_bar"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_centerInParent="true" />
+            </RelativeLayout>
 
             <TextView android:id="@+id/free_item_detail_desc"
                       android:layout_width="match_parent"

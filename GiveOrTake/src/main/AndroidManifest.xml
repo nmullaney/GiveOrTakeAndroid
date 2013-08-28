@@ -87,6 +87,7 @@
         <activity
                 android:name="com.bitdance.giveortake.FreeItemPagerActivity"
                 android:label="@string/title_activity_free_item_pager"
+                android:configChanges="orientation"
                 android:parentActivityName="com.bitdance.giveortake.MainActivity" >
         </activity>
         <activity android:name="com.bitdance.giveortake.UpdateUsernameActivity"

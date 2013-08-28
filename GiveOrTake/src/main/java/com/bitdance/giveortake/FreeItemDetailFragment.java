@@ -5,11 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -40,6 +41,7 @@ public class FreeItemDetailFragment extends Fragment {
     private TextView usernameView;
     private TextView karmaView;
     private ImageView imageView;
+    private ProgressBar imageProgressBar;
     private Button wantButton;
 
     private boolean userErrorShown = false;
@@ -207,6 +209,8 @@ public class FreeItemDetailFragment extends Fragment {
 
         imageView = (ImageView)v.findViewById(R.id.free_item_detail_image);
 
+        imageProgressBar = (ProgressBar)v.findViewById(R.id.image_progress_bar);
+
         TextView descView = (TextView)v.findViewById(R.id.free_item_detail_desc);
         descView.setText(item.getDescription());
 
@@ -301,6 +305,12 @@ public class FreeItemDetailFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateUI();
+    }
+
     private void updateUI() {
         if (owner != null && usernameView != null && karmaView != null && wantButton != null) {
             usernameView.setText(owner.getUserName());
@@ -308,11 +318,20 @@ public class FreeItemDetailFragment extends Fragment {
             wantButton.setEnabled(true);
         }
         int maxImageDimension = getMaxImageDimension();
+        if (imageView != null) {
+            ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+            layoutParams.height = getMaxImageDimension();
+            layoutParams.width = getMaxImageDimension();
+            imageView.setLayoutParams(layoutParams);
+        }
         if (maxImageDimension > 0 && item.getImage(getActivity(), maxImageDimension) != null &&
                 imageView != null) {
             Log.i(TAG, "Setting height for " + item.getName() + " to " + maxImageDimension);
             imageView.setImageDrawable(item.getImage(getActivity(), maxImageDimension));
+            imageProgressBar.setVisibility(View.INVISIBLE);
             imageView.getParent().requestLayout();
+        } else {
+            imageProgressBar.setVisibility(View.VISIBLE);
         }
     }
 
