@@ -8,6 +8,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,6 +25,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public static final String TAG = "MainActivity";
 
     private static final int DEFAULT_SELECTED_TAB = 1;
+    private static final int FREE_ITEMS_TAB = 1;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -89,6 +91,30 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
 
         actionBar.selectTab(actionBar.getTabAt(DEFAULT_SELECTED_TAB));
+
+        Long itemID = getSelectedItemID();
+        if (itemID != null) {
+            actionBar.selectTab(actionBar.getTabAt(FREE_ITEMS_TAB));
+        }
+    }
+
+    protected Long getSelectedItemID() {
+        Log.i(TAG, "getting selected item ID");
+        Long itemID = null;
+        if (getIntent().getData() != null) {
+            Uri uri = getIntent().getData();
+            if (uri.getHost().equals("freeItem")) {
+                String itemIDstr = uri.getQueryParameter("itemID");
+                if (itemIDstr != null) {
+                    itemID = new Long(itemIDstr);
+                } else {
+                    Log.i(TAG, "ItemID is null");
+                }
+            }
+            Log.i(TAG, getIntent().getData().toString());
+        }
+        Log.i(TAG, "ItemID = " + itemID);
+        return itemID;
     }
 
     @Override
@@ -98,6 +124,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.i(TAG, "Got search query: " + query);
             ((FreeItemsFragment) mSectionsPagerAdapter.getFreeItemsFragment()).searchQuery(query);
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Long itemID = getSelectedItemID();
+            if (itemID != null) {
+                getActionBar().selectTab(getActionBar().getTabAt(FREE_ITEMS_TAB));
+                ((FreeItemsFragment) mSectionsPagerAdapter.getFreeItemsFragment()).displaySingleItem(itemID);
+            }
+        } else {
+            Log.i(TAG, "Action = " + intent.getAction());
         }
     }
 

@@ -111,8 +111,6 @@ public class FreeItemsFragment extends ListFragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        items = getApplication().getFreeItems();
-        setListAdapter(new ItemArrayAdapter(getActivity(), items));
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity().getApplicationContext());
         IntentFilter intentFilter = new IntentFilter(ItemService.FREE_ITEMS_UPDATED);
         localBroadcastManager.registerReceiver(newItemsBroadcastReceiver, intentFilter);
@@ -121,7 +119,34 @@ public class FreeItemsFragment extends ListFragment {
         localBroadcastManager.registerReceiver(itemsDeletedBroadcastReceiver,
                 new IntentFilter(ItemService.ITEMS_DELETED));
 
-        refreshItems(0);
+        if (getSelectedItemID() != null) {
+            displaySingleItem(getSelectedItemID());
+        } else {
+            items = getApplication().getFreeItems();
+            setListAdapter(new ItemArrayAdapter(getActivity(), items));
+            Log.i(TAG, "Refreshing onCreate");
+            refreshItems(0);
+        }
+    }
+
+    private Long getSelectedItemID() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        return mainActivity.getSelectedItemID();
+    }
+
+    public void displaySingleItem(Long itemID) {
+        items = new ArrayList<Item>();
+        Item singleItem = getApplication().getItem(itemID);
+        if (singleItem != null) {
+            Log.i(TAG, "Found single item among existing items");
+            items.add(singleItem);
+        }
+        getApplication().replaceFreeItems(items);
+        setListAdapter(new ItemArrayAdapter(getActivity(), items));
+        if (singleItem == null) {
+            Log.i(TAG, "Fetching single item for " + itemID);
+            fetchSingleItem(itemID);
+        }
     }
 
     @Override
@@ -170,6 +195,7 @@ public class FreeItemsFragment extends ListFragment {
                     Log.i(TAG, "Unsetting query");
                     query = null;
                     if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+                        Log.i(TAG, "Refreshing onMenuItemActonCollapse");
                         refreshItems(0);
                     }
                     return true;
@@ -187,6 +213,7 @@ public class FreeItemsFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch(menuItem.getItemId()) {
             case R.id.menu_item_refresh:
+                Log.i(TAG, "Refreshing due to menu");
                 refreshItems(0);
                 return true;
             case R.id.menu_item_filter:
@@ -209,6 +236,7 @@ public class FreeItemsFragment extends ListFragment {
                 setListAdapter(new ItemArrayAdapter(getActivity(), items));
                 getListView().requestLayout();
                 if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+                    Log.i(TAG, "Refreshing due to filter change");
                     refreshItems(0);
                 }
             default:
@@ -224,6 +252,7 @@ public class FreeItemsFragment extends ListFragment {
         setListAdapter(new ItemArrayAdapter(getActivity(), items));
         getListView().requestLayout();
         if (items.size() < Constants.MAX_ITEMS_TO_REQUEST) {
+            Log.i(TAG, "Refresh for new search query");
             refreshItems(0);
         }
     }
@@ -262,8 +291,10 @@ public class FreeItemsFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        items = getApplication().getFreeItems();
-        setListAdapter(new ItemArrayAdapter(getActivity(), items));
+        if (getSelectedItemID() == null) {
+            items = getApplication().getFreeItems();
+            setListAdapter(new ItemArrayAdapter(getActivity(), items));
+        }
     }
 
     @Override
@@ -296,6 +327,14 @@ public class FreeItemsFragment extends ListFragment {
         refreshIntent.setAction(ItemService.UPDATE_FREE_ITEMS);
         refreshIntent.putExtra(ItemService.EXTRA_OFFSET, offset);
         refreshIntent.putExtra(ItemService.EXTRA_QUERY, query);
+        getActivity().startService(refreshIntent);
+    }
+
+    public void fetchSingleItem(Long itemID) {
+        setRefreshing(true);
+        Intent refreshIntent = new Intent(getActivity(), ItemService.class);
+        refreshIntent.setAction(ItemService.FETCH_SINGLE_ITEM);
+        refreshIntent.putExtra(ItemService.EXTRA_ITEM_ID, itemID);
         getActivity().startService(refreshIntent);
     }
 

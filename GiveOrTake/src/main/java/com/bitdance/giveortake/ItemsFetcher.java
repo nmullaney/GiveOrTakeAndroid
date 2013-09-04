@@ -65,6 +65,12 @@ public class ItemsFetcher {
         return fetchItemsWithFilter(filter);
     }
 
+    public ItemsResponse fetchSingleItem(Long itemID) {
+        ItemsFilter filter = new ItemsFilter();
+        filter.setItemID(itemID);
+        return fetchItemsWithFilter(filter);
+    }
+
     private ItemsResponse fetchItemsWithFilter(ItemsFilter filter) {
         ItemsResponse itemsResponse;
         String urlSpec = Constants.BASE_URL + "/items.php?" + filter.buildQueryString();

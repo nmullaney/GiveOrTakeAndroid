@@ -15,6 +15,7 @@ public class ItemService extends IntentService {
 
     public static final String UPDATE_FREE_ITEMS = "update_free_items";
     public static final String UPDATE_MY_ITEMS = "update_my_items";
+    public static final String FETCH_SINGLE_ITEM = "fetch_single_item";
     public static final String EXTRA_OFFSET = "extra_offset";
     public static final String EXTRA_QUERY = "extra_query";
 
@@ -60,6 +61,9 @@ public class ItemService extends IntentService {
             Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
             String query = intent.getStringExtra(EXTRA_QUERY);
             fetchFreeItems(offset, query);
+        } else if (intent.getAction().equals((FETCH_SINGLE_ITEM))) {
+            Long itemID = intent.getLongExtra(EXTRA_ITEM_ID, 0);
+            fetchSingleItem(itemID);
         } else if (intent.getAction().equals(UPDATE_MY_ITEMS)) {
             Integer offset = intent.getIntExtra(EXTRA_OFFSET, 0);
             fetchMyItems(offset);
@@ -116,6 +120,19 @@ public class ItemService extends IntentService {
                 getGOTApplication().mergeNewFreeItems(itemsResponse.getItems());
             }
             i.putExtra(EXTRA_OFFSET, offset);
+        } else {
+            i.putExtra(EXTRA_ERROR, itemsResponse.getError());
+        }
+
+        broadcastIntent(i);
+    }
+
+    private void fetchSingleItem(Long itemID) {
+        ItemsFetcher fetcher = new ItemsFetcher(this, getGOTApplication().getActiveUser());
+        ItemsFetcher.ItemsResponse itemsResponse = fetcher.fetchSingleItem(itemID);
+        Intent i = new Intent(FREE_ITEMS_UPDATED);
+        if (itemsResponse.isSuccess()) {
+            getGOTApplication().replaceFreeItems(itemsResponse.getItems());
         } else {
             i.putExtra(EXTRA_ERROR, itemsResponse.getError());
         }
