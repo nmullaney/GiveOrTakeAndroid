@@ -134,6 +134,11 @@ public class FreeItemsFragment extends ListFragment {
         return mainActivity.getSelectedItemID();
     }
 
+    private void clearSelectedItemID() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.clearSelectedItemID();
+    }
+
     public void displaySingleItem(Long itemID) {
         items = new ArrayList<Item>();
         Item singleItem = getApplication().getItem(itemID);
@@ -214,6 +219,7 @@ public class FreeItemsFragment extends ListFragment {
         switch(menuItem.getItemId()) {
             case R.id.menu_item_refresh:
                 Log.i(TAG, "Refreshing due to menu");
+                clearSelectedItemID();
                 refreshItems(0);
                 return true;
             case R.id.menu_item_filter:
@@ -228,6 +234,7 @@ public class FreeItemsFragment extends ListFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_FILTER_RESULT:
+                clearSelectedItemID();
                 Log.d(TAG, "Got new filter");
                 Log.d(TAG, "number of items before filter: " + items.size());
                 getApplication().filterFreeItems();

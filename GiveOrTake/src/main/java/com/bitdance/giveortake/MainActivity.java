@@ -24,8 +24,12 @@ import android.util.Log;
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     public static final String TAG = "MainActivity";
 
+    public static final String EXTRA_ITEM_ID = "extra_item_id";
+
     private static final int DEFAULT_SELECTED_TAB = 1;
     private static final int FREE_ITEMS_TAB = 1;
+
+    private Long selectedItemID;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,10 +48,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "setting selected id from intent");
+        setSelectedItemIDFromIntent();
         ActiveUser activeUser = ((GiveOrTakeApplication) getApplication()).getActiveUser();
         if (activeUser == null || activeUser.getUserID() == null) {
             Intent logoutIntent = new Intent(this, LoginActivity.class);
             logoutIntent.putExtra(LoginFragment.EXTRA_LOGIN_ACTION, LoginFragment.LOGOUT);
+            logoutIntent.putExtra(MainActivity.EXTRA_ITEM_ID, getSelectedItemID());
             startActivity(logoutIntent);
             finish();
         }
@@ -98,23 +105,32 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
-    protected Long getSelectedItemID() {
-        Log.i(TAG, "getting selected item ID");
+    private void setSelectedItemIDFromIntent() {
         Long itemID = null;
+        Log.i(TAG, "Intent = " + getIntent());
         if (getIntent().getData() != null) {
             Uri uri = getIntent().getData();
+            Log.i(TAG, "uri = " + uri);
             if (uri.getHost().equals("freeItem")) {
                 String itemIDstr = uri.getQueryParameter("itemID");
                 if (itemIDstr != null) {
                     itemID = new Long(itemIDstr);
-                } else {
-                    Log.i(TAG, "ItemID is null");
                 }
             }
-            Log.i(TAG, getIntent().getData().toString());
+        } else if (getIntent().getLongExtra(MainActivity.EXTRA_ITEM_ID, 0) != 0) {
+            itemID = getIntent().getLongExtra(MainActivity.EXTRA_ITEM_ID, 0);
         }
-        Log.i(TAG, "ItemID = " + itemID);
-        return itemID;
+        selectedItemID = itemID;
+        Log.i(TAG, "Selected item id = " + selectedItemID);
+    }
+
+    public Long getSelectedItemID() {
+        return selectedItemID;
+    }
+
+    public void clearSelectedItemID() {
+        Log.i(TAG, "Clearing selected item id");
+        selectedItemID = null;
     }
 
     @Override

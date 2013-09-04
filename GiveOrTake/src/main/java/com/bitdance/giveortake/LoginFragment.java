@@ -156,6 +156,10 @@ public class LoginFragment extends Fragment {
         } else {
             Intent mainIntent = new Intent(getActivity(), MainActivity.class);
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Long selectedItemID = getActivity().getIntent().getLongExtra(MainActivity.EXTRA_ITEM_ID, 0);
+            if (selectedItemID != 0) {
+                mainIntent.putExtra(MainActivity.EXTRA_ITEM_ID, selectedItemID);
+            }
             startActivity(mainIntent);
         }
         getActivity().finish();
