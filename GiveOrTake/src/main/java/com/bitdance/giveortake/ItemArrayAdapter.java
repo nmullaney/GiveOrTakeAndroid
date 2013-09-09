@@ -35,16 +35,12 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         Item i = getItem(position);
 
         ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
-        Drawable thumbnail = i.getThumbnail(getContext());
-        if (thumbnail != null) {
+        if (i.shouldFetchThumbnail(getContext())) {
+            fetchThumbnail(i);
+        } else {
+            Drawable thumbnail = i.getThumbnail(getContext());
             Log.d(TAG, "Setting image drawable for item: " + i);
             thumbnailView.setImageDrawable(thumbnail);
-        } else {
-            Log.d(TAG, "Loading thumbnail for item: " + i);
-            Intent intent = new Intent(getContext(), ItemService.class);
-            intent.setAction(ItemService.FETCH_ITEM_THUMBNAIL);
-            intent.putExtra(ItemService.EXTRA_ITEM, i);
-            getContext().startService(intent);
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.list_item_name);
@@ -55,6 +51,14 @@ public class ItemArrayAdapter  extends ArrayAdapter<Item> {
         imageView.setImageDrawable(imageState);
 
         return convertView;
+    }
+
+    private void fetchThumbnail(Item i) {
+        Log.d(TAG, "Loading thumbnail for item: " + i);
+        Intent intent = new Intent(getContext(), ItemService.class);
+        intent.setAction(ItemService.FETCH_ITEM_THUMBNAIL);
+        intent.putExtra(ItemService.EXTRA_ITEM, i);
+        getContext().startService(intent);
     }
 
     // This is a bit lame, but probably good enough

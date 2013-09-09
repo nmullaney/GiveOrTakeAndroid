@@ -155,7 +155,7 @@ public class EditOfferFragment extends Fragment {
         }
 
         item = (Item) getActivity().getIntent().getSerializableExtra(OffersFragment.EXTRA_ITEM);
-        if (item.getId() != null && item.getImage(getActivity(), null) == null) {
+        if (item.getId() != null && item.shouldFetchImage(getActivity())) {
             Intent intent = new Intent(getActivity(), ItemService.class);
             intent.setAction(ItemService.FETCH_ITEM_IMAGE);
             intent.putExtra(ItemService.EXTRA_ITEM, item);

@@ -189,7 +189,7 @@ public class FreeItemDetailFragment extends Fragment {
             getActivity().startService(userIntent);
         }
 
-        if (item.getImage(getActivity(), null) == null) {
+        if (item.shouldFetchImage(getActivity())) {
             Intent imageIntent = new Intent(getActivity(), ItemService.class);
             imageIntent.setAction(ItemService.FETCH_ITEM_IMAGE);
             imageIntent.putExtra(ItemService.EXTRA_ITEM, item);

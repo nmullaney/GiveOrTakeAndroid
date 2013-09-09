@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Model class for an Item.
@@ -96,6 +97,7 @@ public class Item implements Serializable, Identifiable {
         dateCreated = dateFromJSONString(dateCreatedStr);
         String dateUpdatedStr = jsonObject.getString(JSON_DATE_UPDATED);
         dateUpdated = dateFromJSONString(dateUpdatedStr);
+        Log.i(TAG, "Date updated: " + dateUpdated);
         if (jsonObject.has(JSON_DISTANCE)) {
             distance = jsonObject.getInt(JSON_DISTANCE);
         } else {
@@ -128,7 +130,9 @@ public class Item implements Serializable, Identifiable {
 
     private Date dateFromJSONString(String jsonString) {
         try {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(jsonString);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return dateFormat.parse(jsonString);
         } catch (ParseException pe) {
             Log.e(TAG, "Failed to parse date: " + jsonString, pe);
         }
@@ -189,10 +193,29 @@ public class Item implements Serializable, Identifiable {
         return thumbnailURL;
     }
 
+    public boolean shouldFetchThumbnail(Context context) {
+        File file = getLocalThumbnailFile(context);
+        // check for staleness
+        if (file.exists()) {
+            Date dateModified = new Date(file.lastModified());
+            if (dateModified.before(getDateUpdated())) {
+                Log.i(TAG, "Date last modified: " + dateModified + ", Date item updated: " + getDateUpdated());
+                return true;
+            }
+        }
+        if (thumbnail != null) {
+            return false;
+        }
+        if (file.exists() && file.length() > 0) {
+            return false;
+        }
+        return true;
+    }
+
     public Drawable getThumbnail(Context context) {
+        File file = getLocalThumbnailFile(context);
         if (thumbnail == null) {
             Log.d(TAG, "Thumbnail is null, loading from file");
-            File file = getLocalThumbnailFile(context);
             Log.d(TAG, "File to load is " + file.getName());
             if (file.exists()) {
                 Log.d(TAG, "Pulling thumbnail from file");
@@ -288,13 +311,38 @@ public class Item implements Serializable, Identifiable {
         return context.getFileStreamPath(filename);
     }
 
+    public boolean shouldFetchImage(Context context) {
+        // Check for staleness
+        File file = getLocalImageFile(context);
+        if (file.exists()) {
+            Date modifiedDate = new Date(file.lastModified());
+            if (modifiedDate.before(getDateUpdated())) {
+                return true;
+            }
+        }
+        // check if we already have a loaded image
+        if (image != null) {
+            return false;
+        }
+        // check if we already have a local file
+        if (file.exists() && file.length() > 0) {
+            return false;
+        }
+        // check if we have a temp file
+        if (tempImageFile != null) {
+            return false;
+        }
+        return true;
+    }
+
     // If maxDimen is null, we'll return any image we have, or the fullsize image
     public Drawable getImage(Context context, Integer maxDimen) {
+        File file = getLocalImageFile(context);
         if (image != null && (maxDimen == null || image.getIntrinsicHeight() == maxDimen)) {
             Log.i(TAG, "Returning loading image for dimension: " + maxDimen + " for " + getName());
             return image;
         }
-        File file = getLocalImageFile(context);
+
         Log.i(TAG, "Local image file: " + file.getName());
         if (!file.exists() && tempImageFile != null) {
             file = context.getFileStreamPath(tempImageFile);
