@@ -90,6 +90,11 @@ public class UpdateEmailFragment extends Fragment {
         public void onClick(View view) {
             hideErrorMessage();
             String newEmail = emailText.getText().toString();
+            if (newEmail == null || newEmail.isEmpty()) {
+                String errorMessage = getString(R.string.error_must_set_email);
+                displayErrorMessage(errorMessage);
+                return;
+            }
             if (newEmail.equals(getGOTApplication().getActiveUser().getEmail())) {
                 // no change
                 if (isNewUserFlow) {
