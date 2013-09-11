@@ -26,7 +26,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static final String EXTRA_ITEM_ID = "extra_item_id";
 
-    private static final int DEFAULT_SELECTED_TAB = 1;
+    private static final int DEFAULT_SELECTED_TAB = 0;
     private static final int FREE_ITEMS_TAB = 1;
 
     private Long selectedItemID;

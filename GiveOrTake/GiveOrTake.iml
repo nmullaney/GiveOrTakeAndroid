@@ -60,7 +60,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/bundles" />
       <excludeFolder url="file://$MODULE_DIR$/build/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/dependency-cache" />
-      <excludeFolder url="file://$MODULE_DIR$/build/exploded-bundles" />
       <excludeFolder url="file://$MODULE_DIR$/build/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/libs" />
       <excludeFolder url="file://$MODULE_DIR$/build/manifests" />
@@ -69,13 +68,14 @@
     </content>
     <orderEntry type="jdk" jdkName="Android 4.2.2 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="google-play-services" level="project" />
-    <orderEntry type="module" module-name="Facebook" exported="" />
+    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
+    <orderEntry type="library" exported="" name="GoogleAdMobAdsSdk-6.4.1" level="project" />
+    <orderEntry type="library" exported="" name="httpcore-4.2.4" level="project" />
     <orderEntry type="module" module-name="google-play-services_lib" exported="" />
     <orderEntry type="library" exported="" name="httpclient-4.2.5" level="project" />
-    <orderEntry type="library" exported="" name="httpcore-4.2.4" level="project" />
+    <orderEntry type="module" module-name="Facebook" exported="" />
     <orderEntry type="library" exported="" name="httpmime-4.2.5" level="project" />
-    <orderEntry type="library" name="GoogleAdMobAdsSdk-6.4.1" level="project" />
+    <orderEntry type="library" exported="" name="google-play-services" level="project" />
   </component>
 </module>
 
