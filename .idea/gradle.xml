@@ -3,10 +3,13 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$APPLICATION_HOME_DIR$/sdk/extras/google/google_play_services/libproject" />
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$APPLICATION_HOME_DIR$/sdk/extras/google/google_play_services" />
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$USER_HOME$/developement_tools/gradle-1.9" />
       </GradleProjectSettings>
     </option>
   </component>
